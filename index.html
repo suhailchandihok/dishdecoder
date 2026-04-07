@@ -15,13 +15,26 @@ header{width:100%;max-width:760px;padding:40px 24px 20px;text-align:center}
 .wordmark span{font-style:italic}
 .tagline{font-size:15px;color:var(--muted);margin-top:6px;font-weight:300}
 main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:column;gap:16px}
-.upload-zone{background:var(--surface);border:2px dashed var(--border);border-radius:var(--radius);padding:48px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.upload-zone{background:var(--surface);border:2px dashed var(--border);border-radius:var(--radius);padding:40px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
 .upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--al)}
 .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-icon{width:52px;height:52px;background:var(--al);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
 .upload-icon svg{width:24px;height:24px;color:var(--accent)}
-.upload-zone h2{font-family:'Fraunces',serif;font-size:21px;font-weight:300;margin-bottom:6px}
-.upload-zone p{font-size:14px;color:var(--muted)}
+.upload-zone h2{font-family:'Fraunces',serif;font-size:20px;font-weight:300;margin-bottom:5px}
+.upload-zone p{font-size:13px;color:var(--muted)}
+.upload-zone.has-photo{border-style:solid;border-color:var(--accent);background:var(--al)}
+.upload-zone.secondary{padding:28px 20px}
+.upload-zone.secondary .upload-icon{width:40px;height:40px;margin-bottom:10px}
+.upload-zone.secondary .upload-icon svg{width:18px;height:18px}
+.upload-zone.secondary h2{font-size:16px}
+.photo-zones{display:flex;flex-direction:column;gap:12px}
+.photo-zone-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.photo-zone-label .required-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0}
+.photo-zone-label .optional-tag{font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);opacity:.75;margin-left:2px}
+.preview-thumb{width:100%;max-height:220px;object-fit:cover;display:block;border-radius:calc(var(--radius) - 4px)}
+.preview-zone{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.preview-footer{padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.preview-zone-name{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
 #preview-wrap{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 #preview-img{width:100%;max-height:260px;object-fit:cover;display:block}
 .preview-footer{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -170,26 +183,59 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
   <p class="tagline">Photo your fridge. Get dinner ideas in seconds.</p>
 </header>
 <main>
-  <div class="upload-zone" id="upload-zone"
-    ondragover="this.classList.add('drag');event.preventDefault()"
-    ondragleave="this.classList.remove('drag')"
-    ondrop="this.classList.remove('drag');handleFile(event.dataTransfer.files[0]);event.preventDefault()">
-    <input type="file" accept="image/*" capture="environment" onchange="handleFile(this.files[0])">
-    <div class="upload-icon">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-      </svg>
+  <div class="photo-zones">
+    <!-- Fridge photo (required) -->
+    <div>
+      <div class="photo-zone-label"><span class="required-dot"></span>Fridge photo</div>
+      <div id="fridge-upload-zone" class="upload-zone"
+        ondragover="this.classList.add('drag');event.preventDefault()"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="this.classList.remove('drag');handleFridgeFile(event.dataTransfer.files[0]);event.preventDefault()">
+        <input type="file" accept="image/*" capture="environment" onchange="handleFridgeFile(this.files[0])">
+        <div class="upload-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h2>Snap your fridge</h2>
+        <p>Tap to take a photo, or drag one here</p>
+      </div>
+      <div id="fridge-preview" class="preview-zone" style="display:none">
+        <img id="fridge-preview-img" class="preview-thumb" alt="Your fridge">
+        <div class="preview-footer">
+          <span class="preview-zone-name" id="fridge-preview-name"></span>
+          <button class="btn-ghost" onclick="clearFridgePhoto()">Change</button>
+        </div>
+      </div>
     </div>
-    <h2>Snap your fridge</h2>
-    <p>Tap to take a photo, or drag one here</p>
-  </div>
 
-  <div id="preview-wrap">
-    <img id="preview-img" alt="Your fridge">
-    <div class="preview-footer">
-      <span class="preview-name" id="preview-name"></span>
-      <button class="btn-ghost" onclick="resetPhoto()">Change photo</button>
+    <!-- Spice cabinet photo (optional) -->
+    <div id="spice-zone-wrap" style="display:none">
+      <div class="photo-zone-label">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--accent)"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        Spice cabinet <span class="optional-tag">(optional — improves results)</span>
+      </div>
+      <div id="spice-upload-zone" class="upload-zone secondary"
+        ondragover="this.classList.add('drag');event.preventDefault()"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="this.classList.remove('drag');handleSpiceFile(event.dataTransfer.files[0]);event.preventDefault()">
+        <input type="file" accept="image/*" capture="environment" onchange="handleSpiceFile(this.files[0])">
+        <div class="upload-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+          </svg>
+        </div>
+        <h2>Snap your spice cabinet</h2>
+        <p>Help the AI find your seasonings & sauces</p>
+      </div>
+      <div id="spice-preview" class="preview-zone" style="display:none">
+        <img id="spice-preview-img" class="preview-thumb" alt="Your spice cabinet">
+        <div class="preview-footer">
+          <span class="preview-zone-name" id="spice-preview-name"></span>
+          <button class="btn-ghost" onclick="clearSpicePhoto()">Remove</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -292,11 +338,12 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
 </div>
 
 <script>
-let imgB64=null,imgType=null,selMin=15,ingredients=[];
+let fridgeB64=null,fridgeType=null;
+let spiceB64=null,spiceType=null;
+let selMin=15,ingredients=[];
 let healthPrefs=[],cuisinePref='';
 let allRecipes=[];
 let detailStepIdx=0;
-// userRatings keyed by recipe name
 const userRatings={};
 
 // ── Utility ──────────────────────────────────────────
@@ -324,15 +371,17 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function showErr(msg){const b=document.getElementById('error-box');b.textContent=msg;b.style.display='block';}
 
 // ── File handling ─────────────────────────────────────
-function handleFile(file){
+function handleFridgeFile(file){
   if(!file)return;
-  imgType=file.type||'image/jpeg';
+  fridgeType=file.type||'image/jpeg';
   const r=new FileReader();
   r.onload=e=>{
-    imgB64=e.target.result.split(',')[1];
-    document.getElementById('preview-img').src=e.target.result;
-    document.getElementById('preview-name').textContent=file.name;
-    S('preview-wrap');H('upload-zone');
+    fridgeB64=e.target.result.split(',')[1];
+    document.getElementById('fridge-preview-img').src=e.target.result;
+    document.getElementById('fridge-preview-name').textContent=file.name;
+    H('fridge-upload-zone');S('fridge-preview');
+    // Show spice cabinet zone, time row, prefs, scan button
+    document.getElementById('spice-zone-wrap').style.display='block';
     document.getElementById('time-row').style.display='flex';
     document.getElementById('health-panel').style.display='block';
     document.getElementById('cuisine-panel').style.display='block';
@@ -341,14 +390,34 @@ function handleFile(file){
   };
   r.readAsDataURL(file);
 }
-function resetPhoto(){
-  imgB64=null;ingredients=[];allRecipes=[];
-  H('preview-wrap');S('upload-zone');
+function clearFridgePhoto(){
+  fridgeB64=null;ingredients=[];allRecipes=[];
+  H('fridge-preview');S('fridge-upload-zone');
+  document.getElementById('spice-zone-wrap').style.display='none';
+  clearSpicePhoto();
   ['time-row','health-panel','cuisine-panel'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('scan-btn').style.display='none';
   ['loading','error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
 }
-function resetAll(){resetPhoto();}
+function handleSpiceFile(file){
+  if(!file)return;
+  spiceType=file.type||'image/jpeg';
+  const r=new FileReader();
+  r.onload=e=>{
+    spiceB64=e.target.result.split(',')[1];
+    document.getElementById('spice-preview-img').src=e.target.result;
+    document.getElementById('spice-preview-name').textContent=file.name;
+    H('spice-upload-zone');S('spice-preview');
+  };
+  r.readAsDataURL(file);
+}
+function clearSpicePhoto(){
+  spiceB64=null;spiceType=null;
+  H('spice-preview');S('spice-upload-zone');
+  document.getElementById('spice-preview-img').src='';
+  document.getElementById('spice-preview-name').textContent='';
+}
+function resetAll(){clearFridgePhoto();}
 
 // ── Chips ─────────────────────────────────────────────
 function renderChips(){
@@ -400,19 +469,26 @@ async function callBackend(messages,max_tokens){
 
 // ── Scan ──────────────────────────────────────────────
 async function runScan(){
-  if(!imgB64){showErr('Please upload a fridge photo first.');return;}
+  if(!fridgeB64){showErr('Please upload a fridge photo first.');return;}
   document.getElementById('scan-btn').disabled=true;
   ['error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
   S('loading');setMsg('Scanning your fridge...');
   try{
     setMsg('Spotting ingredients...');
+    // Build user content — always include fridge, optionally include spice cabinet
+    const userContent=[
+      {type:'image_url',image_url:{url:'data:'+fridgeType+';base64,'+fridgeB64,detail:'low'}},
+    ];
+    if(spiceB64){
+      userContent.push({type:'image_url',image_url:{url:'data:'+spiceType+';base64,'+spiceB64,detail:'low'}});
+      userContent.push({type:'text',text:'First image is the fridge, second image is the spice cabinet. What food ingredients and spices/seasonings/sauces do you see across both?'});
+    }else{
+      userContent.push({type:'text',text:'What food ingredients do you see?'});
+    }
     const ingRaw=await callBackend([
-      {role:'system',content:'You are a chef assistant. The user sends a fridge photo. Respond ONLY with JSON: {"ingredients":["egg","milk","cheddar"]}. List every visible food item. Lowercase, concise, no duplicates.'},
-      {role:'user',content:[
-        {type:'image_url',image_url:{url:'data:'+imgType+';base64,'+imgB64,detail:'low'}},
-        {type:'text',text:'What food ingredients do you see?'}
-      ]}
-    ],400);
+      {role:'system',content:'You are a chef assistant. The user sends one or two photos (fridge, and optionally a spice cabinet). Respond ONLY with JSON: {"ingredients":["egg","milk","cheddar","cumin","paprika"]}. List every visible food item, spice, seasoning, sauce, and condiment. Lowercase, concise, no duplicates.'},
+      {role:'user',content:userContent}
+    ],500);
     try{ingredients=JSON.parse(ingRaw.replace(/```json|```/g,'').trim()).ingredients||[];}
     catch(e){
       const m=ingRaw.match(/"ingredients"\s*:\s*\[([^\]]+)\]/);
