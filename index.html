@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DishDecoder — fridge to dinner in seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F4EE;--surface:#FFFFFF;--text:#1A1914;--muted:#7A7669;
+  --accent:#2D5016;--accent-light:#E8F0DE;--border:rgba(26,25,20,0.12);--radius:16px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;max-width:680px;padding:48px 24px 24px;text-align:center}
+.wordmark{font-family:'Fraunces',serif;font-size:38px;font-weight:300;letter-spacing:-0.5px;color:var(--accent)}
+.wordmark span{font-style:italic}
+.tagline{font-size:15px;color:var(--muted);margin-top:6px;font-weight:300}
+main{width:100%;max-width:680px;padding:0 24px 80px;display:flex;flex-direction:column;gap:16px}
+
+.upload-zone{background:var(--surface);border:2px dashed var(--border);border-radius:var(--radius);padding:52px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--accent-light)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{width:52px;height:52px;background:var(--accent-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.upload-icon svg{width:24px;height:24px;color:var(--accent)}
+.upload-zone h2{font-family:'Fraunces',serif;font-size:21px;font-weight:300;margin-bottom:6px}
+.upload-zone p{font-size:14px;color:var(--muted)}
+
+#preview-wrap{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+#preview-img{width:100%;max-height:300px;object-fit:cover;display:block}
+.preview-footer{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.preview-name{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.btn-ghost{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+.time-row{display:none;gap:8px}
+.time-btn{flex:1;height:46px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px}
+.time-btn small{font-size:10px;opacity:.7}
+.time-btn:hover{border-color:var(--accent);color:var(--accent)}
+.time-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+
+.btn-scan{display:none;width:100%;height:54px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:'Fraunces',serif;font-size:19px;font-weight:300;cursor:pointer;transition:opacity .15s,transform .1s;align-items:center;justify-content:center;gap:10px}
+.btn-scan:hover{opacity:.9}
+.btn-scan:active{transform:scale(.98)}
+.btn-scan:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+#loading{display:none;text-align:center;padding:36px 0}
+.spinner{width:34px;height:34px;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading p{font-size:14px;color:var(--muted);font-family:'Fraunces',serif;font-style:italic}
+
+#error-box{display:none;background:#FFF5F5;border:1px solid #FECACA;border-radius:var(--radius);padding:16px 20px;font-size:14px;color:#B91C1C;line-height:1.5}
+
+#ing-section{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.field-label{display:block;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{background:var(--accent-light);color:var(--accent);font-size:13px;font-weight:500;padding:5px 12px;border-radius:99px;border:1px solid rgba(45,80,22,.18)}
+
+#rec-section{display:none}
+.rec-header{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:14px}
+.rec-grid{display:flex;flex-direction:column;gap:14px}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:border-color .2s}
+.rec-card:hover{border-color:var(--accent)}
+.rec-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.rec-name{font-family:'Fraunces',serif;font-size:20px;font-weight:300;line-height:1.3}
+.rec-time{background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:500;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.rec-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.steps-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:10px}
+.steps{list-style:none;display:flex;flex-direction:column;gap:9px}
+.steps li{display:flex;gap:11px;font-size:14px;line-height:1.5}
+.snum{width:22px;height:22px;min-width:22px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;margin-top:1px}
+
+.try-again{text-align:center;padding:4px 0}
+.try-again button{background:none;border:none;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">Dish<span>Decoder</span></div>
+  <p class="tagline">Photo your fridge. Get dinner ideas in seconds.</p>
+</header>
+
+<main>
+
+  <!-- Upload zone — no API key needed, just upload and go -->
+  <div class="upload-zone" id="upload-zone"
+    ondragover="this.classList.add('drag');event.preventDefault()"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="this.classList.remove('drag');handleFile(event.dataTransfer.files[0]);event.preventDefault()">
+    <input type="file" accept="image/*" capture="environment" onchange="handleFile(this.files[0])">
+    <div class="upload-icon">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+    </div>
+    <h2>Snap your fridge</h2>
+    <p>Tap to take a photo, or drag one here</p>
+  </div>
+
+  <!-- Image preview -->
+  <div id="preview-wrap">
+    <img id="preview-img" alt="Your fridge">
+    <div class="preview-footer">
+      <span class="preview-name" id="preview-name"></span>
+      <button class="btn-ghost" onclick="resetPhoto()">Change photo</button>
+    </div>
+  </div>
+
+  <!-- Time filter -->
+  <div class="time-row" id="time-row">
+    <button class="time-btn active" data-min="15" onclick="setTime(this)">15 min<small>quick</small></button>
+    <button class="time-btn" data-min="30" onclick="setTime(this)">30 min<small>normal</small></button>
+    <button class="time-btn" data-min="60" onclick="setTime(this)">60 min<small>relaxed</small></button>
+  </div>
+
+  <!-- Main CTA -->
+  <button class="btn-scan" id="scan-btn" onclick="runScan()">
+    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+    </svg>
+    Find recipes
+  </button>
+
+  <div id="loading"><div class="spinner"></div><p id="load-msg">Scanning your fridge...</p></div>
+  <div id="error-box"></div>
+
+  <div id="ing-section">
+    <span class="field-label">Ingredients spotted</span>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div id="rec-section">
+    <p class="rec-header">Here's what you can make</p>
+    <div class="rec-grid" id="rec-grid"></div>
+  </div>
+
+  <div class="try-again" id="try-again" style="display:none">
+    <button onclick="resetAll()">Start over with a new photo</button>
+  </div>
+
+</main>
+
+<script>
+let imgB64 = null, imgType = null, selMin = 15;
+
+function setTime(btn) {
+  document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selMin = parseInt(btn.dataset.min);
+}
+
+function handleFile(file) {
+  if (!file) return;
+  imgType = file.type || 'image/jpeg';
+  const r = new FileReader();
+  r.onload = e => {
+    imgB64 = e.target.result.split(',')[1];
+    document.getElementById('preview-img').src = e.target.result;
+    document.getElementById('preview-name').textContent = file.name;
+    S('preview-wrap'); H('upload-zone');
+    document.getElementById('time-row').style.display = 'flex';
+    document.getElementById('scan-btn').style.display = 'flex';
+    ['loading','error-box','ing-section','rec-section','try-again'].forEach(H);
+  };
+  r.readAsDataURL(file);
+}
+
+function resetPhoto() {
+  imgB64 = null;
+  H('preview-wrap'); S('upload-zone');
+  document.getElementById('time-row').style.display = 'none';
+  document.getElementById('scan-btn').style.display = 'none';
+  ['loading','error-box','ing-section','rec-section','try-again'].forEach(H);
+}
+
+function resetAll() { resetPhoto(); }
+function S(id) { document.getElementById(id).style.display = 'block'; }
+function H(id) { document.getElementById(id).style.display = 'none'; }
+function setMsg(m) { document.getElementById('load-msg').textContent = m; }
+
+// All API calls go to our own backend — no key exposed to users
+async function callBackend(messages, max_tokens) {
+  const res = await fetch('/api/scan', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, max_tokens })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 429) throw new Error('Too many requests — wait a moment and try again.');
+    throw new Error(err.error || `Error ${res.status}. Try again.`);
+  }
+
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+async function runScan() {
+  if (!imgB64) { showErr('Please upload a fridge photo first.'); return; }
+
+  document.getElementById('scan-btn').disabled = true;
+  ['error-box','ing-section','rec-section','try-again'].forEach(H);
+  S('loading'); setMsg('Scanning your fridge...');
+
+  try {
+    // STEP 1 — identify ingredients
+    setMsg('Spotting ingredients...');
+    const ingRaw = await callBackend([
+      {
+        role: 'system',
+        content: 'You are a chef assistant. The user sends a fridge photo. Respond ONLY with JSON: {"ingredients":["egg","milk","cheddar"]}. List every visible food item. Lowercase, concise, no duplicates.'
+      },
+      {
+        role: 'user',
+        content: [
+          { type: 'image_url', image_url: { url: `data:${imgType};base64,${imgB64}`, detail: 'low' } },
+          { type: 'text', text: 'What food ingredients do you see?' }
+        ]
+      }
+    ], 400);
+
+    let ingredients = [];
+    try {
+      ingredients = JSON.parse(ingRaw.replace(/```json|```/g,'').trim()).ingredients || [];
+    } catch(e) {
+      const m = ingRaw.match(/"ingredients"\s*:\s*\[([^\]]+)\]/);
+      if (m) ingredients = m[1].split(',').map(s => s.replace(/["\s]/g,'').trim()).filter(Boolean);
+    }
+
+    if (!ingredients.length) throw new Error('Could not spot ingredients. Try a clearer photo with better lighting.');
+
+    document.getElementById('chips').innerHTML = ingredients.map(i => `<span class="chip">${esc(i)}</span>`).join('');
+    S('ing-section');
+
+    // STEP 2 — generate recipes
+    setMsg('Coming up with recipes...');
+    const recRaw = await callBackend([
+      {
+        role: 'system',
+        content: `You are a creative home cook. Given ingredients and a time limit, suggest exactly 3 recipes. Reply ONLY with valid JSON, no markdown:
+{"recipes":[{"name":"Name","time":"20 min","description":"One enticing sentence.","steps":["Step one.","Step two.","Step three.","Step four."]}]}
+Use only the provided ingredients plus common pantry staples (salt, pepper, oil, butter, garlic, onion, flour, sugar). Each recipe must fit within ${selMin} minutes.`
+      },
+      {
+        role: 'user',
+        content: `Ingredients: ${ingredients.join(', ')}. Time: ${selMin} minutes. Give me 3 recipes.`
+      }
+    ], 1400);
+
+    let recipes = [];
+    try {
+      recipes = JSON.parse(recRaw.replace(/```json|```/g,'').trim()).recipes || [];
+    } catch(e) {
+      throw new Error('Could not parse recipes. Try scanning again.');
+    }
+
+    if (!recipes.length) throw new Error('No recipes returned. Try again.');
+
+    document.getElementById('rec-grid').innerHTML = recipes.map(r => `
+      <div class="rec-card">
+        <div class="rec-top">
+          <div class="rec-name">${esc(r.name)}</div>
+          <div class="rec-time">${esc(r.time || selMin + ' min')}</div>
+        </div>
+        <div class="rec-desc">${esc(r.description)}</div>
+        <div class="steps-label">How to make it</div>
+        <ol class="steps">
+          ${(r.steps||[]).map((s,i)=>`<li><div class="snum">${i+1}</div><span>${esc(s)}</span></li>`).join('')}
+        </ol>
+      </div>`).join('');
+
+    S('rec-section'); S('try-again'); H('loading');
+
+  } catch(err) {
+    H('loading');
+    showErr(err.message || 'Something went wrong. Try again.');
+    S('try-again');
+  } finally {
+    document.getElementById('scan-btn').disabled = false;
+  }
+}
+
+function showErr(msg) { const b = document.getElementById('error-box'); b.textContent = msg; b.style.display='block'; }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
