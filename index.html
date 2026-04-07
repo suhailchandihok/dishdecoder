@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#F7F4EE;--surface:#FFF;--text:#1A1914;--muted:#7A7669;--accent:#2D5016;--al:#E8F0DE;--border:rgba(26,25,20,0.12);--radius:16px;}
+:root{--bg:#F7F4EE;--surface:#FFF;--text:#1A1914;--muted:#7A7669;--accent:#2D5016;--al:#E8F0DE;--border:rgba(26,25,20,0.12);--radius:16px;--missing:#DC2626;--missing-bg:#FEF2F2;--missing-border:rgba(220,38,38,0.2);}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
 header{width:100%;max-width:760px;padding:40px 24px 20px;text-align:center}
 .wordmark{font-family:'Fraunces',serif;font-size:38px;font-weight:300;letter-spacing:-.5px;color:var(--accent)}
@@ -68,39 +68,63 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
 .modal-actions{display:flex;gap:8px;justify-content:flex-end}
 .btn-cancel{height:38px;padding:0 16px;background:none;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer}
 .btn-confirm{height:38px;padding:0 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
-#rec-section{display:none}
-.rec-header{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:14px}
-.rec-grid{display:flex;flex-direction:column;gap:16px}
-.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .2s}
-.rec-card:hover{border-color:rgba(45,80,22,.3)}
-.rec-card-header{padding:20px 22px 16px;cursor:pointer;user-select:none}
-.rec-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
-.rec-name{font-family:'Fraunces',serif;font-size:20px;font-weight:300;line-height:1.3}
-.rec-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start;flex-shrink:0}
+
+/* ── Recipe chooser (5-card grid) ── */
+#chooser-section{display:none}
+.chooser-header{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:6px}
+.chooser-sub{font-size:14px;color:var(--muted);margin-bottom:16px}
+.chooser-grid{display:flex;flex-direction:column;gap:12px}
+.chooser-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px 20px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s;user-select:none}
+.chooser-card:hover{border-color:var(--accent);box-shadow:0 4px 18px rgba(45,80,22,.1);transform:translateY(-1px)}
+.chooser-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.chooser-name{font-family:'Fraunces',serif;font-size:18px;font-weight:300;line-height:1.3}
+.chooser-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center;flex-shrink:0}
 .badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px;white-space:nowrap}
 .badge-time{background:var(--al);color:var(--accent);border:1px solid rgba(45,80,22,.18)}
 .badge-cal{background:#E6F1FB;color:#185FA5;border:1px solid rgba(24,95,165,.18)}
 .badge-easy{background:#E1F5EE;color:#0F6E56;border:1px solid rgba(15,110,86,.2)}
 .badge-medium{background:#FAEEDA;color:#854F0B;border:1px solid rgba(133,79,11,.2)}
 .badge-hard{background:#FCEBEB;color:#A32D2D;border:1px solid rgba(163,45,45,.2)}
-.rec-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:10px}
-.nutrition-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.badge-rating{background:#FFFBEB;color:#92400E;border:1px solid rgba(146,64,14,.2);display:inline-flex;align-items:center;gap:3px}
+.chooser-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.chooser-ing-preview{display:flex;flex-wrap:wrap;gap:5px}
+.cip{font-size:12px;padding:3px 9px;border-radius:99px;border:1px solid;font-weight:500}
+.cip-have{background:var(--al);color:var(--accent);border-color:rgba(45,80,22,.18)}
+.cip-missing{background:var(--missing-bg);color:var(--missing);border-color:var(--missing-border)}
+.missing-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-left:2px;vertical-align:middle}
+.chooser-footer{margin-top:10px;display:flex;align-items:center;justify-content:space-between}
+.chooser-missing-count{font-size:12px;color:var(--missing);font-weight:500;display:flex;align-items:center;gap:4px}
+.chooser-cta{font-size:12px;color:var(--accent);font-weight:500;display:flex;align-items:center;gap:4px}
+
+/* ── Full recipe detail ── */
+#detail-section{display:none}
+.detail-back{display:flex;align-items:center;gap:6px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;padding:0;margin-bottom:18px;transition:color .15s}
+.detail-back:hover{color:var(--accent)}
+.detail-back svg{flex-shrink:0}
+.detail-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.detail-head{padding:24px 24px 20px}
+.detail-name{font-family:'Fraunces',serif;font-size:26px;font-weight:300;line-height:1.3;margin-bottom:10px}
+.detail-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.detail-rating-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.star-display{display:flex;gap:2px}
+.star-display .s{font-size:17px;line-height:1}
+.rating-text{font-size:14px;font-weight:500;color:var(--text)}
+.rating-count{font-size:13px;color:var(--muted)}
+.detail-desc{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.nutrition-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
 .nutr-pill{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:12px;display:flex;flex-direction:column;align-items:center;min-width:58px}
 .nutr-val{font-weight:500;font-size:13px;color:var(--text)}
 .nutr-key{color:var(--muted);font-size:11px;margin-top:1px}
-.rec-expand-hint{font-size:12px;color:var(--accent);display:flex;align-items:center;gap:4px}
-.chevron{transition:transform .25s}
-.chevron.open{transform:rotate(180deg)}
-.rec-body{display:none;border-top:1px solid var(--border)}
-.rec-body.open{display:block}
-.tabs{display:flex;border-bottom:1px solid var(--border)}
-.tab{flex:1;padding:12px 8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;transition:all .15s;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.tab-panel{display:none;padding:20px 22px}
-.tab-panel.active{display:block}
-.ing-list{list-style:none;display:flex;flex-direction:column;gap:9px}
-.ing-list li{display:flex;align-items:baseline;gap:10px;font-size:14px;line-height:1.5}
+.detail-tabs{display:flex;border-bottom:1px solid var(--border)}
+.detail-tab{flex:1;padding:13px 8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;transition:all .15s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.detail-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.detail-panel{display:none;padding:22px 24px}
+.detail-panel.active{display:block}
+.ing-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ing-list li{display:flex;align-items:baseline;gap:10px;font-size:14px;line-height:1.5;flex-wrap:wrap}
 .ing-amount{font-weight:500;color:var(--accent);min-width:90px;flex-shrink:0}
+.ing-name-wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ing-missing-badge{background:var(--missing-bg);color:var(--missing);border:1px solid var(--missing-border);border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;flex-shrink:0}
 .ing-note{font-size:12px;color:var(--muted);margin-left:auto;text-align:right}
 .tip-box{margin-top:14px;background:var(--al);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--accent);line-height:1.6;border:1px solid rgba(45,80,22,.15)}
 .tip-label{font-weight:500;margin-bottom:3px;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
@@ -120,8 +144,24 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
 .done-state{text-align:center;padding:24px 0}
 .done-state p{font-family:'Fraunces',serif;font-size:20px;font-weight:300;margin-bottom:6px}
 .done-state small{font-size:13px;color:var(--muted)}
+
+/* ── User rating widget ── */
+.user-rating-section{padding:22px 24px;border-top:1px solid var(--border)}
+.user-rating-title{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:12px}
+.star-picker{display:flex;gap:6px;margin-bottom:10px}
+.star-btn{font-size:28px;background:none;border:none;cursor:pointer;padding:0;line-height:1;transition:transform .1s;color:#D1C9BA;user-select:none}
+.star-btn:hover,.star-btn.lit{color:#F59E0B}
+.star-btn:active{transform:scale(1.2)}
+.rating-submitted{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--accent);font-weight:500;padding:6px 0}
+.rating-submitted svg{flex-shrink:0}
+.user-rating-hint{font-size:12px;color:var(--muted);margin-top:4px}
+
 .try-again{text-align:center;padding:4px 0}
 .try-again button{background:none;border:none;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;text-decoration:underline}
+
+/* ── Missing ingredients summary banner ── */
+.missing-banner{background:var(--missing-bg);border:1px solid var(--missing-border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--missing);line-height:1.5;display:flex;align-items:flex-start;gap:8px;margin-bottom:14px}
+.missing-banner svg{flex-shrink:0;margin-top:1px}
 </style>
 </head>
 <body>
@@ -214,9 +254,20 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
     <div class="chips" id="chips"></div>
   </div>
 
-  <div id="rec-section">
-    <p class="rec-header">Here's what you can make</p>
-    <div class="rec-grid" id="rec-grid"></div>
+  <!-- Step 1: Choose a recipe from 5 options -->
+  <div id="chooser-section">
+    <p class="chooser-header">Choose a recipe</p>
+    <p class="chooser-sub">Tap any dish for the full breakdown</p>
+    <div class="chooser-grid" id="chooser-grid"></div>
+  </div>
+
+  <!-- Step 2: Full recipe detail -->
+  <div id="detail-section">
+    <button class="detail-back" onclick="showChooser()">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      Back to all recipes
+    </button>
+    <div class="detail-card" id="detail-card"></div>
   </div>
 
   <div class="try-again" id="try-again" style="display:none">
@@ -243,8 +294,12 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
 <script>
 let imgB64=null,imgType=null,selMin=15,ingredients=[];
 let healthPrefs=[],cuisinePref='';
-const recipeSteps={};
+let allRecipes=[];
+let detailStepIdx=0;
+// userRatings keyed by recipe name
+const userRatings={};
 
+// ── Utility ──────────────────────────────────────────
 function togglePill(btn,group){
   if(group==='cuisine'){
     const wasActive=btn.classList.contains('active');
@@ -258,12 +313,17 @@ function togglePill(btn,group){
     else healthPrefs=healthPrefs.filter(v=>v!==val);
   }
 }
-
 function setTime(btn){
   document.querySelectorAll('.time-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');selMin=parseInt(btn.dataset.min);
 }
+function S(id){document.getElementById(id).style.display='block';}
+function H(id){document.getElementById(id).style.display='none';}
+function setMsg(m){document.getElementById('load-msg').textContent=m;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showErr(msg){const b=document.getElementById('error-box');b.textContent=msg;b.style.display='block';}
 
+// ── File handling ─────────────────────────────────────
 function handleFile(file){
   if(!file)return;
   imgType=file.type||'image/jpeg';
@@ -277,30 +337,28 @@ function handleFile(file){
     document.getElementById('health-panel').style.display='block';
     document.getElementById('cuisine-panel').style.display='block';
     document.getElementById('scan-btn').style.display='flex';
-    ['loading','error-box','ing-section','rec-section','try-again'].forEach(H);
+    ['loading','error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
   };
   r.readAsDataURL(file);
 }
-
 function resetPhoto(){
-  imgB64=null;ingredients=[];
+  imgB64=null;ingredients=[];allRecipes=[];
   H('preview-wrap');S('upload-zone');
   ['time-row','health-panel','cuisine-panel'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('scan-btn').style.display='none';
-  ['loading','error-box','ing-section','rec-section','try-again'].forEach(H);
+  ['loading','error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
 }
 function resetAll(){resetPhoto();}
-function S(id){document.getElementById(id).style.display='block';}
-function H(id){document.getElementById(id).style.display='none';}
-function setMsg(m){document.getElementById('load-msg').textContent=m;}
 
+// ── Chips ─────────────────────────────────────────────
 function renderChips(){
   document.getElementById('chips').innerHTML=ingredients.map((ing,i)=>
-    `<span class="chip">${esc(ing)}<button class="chip-x" onclick="removeIng(${i})">x</button></span>`
+    `<span class="chip">${esc(ing)}<button class="chip-x" onclick="removeIng(${i})">×</button></span>`
   ).join('');
 }
 function removeIng(i){ingredients.splice(i,1);renderChips();renderModalChips();}
 
+// ── Modal ─────────────────────────────────────────────
 function openModal(){
   renderModalChips();
   document.getElementById('modal-wrap').classList.add('open');
@@ -310,7 +368,7 @@ function openModal(){
 function closeModal(){document.getElementById('modal-wrap').classList.remove('open');}
 function renderModalChips(){
   document.getElementById('modal-chips').innerHTML=ingredients.map((ing,i)=>
-    `<span class="modal-chip">${esc(ing)}<button class="chip-x" onclick="modalRemove(${i})">x</button></span>`
+    `<span class="modal-chip">${esc(ing)}<button class="chip-x" onclick="modalRemove(${i})">×</button></span>`
   ).join('');
 }
 function modalRemove(i){ingredients.splice(i,1);renderModalChips();renderChips();}
@@ -324,6 +382,7 @@ function addIngredient(){
 }
 function confirmEdit(){closeModal();if(ingredients.length)generateRecipes();}
 
+// ── API ───────────────────────────────────────────────
 async function callBackend(messages,max_tokens){
   const res=await fetch('/api/scan',{
     method:'POST',
@@ -339,10 +398,11 @@ async function callBackend(messages,max_tokens){
   return data.choices?.[0]?.message?.content||'';
 }
 
+// ── Scan ──────────────────────────────────────────────
 async function runScan(){
   if(!imgB64){showErr('Please upload a fridge photo first.');return;}
   document.getElementById('scan-btn').disabled=true;
-  ['error-box','ing-section','rec-section','try-again'].forEach(H);
+  ['error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
   S('loading');setMsg('Scanning your fridge...');
   try{
     setMsg('Spotting ingredients...');
@@ -368,71 +428,253 @@ async function runScan(){
   }
 }
 
+// ── Generate 5 recipes ────────────────────────────────
 async function generateRecipes(){
-  S('loading');setMsg('Writing your recipes...');H('rec-section');
+  S('loading');setMsg('Finding top-rated recipes...');
+  H('chooser-section');H('detail-section');
   let prefContext='';
   if(healthPrefs.length)prefContext+='Health requirements: '+healthPrefs.join(', ')+'. ';
   if(cuisinePref)prefContext+='Cuisine style: '+cuisinePref+'. ';
   try{
     const recRaw=await callBackend([
-      {role:'system',content:'You are a creative home cook with nutrition expertise. Given ingredients, time, and preferences, suggest exactly 3 detailed recipes. Reply ONLY with valid JSON, no markdown:\n{"recipes":[{"name":"Recipe Name","time":"20 min","difficulty":"Easy","cuisine":"Italian","description":"One enticing sentence.","tip":"One practical chef tip.","nutrition":{"calories":450,"protein":"28g","carbs":"32g","fat":"18g","fiber":"4g"},"ingredients":[{"amount":"2 large","item":"eggs","note":"room temperature"}],"steps":["Detailed step one with temperatures and times.","Step two.","Step three.","Step four.","Step five."]}]}\nRules: difficulty = "Easy","Medium" or "Hard". Nutrition must be realistic for one serving. calories is an integer. Use only provided ingredients plus pantry staples (salt,pepper,oil,butter,garlic,onion,flour,sugar,soy sauce,vinegar,spices). Fit within '+selMin+' minutes. Steps must be specific with temperatures and times.'+(prefContext?'\nIMPORTANT: '+prefContext:'')},
-      {role:'user',content:'Ingredients: '+ingredients.join(', ')+'. Time: '+selMin+' min.'+(prefContext?' Preferences: '+prefContext:'')+' Give me 3 detailed recipes.'}
-    ],2400);
+      {role:'system',content:`You are a creative home cook with nutrition expertise and knowledge of highly-rated recipes worldwide. Given a list of fridge ingredients, cooking time, and preferences, suggest exactly 5 recipes. For each recipe, include a realistic internet rating based on how well-known and highly-rated that dish is across food websites like AllRecipes, Food Network, and Tasty (e.g. 4.7 · 2.1k). For every recipe ingredient, mark whether it is "available" (in the fridge list or a common pantry staple: salt, pepper, oil, butter, garlic, onion, flour, sugar, soy sauce, vinegar, common spices, water) or "missing" (not in the fridge and not a pantry staple).
+
+Reply ONLY with valid JSON, no markdown:
+{"recipes":[{"name":"Recipe Name","time":"20 min","difficulty":"Easy","cuisine":"Italian","description":"One enticing sentence.","tip":"One practical chef tip.","rating":4.7,"ratingCount":"2.1k","popularity":"Top Rated","nutrition":{"calories":450,"protein":"28g","carbs":"32g","fat":"18g","fiber":"4g"},"ingredients":[{"amount":"2 large","item":"eggs","available":true,"note":"room temperature"},{"amount":"1 cup","item":"heavy cream","available":false,"note":""}],"steps":["Detailed step one with temperatures and times.","Step two.","Step three.","Step four.","Step five."]}]}
+
+Rules: difficulty = "Easy", "Medium" or "Hard". Nutrition must be realistic for one serving. calories is an integer. Fit within ${selMin} minutes. Steps must be specific with temperatures and times. rating is a float 1.0-5.0. ratingCount is a string like "1.2k" or "847".${prefContext?' IMPORTANT: '+prefContext:''}`},
+      {role:'user',content:'Fridge ingredients: '+ingredients.join(', ')+'. Time: '+selMin+' min.'+(prefContext?' Preferences: '+prefContext:'')+' Give me 5 highly-rated recipe options.'}
+    ],3500);
     let recipes=[];
     try{recipes=JSON.parse(recRaw.replace(/```json|```/g,'').trim()).recipes||[];}
     catch(e){throw new Error('Could not parse recipes. Try scanning again.');}
     if(!recipes.length)throw new Error('No recipes returned. Try again.');
-    renderRecipes(recipes);
-    S('rec-section');S('try-again');H('loading');
+    allRecipes=recipes;
+    renderChooser(recipes);
+    S('chooser-section');S('try-again');H('loading');
   }catch(err){
     H('loading');showErr(err.message||'Something went wrong generating recipes.');S('try-again');
   }
 }
 
-function renderRecipes(recipes){
-  document.getElementById('rec-grid').innerHTML=recipes.map((r,ri)=>{
-    recipeSteps[ri]=r.steps||[];
+// ── Render chooser (5 cards) ──────────────────────────
+function renderChooser(recipes){
+  document.getElementById('chooser-grid').innerHTML=recipes.map((r,ri)=>{
     const n=r.nutrition||{};
     const diffClass=r.difficulty==='Easy'?'badge-easy':r.difficulty==='Hard'?'badge-hard':'badge-medium';
-    const ingHTML=(r.ingredients||[]).map(i=>
-      '<li><span class="ing-amount">'+esc(i.amount)+'</span><span>'+esc(i.item)+'</span>'+(i.note?'<span class="ing-note">'+esc(i.note)+'</span>':'')+'</li>'
-    ).join('');
-    const nutrHTML=n.calories?'<div class="nutrition-row"><div class="nutr-pill"><span class="nutr-val">'+n.calories+'</span><span class="nutr-key">cal</span></div>'+(n.protein?'<div class="nutr-pill"><span class="nutr-val">'+esc(n.protein)+'</span><span class="nutr-key">protein</span></div>':'')+(n.carbs?'<div class="nutr-pill"><span class="nutr-val">'+esc(n.carbs)+'</span><span class="nutr-key">carbs</span></div>':'')+(n.fat?'<div class="nutr-pill"><span class="nutr-val">'+esc(n.fat)+'</span><span class="nutr-key">fat</span></div>':'')+(n.fiber?'<div class="nutr-pill"><span class="nutr-val">'+esc(n.fiber)+'</span><span class="nutr-key">fiber</span></div>':'')+'</div>':'';
-    const steps=r.steps||[];
-    const cookHTML=steps.length?'<div class="cook-progress"><div class="progress-bar"><div class="progress-fill" id="prog-'+ri+'" style="width:0%"></div></div><span class="progress-label" id="prog-label-'+ri+'">Step 1 of '+steps.length+'</span></div><div id="step-display-'+ri+'">'+renderStep(steps,0,ri)+'</div>':'<p style="color:var(--muted);font-size:14px">No steps available.</p>';
-    return '<div class="rec-card" id="card-'+ri+'"><div class="rec-card-header" onclick="toggleCard('+ri+')"><div class="rec-top"><div class="rec-name">'+esc(r.name)+'</div><div class="rec-badges"><span class="badge badge-time">'+esc(r.time||selMin+' min')+'</span>'+(n.calories?'<span class="badge badge-cal">'+n.calories+' cal</span>':'')+'<span class="badge '+diffClass+'">'+esc(r.difficulty||'Easy')+'</span></div></div><div class="rec-desc">'+esc(r.description)+'</div>'+nutrHTML+'<div class="rec-expand-hint"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Tap for ingredients &amp; cook mode<svg class="chevron" id="chev-'+ri+'" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div></div><div class="rec-body" id="body-'+ri+'"><div class="tabs"><button class="tab active" onclick="switchTab('+ri+',\'ing\',this)">Ingredients</button><button class="tab" onclick="switchTab('+ri+',\'cook\',this)">Cook mode</button></div><div class="tab-panel active" id="tab-ing-'+ri+'"><ul class="ing-list">'+ingHTML+'</ul>'+(r.tip?'<div class="tip-box"><div class="tip-label">Chef tip</div>'+esc(r.tip)+'</div>':'')+'</div><div class="tab-panel" id="tab-cook-'+ri+'">'+cookHTML+'</div></div></div>';
+    const stars=renderStarsDisplay(r.rating||4.5);
+    const missingCount=(r.ingredients||[]).filter(i=>i.available===false).length;
+
+    // Show first 6 ingredients as pills
+    const ingPreview=(r.ingredients||[]).slice(0,6).map(i=>{
+      if(i.available===false){
+        return `<span class="cip cip-missing">${esc(i.item)}<span class="missing-label">Missing</span></span>`;
+      }
+      return `<span class="cip cip-have">${esc(i.item)}</span>`;
+    }).join('');
+
+    const missingBadge=missingCount>0
+      ? `<span class="chooser-missing-count"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${missingCount} ingredient${missingCount>1?'s':''} needed</span>`
+      : `<span style="font-size:12px;color:#0F6E56;font-weight:500">✓ All ingredients available</span>`;
+
+    return `<div class="chooser-card" onclick="openDetail(${ri})">
+      <div class="chooser-card-top">
+        <div class="chooser-name">${esc(r.name)}</div>
+        <div class="chooser-badges">
+          <span class="badge badge-time">${esc(r.time||selMin+' min')}</span>
+          ${n.calories?`<span class="badge badge-cal">${n.calories} cal</span>`:''}
+          <span class="badge ${diffClass}">${esc(r.difficulty||'Easy')}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        ${stars}
+        <span style="font-size:13px;font-weight:500;color:var(--text)">${(r.rating||4.5).toFixed(1)}</span>
+        <span style="font-size:12px;color:var(--muted)">· ${esc(r.ratingCount||'—')}</span>
+        ${r.popularity?`<span class="badge badge-rating" style="font-size:10px;padding:2px 7px">${esc(r.popularity)}</span>`:''}
+      </div>
+      <div class="chooser-desc">${esc(r.description)}</div>
+      <div class="chooser-ing-preview">${ingPreview}${(r.ingredients||[]).length>6?`<span style="font-size:12px;color:var(--muted);padding:3px 6px">+${(r.ingredients||[]).length-6} more</span>`:''}</div>
+      <div class="chooser-footer">
+        ${missingBadge}
+        <span class="chooser-cta">Full recipe <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function renderStep(steps,idx,ri){
-  if(idx>=steps.length)return '<div class="done-state"><p>Enjoy your meal!</p><small>Hope it turned out delicious.</small><div style="margin-top:14px"><button class="btn-step" style="max-width:180px;margin:0 auto;display:block" onclick="goStep('+ri+',0,'+steps.length+')">Start again</button></div></div>';
-  return '<div class="step-card"><div class="step-num-large">'+(idx+1)+'</div><div class="step-text">'+esc(steps[idx])+'</div></div><div class="step-nav"><button class="btn-step" onclick="goStep('+ri+','+(idx-1)+','+steps.length+')" '+(idx===0?'disabled':'')+'> Back</button><button class="btn-step primary" onclick="goStep('+ri+','+(idx+1)+','+steps.length+')">'+(idx===steps.length-1?'Done':'Next step')+'</button></div>';
+function renderStarsDisplay(rating){
+  const full=Math.floor(rating);
+  const half=rating-full>=0.5;
+  const empty=5-full-(half?1:0);
+  let html='<div class="star-display">';
+  for(let i=0;i<full;i++)html+=`<span class="s" style="color:#F59E0B">★</span>`;
+  if(half)html+=`<span class="s" style="color:#F59E0B">½</span>`;
+  for(let i=0;i<empty;i++)html+=`<span class="s" style="color:#D1C9BA">★</span>`;
+  html+='</div>';
+  return html;
 }
 
-function goStep(ri,idx,total){
-  const steps=recipeSteps[ri];if(!steps)return;
-  const pct=Math.round((Math.max(idx,0)/total)*100);
-  document.getElementById('prog-'+ri).style.width=pct+'%';
-  document.getElementById('prog-label-'+ri).textContent=idx>=total?'Complete!':'Step '+(idx+1)+' of '+total;
-  document.getElementById('step-display-'+ri).innerHTML=renderStep(steps,idx,ri);
+// ── Open full detail ──────────────────────────────────
+function openDetail(ri){
+  const r=allRecipes[ri];
+  if(!r)return;
+  detailStepIdx=0;
+  H('chooser-section');
+  const n=r.nutrition||{};
+  const diffClass=r.difficulty==='Easy'?'badge-easy':r.difficulty==='Hard'?'badge-hard':'badge-medium';
+  const stars=renderStarsDisplay(r.rating||4.5);
+  const steps=r.steps||[];
+  const missingItems=(r.ingredients||[]).filter(i=>i.available===false);
+
+  // Missing banner
+  const missingBanner=missingItems.length>0
+    ?`<div class="missing-banner"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg><div><strong>You'll need to grab:</strong> ${missingItems.map(i=>esc(i.item)).join(', ')}</div></div>`
+    :'';
+
+  const ingHTML=(r.ingredients||[]).map(i=>{
+    const missBadge=i.available===false?`<span class="ing-missing-badge">Missing</span>`:'';
+    return `<li><span class="ing-amount">${esc(i.amount)}</span><span class="ing-name-wrap"><span>${esc(i.item)}</span>${missBadge}</span>${i.note?`<span class="ing-note">${esc(i.note)}</span>`:''}</li>`;
+  }).join('');
+
+  const nutrHTML=n.calories?`<div class="nutrition-row">
+    <div class="nutr-pill"><span class="nutr-val">${n.calories}</span><span class="nutr-key">cal</span></div>
+    ${n.protein?`<div class="nutr-pill"><span class="nutr-val">${esc(n.protein)}</span><span class="nutr-key">protein</span></div>`:''}
+    ${n.carbs?`<div class="nutr-pill"><span class="nutr-val">${esc(n.carbs)}</span><span class="nutr-key">carbs</span></div>`:''}
+    ${n.fat?`<div class="nutr-pill"><span class="nutr-val">${esc(n.fat)}</span><span class="nutr-key">fat</span></div>`:''}
+    ${n.fiber?`<div class="nutr-pill"><span class="nutr-val">${esc(n.fiber)}</span><span class="nutr-key">fiber</span></div>`:''}
+  </div>`:'';
+
+  const savedRating=userRatings[r.name];
+  const ratingWidget=savedRating!=null
+    ?`<div class="user-rating-section">
+        <div class="user-rating-title">Your rating</div>
+        <div class="rating-submitted">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          You rated this ${savedRating} star${savedRating!==1?'s':''}!
+        </div>
+      </div>`
+    :`<div class="user-rating-section" id="rating-widget-${ri}">
+        <div class="user-rating-title">Rate this recipe</div>
+        <div class="star-picker" id="star-picker-${ri}">
+          ${[1,2,3,4,5].map(s=>`<button class="star-btn" data-val="${s}" onmouseover="hoverStars(${ri},${s})" onmouseout="resetStarHover(${ri})" onclick="submitRating(${ri},'${esc(r.name)}',${s})">★</button>`).join('')}
+        </div>
+        <div class="user-rating-hint">Tap to rate after trying it</div>
+      </div>`;
+
+  const cookHTML=steps.length
+    ?`<div class="cook-progress"><div class="progress-bar"><div class="progress-fill" id="det-prog" style="width:0%"></div></div><span class="progress-label" id="det-prog-label">Step 1 of ${steps.length}</span></div><div id="det-step-display">${renderDetailStep(steps,0)}</div>`
+    :`<p style="color:var(--muted);font-size:14px">No steps available.</p>`;
+
+  document.getElementById('detail-card').innerHTML=`
+    <div class="detail-head">
+      <div class="detail-name">${esc(r.name)}</div>
+      <div class="detail-badges">
+        <span class="badge badge-time">${esc(r.time||selMin+' min')}</span>
+        ${n.calories?`<span class="badge badge-cal">${n.calories} cal</span>`:''}
+        <span class="badge ${diffClass}">${esc(r.difficulty||'Easy')}</span>
+        ${r.cuisine?`<span class="badge" style="background:var(--bg);border:1px solid var(--border);color:var(--muted)">${esc(r.cuisine)}</span>`:''}
+      </div>
+      <div class="detail-rating-row">
+        ${stars}
+        <span class="rating-text">${(r.rating||4.5).toFixed(1)}</span>
+        <span class="rating-count">· ${esc(r.ratingCount||'—')} ratings online</span>
+      </div>
+      <div class="detail-desc">${esc(r.description)}</div>
+      ${nutrHTML}
+    </div>
+    ${missingBanner}
+    <div class="detail-tabs">
+      <button class="detail-tab active" onclick="switchDetailTab('ing',this)">Ingredients</button>
+      <button class="detail-tab" onclick="switchDetailTab('cook',this)">Cook mode</button>
+      <button class="detail-tab" onclick="switchDetailTab('nutr',this)">Nutrition</button>
+    </div>
+    <div class="detail-panel active" id="det-panel-ing">
+      ${missingItems.length>0?`<p style="font-size:12px;color:var(--muted);margin-bottom:14px">Items in <span style="color:var(--missing);font-weight:500">red</span> are not in your fridge.</p>`:''}
+      <ul class="ing-list">${ingHTML}</ul>
+      ${r.tip?`<div class="tip-box"><div class="tip-label">Chef tip</div>${esc(r.tip)}</div>`:''}
+    </div>
+    <div class="detail-panel" id="det-panel-cook">${cookHTML}</div>
+    <div class="detail-panel" id="det-panel-nutr">
+      ${n.calories?`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        ${[['Calories',n.calories,'cal'],['Protein',n.protein,''],['Carbohydrates',n.carbs,''],['Fat',n.fat,''],['Fiber',n.fiber,'']].filter(x=>x[1]).map(x=>`
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">${x[0]}</div>
+          <div style="font-size:22px;font-weight:500;font-family:'Fraunces',serif;color:var(--accent)">${x[1]}<span style="font-size:13px;font-weight:300;color:var(--muted);margin-left:2px">${x[2]}</span></div>
+        </div>`).join('')}
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:14px">Per serving estimates.</p>`
+      :'<p style="color:var(--muted);font-size:14px">No nutrition data available.</p>'}
+    </div>
+    ${ratingWidget}
+  `;
+
+  // Store steps for cook mode
+  window._detailSteps=steps;
+  window._detailRi=ri;
+  window._detailRecipeName=r.name;
+
+  S('detail-section');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function toggleCard(ri){
-  const body=document.getElementById('body-'+ri);
-  const chev=document.getElementById('chev-'+ri);
-  const open=body.classList.toggle('open');
-  chev.classList.toggle('open',open);
+function showChooser(){
+  H('detail-section');
+  S('chooser-section');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function switchTab(ri,tab,btn){
-  document.querySelectorAll('#card-'+ri+' .tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#card-'+ri+' .tab-panel').forEach(p=>p.classList.remove('active'));
+function switchDetailTab(tab,btn){
+  document.querySelectorAll('.detail-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.detail-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-'+tab+'-'+ri).classList.add('active');
+  document.getElementById('det-panel-'+tab).classList.add('active');
 }
 
-function showErr(msg){const b=document.getElementById('error-box');b.textContent=msg;b.style.display='block';}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+// ── Cook mode (detail) ────────────────────────────────
+function renderDetailStep(steps,idx){
+  if(idx>=steps.length){
+    return `<div class="done-state"><p>Enjoy your meal! 🎉</p><small>Hope it turned out delicious.</small><div style="margin-top:14px"><button class="btn-step" style="max-width:180px;margin:0 auto;display:block" onclick="goDetailStep(0)">Start again</button></div></div>`;
+  }
+  return `<div class="step-card"><div class="step-num-large">${idx+1}</div><div class="step-text">${esc(steps[idx])}</div></div>
+  <div class="step-nav">
+    <button class="btn-step" onclick="goDetailStep(${idx-1})" ${idx===0?'disabled':''}>← Back</button>
+    <button class="btn-step primary" onclick="goDetailStep(${idx+1})">${idx===steps.length-1?'Done ✓':'Next step →'}</button>
+  </div>`;
+}
+function goDetailStep(idx){
+  const steps=window._detailSteps||[];
+  const total=steps.length;
+  const clamped=Math.max(0,Math.min(idx,total));
+  const pct=Math.round((Math.max(clamped,0)/total)*100);
+  const prog=document.getElementById('det-prog');
+  const label=document.getElementById('det-prog-label');
+  const disp=document.getElementById('det-step-display');
+  if(prog)prog.style.width=pct+'%';
+  if(label)label.textContent=clamped>=total?'Complete!':'Step '+(clamped+1)+' of '+total;
+  if(disp)disp.innerHTML=renderDetailStep(steps,clamped);
+}
+
+// ── User rating ───────────────────────────────────────
+function hoverStars(ri,val){
+  document.querySelectorAll(`#star-picker-${ri} .star-btn`).forEach(btn=>{
+    btn.classList.toggle('lit',parseInt(btn.dataset.val)<=val);
+  });
+}
+function resetStarHover(ri){
+  document.querySelectorAll(`#star-picker-${ri} .star-btn`).forEach(btn=>btn.classList.remove('lit'));
+}
+function submitRating(ri,recipeName,val){
+  userRatings[recipeName]=val;
+  const widget=document.getElementById(`rating-widget-${ri}`);
+  if(widget){
+    widget.innerHTML=`<div class="user-rating-title">Your rating</div>
+    <div class="rating-submitted">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      You rated this ${val} star${val!==1?'s':''}!
+    </div>`;
+  }
+}
 </script>
 </body>
 </html>
