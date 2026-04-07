@@ -370,25 +370,49 @@ function setMsg(m){document.getElementById('load-msg').textContent=m;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function showErr(msg){const b=document.getElementById('error-box');b.textContent=msg;b.style.display='block';}
 
+// ── Image compression ─────────────────────────────────
+// Resizes + compresses to JPEG before sending — keeps payload well under 4.5MB
+function compressImage(file, maxPx, quality){
+  return new Promise((resolve)=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        let w=img.width,h=img.height;
+        if(w>maxPx||h>maxPx){
+          if(w>h){h=Math.round(h*(maxPx/w));w=maxPx;}
+          else{w=Math.round(w*(maxPx/h));h=maxPx;}
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        const dataUrl=canvas.toDataURL('image/jpeg',quality);
+        resolve({b64:dataUrl.split(',')[1],dataUrl,type:'image/jpeg'});
+      };
+      img.src=e.target.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+
 // ── File handling ─────────────────────────────────────
-function handleFridgeFile(file){
+async function handleFridgeFile(file){
   if(!file)return;
-  fridgeType=file.type||'image/jpeg';
-  const r=new FileReader();
-  r.onload=e=>{
-    fridgeB64=e.target.result.split(',')[1];
-    document.getElementById('fridge-preview-img').src=e.target.result;
-    document.getElementById('fridge-preview-name').textContent=file.name;
-    H('fridge-upload-zone');S('fridge-preview');
-    // Show spice cabinet zone, time row, prefs, scan button
-    document.getElementById('spice-zone-wrap').style.display='block';
-    document.getElementById('time-row').style.display='flex';
-    document.getElementById('health-panel').style.display='block';
-    document.getElementById('cuisine-panel').style.display='block';
-    document.getElementById('scan-btn').style.display='flex';
-    ['loading','error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
-  };
-  r.readAsDataURL(file);
+  // Show a quick "processing" state on the zone
+  document.getElementById('fridge-upload-zone').style.opacity='0.5';
+  const compressed=await compressImage(file,1024,0.82);
+  fridgeB64=compressed.b64;
+  fridgeType=compressed.type;
+  document.getElementById('fridge-upload-zone').style.opacity='1';
+  document.getElementById('fridge-preview-img').src=compressed.dataUrl;
+  document.getElementById('fridge-preview-name').textContent=file.name;
+  H('fridge-upload-zone');S('fridge-preview');
+  document.getElementById('spice-zone-wrap').style.display='block';
+  document.getElementById('time-row').style.display='flex';
+  document.getElementById('health-panel').style.display='block';
+  document.getElementById('cuisine-panel').style.display='block';
+  document.getElementById('scan-btn').style.display='flex';
+  ['loading','error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
 }
 function clearFridgePhoto(){
   fridgeB64=null;ingredients=[];allRecipes=[];
@@ -399,17 +423,16 @@ function clearFridgePhoto(){
   document.getElementById('scan-btn').style.display='none';
   ['loading','error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
 }
-function handleSpiceFile(file){
+async function handleSpiceFile(file){
   if(!file)return;
-  spiceType=file.type||'image/jpeg';
-  const r=new FileReader();
-  r.onload=e=>{
-    spiceB64=e.target.result.split(',')[1];
-    document.getElementById('spice-preview-img').src=e.target.result;
-    document.getElementById('spice-preview-name').textContent=file.name;
-    H('spice-upload-zone');S('spice-preview');
-  };
-  r.readAsDataURL(file);
+  document.getElementById('spice-upload-zone').style.opacity='0.5';
+  const compressed=await compressImage(file,1024,0.82);
+  spiceB64=compressed.b64;
+  spiceType=compressed.type;
+  document.getElementById('spice-upload-zone').style.opacity='1';
+  document.getElementById('spice-preview-img').src=compressed.dataUrl;
+  document.getElementById('spice-preview-name').textContent=file.name;
+  H('spice-upload-zone');S('spice-preview');
 }
 function clearSpicePhoto(){
   spiceB64=null;spiceType=null;
