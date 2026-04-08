@@ -374,6 +374,11 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
       <button class="pill" data-val="turkey mince" onclick="toggleProtein(this)">&#127831; Turkey mince</button>
       <button class="pill" data-val="cod fillet" onclick="toggleProtein(this)">&#127920; Cod</button>
     </div>
+    <div class="allergy-input-row" style="margin-top:10px;margin-bottom:0">
+      <input type="text" id="protein-input" placeholder="Other protein e.g. duck, venison..." onkeydown="if(event.key==='Enter')addCustomProtein()">
+      <button class="btn-add" onclick="addCustomProtein()">Add</button>
+    </div>
+    <div class="allergy-chips" id="custom-protein-chips" style="margin-top:8px"></div>
   </div>
 
   <button class="btn-scan" id="scan-btn" onclick="runScan()">
@@ -481,6 +486,29 @@ function toggleProtein(btn){
   }else{
     extraProteins=extraProteins.filter(function(v){return v!==val;});
   }
+}
+
+function addCustomProtein(){
+  var inp=document.getElementById('protein-input');
+  var v=inp.value.trim().toLowerCase();
+  if(!v)return;
+  if(extraProteins.indexOf(v)===-1)extraProteins.push(v);
+  inp.value='';
+  renderCustomProteinChips();
+}
+function removeCustomProtein(v){
+  extraProteins=extraProteins.filter(function(p){return p!==v;});
+  renderCustomProteinChips();
+}
+function renderCustomProteinChips(){
+  // Only show chips for proteins NOT in the preset list (custom ones)
+  var presets=['chicken breast','chicken thighs','ground beef','beef steak','salmon fillet','shrimp','tuna','pork chops','bacon','sausage','tofu','lamb','turkey mince','cod fillet'];
+  var customs=extraProteins.filter(function(p){return presets.indexOf(p)===-1;});
+  var el=document.getElementById('custom-protein-chips');
+  if(!el)return;
+  el.innerHTML=customs.map(function(p){
+    return '<span class="allergy-chip" style="background:var(--al);color:var(--accent);border-color:rgba(45,80,22,.2)">'+esc(p)+'<button class="allergy-x" style="color:var(--accent)" onclick="removeCustomProtein(\''+esc(p)+'\')">&#215;</button></span>';
+  }).join('');
 }
 
 function addAllergy(){
@@ -676,6 +704,8 @@ function clearFridgePhoto(){
   document.getElementById('allergy-panel').classList.remove('visible');
   document.getElementById('protein-panel').classList.remove('visible');
   extraProteins=[];
+  var cpc=document.getElementById('custom-protein-chips');if(cpc)cpc.innerHTML='';
+  document.querySelectorAll('.protein-grid .pill').forEach(function(b){b.classList.remove('active');});
   clearSpicePhoto();
   ['time-row','health-panel','cuisine-panel'].forEach(function(id){document.getElementById(id).style.display='none';});
   document.getElementById('scan-btn').style.display='none';
