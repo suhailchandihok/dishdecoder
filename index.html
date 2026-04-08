@@ -338,6 +338,11 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
       <button class="pill" data-val="Greek" onclick="togglePill(this,'cuisine')">Greek</button>
       <button class="pill" data-val="Korean" onclick="togglePill(this,'cuisine')">Korean</button>
     </div>
+    <div class="allergy-input-row" style="margin-top:10px;margin-bottom:0">
+      <input type="text" id="cuisine-custom-input" placeholder="Other cuisine e.g. Peruvian, Ethiopian..." onkeydown="if(event.key==='Enter')addCustomCuisine()">
+      <button class="btn-add" onclick="addCustomCuisine()">Add</button>
+    </div>
+    <div id="cuisine-custom-chip" style="margin-top:8px"></div>
   </div>
 
   <div class="allergy-panel" id="allergy-panel">
@@ -379,6 +384,20 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
       <button class="btn-add" onclick="addCustomProtein()">Add</button>
     </div>
     <div class="allergy-chips" id="custom-protein-chips" style="margin-top:8px"></div>
+  </div>
+
+  <div class="pref-panel" id="meal-type-panel">
+    <div class="pref-title">Meal type <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:11px;opacity:.8">(optional &mdash; pick one)</span></div>
+    <div class="pill-grid">
+      <button class="pill" data-val="Breakfast" onclick="togglePill(this,'mealtype')">&#9728;&#65039; Breakfast</button>
+      <button class="pill" data-val="Brunch" onclick="togglePill(this,'mealtype')">&#127859; Brunch</button>
+      <button class="pill" data-val="Lunch" onclick="togglePill(this,'mealtype')">&#127956; Lunch</button>
+      <button class="pill" data-val="Dinner" onclick="togglePill(this,'mealtype')">&#127769; Dinner</button>
+      <button class="pill" data-val="Snack" onclick="togglePill(this,'mealtype')">&#127815; Snack</button>
+      <button class="pill" data-val="Dessert" onclick="togglePill(this,'mealtype')">&#127856; Dessert</button>
+      <button class="pill" data-val="Appetiser" onclick="togglePill(this,'mealtype')">&#127860; Appetiser</button>
+      <button class="pill" data-val="Meal Prep" onclick="togglePill(this,'mealtype')">&#128230; Meal prep</button>
+    </div>
   </div>
 
   <button class="btn-scan" id="scan-btn" onclick="runScan()">
@@ -460,7 +479,7 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
 
 <script>
 var fridgeB64=null,fridgeType=null,spiceB64=null,spiceType=null;
-var selMin=15,ingredients=[],healthPrefs=[],cuisinePref='';
+var selMin=15,ingredients=[],healthPrefs=[],cuisinePref='',mealTypePref='';
 var allRecipes=[],detailStepIdx=0,userRatings={};
 var allergies=[],extraProteins=[],currentServings=2,baseServings=2,currentRecipeIdx=null;
 var HKEY='dishdecoder_history',LKEY='dishdecoder_last_scan';
@@ -529,7 +548,7 @@ function renderAllergyChips(){
 function getHistory(){try{return JSON.parse(localStorage.getItem(HKEY)||'[]');}catch(e){return[];}}
 function saveToHistory(recipes){
   var h=getHistory();
-  h.unshift({id:Date.now(),date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}),ingredients:ingredients.slice(),recipes:recipes,selMin:selMin,healthPrefs:healthPrefs.slice(),cuisinePref:cuisinePref,allergies:allergies.slice(),extraProteins:extraProteins.slice()});
+  h.unshift({id:Date.now(),date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}),ingredients:ingredients.slice(),recipes:recipes,selMin:selMin,healthPrefs:healthPrefs.slice(),cuisinePref:cuisinePref,mealTypePref:mealTypePref,allergies:allergies.slice(),extraProteins:extraProteins.slice()});
   try{localStorage.setItem(HKEY,JSON.stringify(h.slice(0,10)));}catch(e){}
   updateHistoryBtn();
 }
@@ -562,7 +581,7 @@ function loadHistoryEntry(i){
 }
 
 function saveLastScan(){
-  try{localStorage.setItem(LKEY,JSON.stringify({ingredients:ingredients.slice(),selMin:selMin,healthPrefs:healthPrefs.slice(),cuisinePref:cuisinePref,allergies:allergies.slice(),extraProteins:extraProteins.slice()}));}catch(e){}
+  try{localStorage.setItem(LKEY,JSON.stringify({ingredients:ingredients.slice(),selMin:selMin,healthPrefs:healthPrefs.slice(),cuisinePref:cuisinePref,mealTypePref:mealTypePref,allergies:allergies.slice(),extraProteins:extraProteins.slice()}));}catch(e){}
   updateCookAgainBtn();
 }
 function updateCookAgainBtn(){
@@ -581,6 +600,7 @@ function cookAgain(){
     if(!last||!last.ingredients.length)return;
     ingredients=last.ingredients.slice();selMin=last.selMin||15;
     healthPrefs=(last.healthPrefs||[]).slice();cuisinePref=last.cuisinePref||'';
+    mealTypePref=last.mealTypePref||'';
     allergies=(last.allergies||[]).slice();extraProteins=(last.extraProteins||[]).slice();
     renderChips();S('ing-section');
     ['error-box','chooser-section','detail-section','try-again'].forEach(H);
@@ -642,13 +662,45 @@ function togglePill(btn,group){
   if(group==='cuisine'){
     var was=btn.classList.contains('active');
     document.querySelectorAll('#cuisine-panel .pill').forEach(function(p){p.classList.remove('active');});
+    clearCustomCuisine();
     if(!was){btn.classList.add('active');cuisinePref=btn.dataset.val;}else{cuisinePref='';}
+  }else if(group==='mealtype'){
+    var wasMeal=btn.classList.contains('active');
+    document.querySelectorAll('#meal-type-panel .pill').forEach(function(p){p.classList.remove('active');});
+    if(!wasMeal){btn.classList.add('active');mealTypePref=btn.dataset.val;}else{mealTypePref='';}
   }else{
     btn.classList.toggle('active');
     var val=btn.dataset.val;
     if(btn.classList.contains('active')){healthPrefs.push(val);}
     else{healthPrefs=healthPrefs.filter(function(v){return v!==val;});}
   }
+}
+function addCustomCuisine(){
+  var inp=document.getElementById('cuisine-custom-input');
+  var v=inp.value.trim();
+  if(!v)return;
+  // Deselect any preset pill
+  document.querySelectorAll('#cuisine-panel .pill').forEach(function(p){p.classList.remove('active');});
+  cuisinePref=v;
+  inp.value='';
+  renderCustomCuisineChip();
+}
+function clearCustomCuisine(){
+  var el=document.getElementById('cuisine-custom-chip');
+  if(el)el.innerHTML='';
+  var inp=document.getElementById('cuisine-custom-input');
+  if(inp)inp.value='';
+}
+function renderCustomCuisineChip(){
+  var el=document.getElementById('cuisine-custom-chip');
+  if(!el)return;
+  el.innerHTML=cuisinePref
+    ?'<span class="allergy-chip" style="background:var(--al);color:var(--accent);border-color:rgba(45,80,22,.2)">'+esc(cuisinePref)+'<button class="allergy-x" style="color:var(--accent)" onclick="removeCuisinePref()">&#215;</button></span>'
+    :'';
+}
+function removeCuisinePref(){
+  cuisinePref='';
+  clearCustomCuisine();
 }
 function setTime(btn){
   document.querySelectorAll('.time-btn').forEach(function(b){b.classList.remove('active');});
@@ -690,6 +742,7 @@ function handleFridgeFile(file){
     document.getElementById('cuisine-panel').style.display='block';
     document.getElementById('allergy-panel').classList.add('visible');
     document.getElementById('protein-panel').classList.add('visible');
+    document.getElementById('meal-type-panel').style.display='block';
     document.getElementById('scan-btn').style.display='flex';
     ['loading','error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
   });
@@ -703,9 +756,11 @@ function clearFridgePhoto(){
   document.getElementById('expiry-check').checked=false;
   document.getElementById('allergy-panel').classList.remove('visible');
   document.getElementById('protein-panel').classList.remove('visible');
-  extraProteins=[];
+  document.getElementById('meal-type-panel').style.display='none';
+  extraProteins=[];cuisinePref='';mealTypePref='';
   var cpc=document.getElementById('custom-protein-chips');if(cpc)cpc.innerHTML='';
-  document.querySelectorAll('.protein-grid .pill').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.protein-grid .pill, #meal-type-panel .pill').forEach(function(b){b.classList.remove('active');});
+  clearCustomCuisine();
   clearSpicePhoto();
   ['time-row','health-panel','cuisine-panel'].forEach(function(id){document.getElementById(id).style.display='none';});
   document.getElementById('scan-btn').style.display='none';
@@ -794,16 +849,21 @@ function runScan(){
 function generateRecipes(){
   S('loading');setMsg('Finding top-rated recipes...');H('chooser-section');H('detail-section');
   var pc='';
+  if(mealTypePref)pc+='Meal type: '+mealTypePref+' recipes only. ';
   if(healthPrefs.length)pc+='Health requirements: '+healthPrefs.join(', ')+'. ';
   if(cuisinePref)pc+='Cuisine style: '+cuisinePref+'. ';
   if(allergies.length)pc+='STRICT ALLERGIES - never include these: '+allergies.join(', ')+'. ';
-  if(extraProteins.length)pc+='The user is also adding these proteins (treat as available ingredients): '+extraProteins.join(', ')+'. ';
+  if(extraProteins.length)pc+='The user is buying these proteins — build recipes around them: '+extraProteins.join(', ')+'. ';
   if(document.getElementById('expiry-check')&&document.getElementById('expiry-check').checked)
     pc+='Prioritise ingredients that expire soonest (leafy greens, fresh meat, dairy, opened sauces). ';
+  var proteinNote=extraProteins.length
+    ?'The user has specified proteins ('+extraProteins.join(', ')+') — at least 3 of the 5 recipes must feature one of these as the main protein.'
+    :'No protein was specified. Assume the user likely has common proteins available (chicken, beef, eggs, etc.) even if not visible in the scan. Vary the proteins across all 5 recipes — do not give 5 egg-based dishes. Include a mix such as chicken, beef or pork, fish, and plant-based options.';
   var sys='You are a creative home cook with nutrition expertise. Given fridge ingredients, cooking time, and preferences, suggest exactly 5 recipes. '
-    +'Use the scanned ingredients as your starting point, but always recommend the BEST-RATED and most delicious dishes that make sense with those ingredients — even if that means assuming a common protein or one extra item might be on hand. '
-    +'People often have ingredients not visible in the photo (meat on a counter, items in a cupboard, etc.), so do not limit yourself strictly to only what was scanned. '
-    +'Think: given these ingredients, what are the 5 highest-rated dishes a home cook would most want to make tonight? '
+    +proteinNote+' '
+    +'Use the scanned ingredients as your starting point, but always recommend the BEST-RATED and most delicious dishes that make sense with those ingredients — even if that means one or two items might need to be grabbed. '
+    +'People often have ingredients not visible in the photo (meat on a counter, items in a cupboard), so never limit yourself strictly to only what was scanned. '
+    +'Think: given these ingredients, what are the 5 highest-rated dishes a home cook would most want to make? '
     +'Include realistic internet ratings from AllRecipes/Food Network/Tasty. '
     +'For every ingredient mark available (in fridge, in the extra proteins list, or a pantry staple: salt, pepper, oil, butter, garlic, onion, flour, sugar, soy sauce, vinegar, common spices, water) or missing (genuinely not likely to be on hand). '
     +'\n\nReply ONLY with valid JSON, no markdown:\n'
@@ -811,9 +871,10 @@ function generateRecipes(){
     +'Rules: difficulty=Easy/Medium/Hard. Nutrition realistic per serving. calories is integer. Fit within '+selMin+' min. Steps have temperatures/times. rating 1.0-5.0. ratingCount like "1.2k".'
     +(pc?' IMPORTANT: '+pc:'');
   var um='Scanned fridge ingredients: '+ingredients.join(', ')+'. Time: '+selMin+' min.'
-    +(extraProteins.length?' Extra proteins the user is adding: '+extraProteins.join(', ')+'.':'')
+    +(extraProteins.length?' User is buying these proteins: '+extraProteins.join(', ')+'.':'')
+    +(mealTypePref?' Meal type: '+mealTypePref+'.':'')
     +(pc?' Preferences: '+pc:'')
-    +' Suggest the 5 best-rated recipes that make great use of these ingredients. Prioritise top-rated dishes even if they need one or two items not visible in the scan.';
+    +' Suggest the 5 best-rated recipes. Vary proteins across the 5 dishes.';
   return callBackend([{role:'system',content:sys},{role:'user',content:um}],3500).then(function(raw){
     var recipes=[];
     try{recipes=JSON.parse(raw.replace(/```json|```/g,'').trim()).recipes||[];}
