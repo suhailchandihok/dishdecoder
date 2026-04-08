@@ -801,13 +801,19 @@ function generateRecipes(){
   if(document.getElementById('expiry-check')&&document.getElementById('expiry-check').checked)
     pc+='Prioritise ingredients that expire soonest (leafy greens, fresh meat, dairy, opened sauces). ';
   var sys='You are a creative home cook with nutrition expertise. Given fridge ingredients, cooking time, and preferences, suggest exactly 5 recipes. '
+    +'Use the scanned ingredients as your starting point, but always recommend the BEST-RATED and most delicious dishes that make sense with those ingredients — even if that means assuming a common protein or one extra item might be on hand. '
+    +'People often have ingredients not visible in the photo (meat on a counter, items in a cupboard, etc.), so do not limit yourself strictly to only what was scanned. '
+    +'Think: given these ingredients, what are the 5 highest-rated dishes a home cook would most want to make tonight? '
     +'Include realistic internet ratings from AllRecipes/Food Network/Tasty. '
-    +'For every ingredient mark available (in fridge, in the extra proteins list, or a pantry staple: salt, pepper, oil, butter, garlic, onion, flour, sugar, soy sauce, vinegar, common spices, water) or missing. '
+    +'For every ingredient mark available (in fridge, in the extra proteins list, or a pantry staple: salt, pepper, oil, butter, garlic, onion, flour, sugar, soy sauce, vinegar, common spices, water) or missing (genuinely not likely to be on hand). '
     +'\n\nReply ONLY with valid JSON, no markdown:\n'
     +'{"recipes":[{"name":"Pasta","time":"20 min","difficulty":"Easy","cuisine":"Italian","description":"Sentence.","tip":"Tip.","rating":4.7,"ratingCount":"2.1k","popularity":"Top Rated","nutrition":{"calories":450,"protein":"28g","carbs":"32g","fat":"18g","fiber":"4g"},"ingredients":[{"amount":"2 large","item":"eggs","available":true,"note":""},{"amount":"1 cup","item":"cream","available":false,"note":""}],"steps":["Step one.","Step two."]}]}\n\n'
     +'Rules: difficulty=Easy/Medium/Hard. Nutrition realistic per serving. calories is integer. Fit within '+selMin+' min. Steps have temperatures/times. rating 1.0-5.0. ratingCount like "1.2k".'
     +(pc?' IMPORTANT: '+pc:'');
-  var um='Fridge ingredients: '+ingredients.join(', ')+'. Time: '+selMin+' min.'+(pc?' Preferences: '+pc:'')+' Give me 5 highly-rated recipe options.';
+  var um='Scanned fridge ingredients: '+ingredients.join(', ')+'. Time: '+selMin+' min.'
+    +(extraProteins.length?' Extra proteins the user is adding: '+extraProteins.join(', ')+'.':'')
+    +(pc?' Preferences: '+pc:'')
+    +' Suggest the 5 best-rated recipes that make great use of these ingredients. Prioritise top-rated dishes even if they need one or two items not visible in the scan.';
   return callBackend([{role:'system',content:sys},{role:'user',content:um}],3500).then(function(raw){
     var recipes=[];
     try{recipes=JSON.parse(raw.replace(/```json|```/g,'').trim()).recipes||[];}
