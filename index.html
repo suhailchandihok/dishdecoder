@@ -38,9 +38,8 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
 .preview-zone-name{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
 .btn-ghost{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
-/* Intent toggle */
-.intent-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px;gap:4px}
-.intent-toggle.visible{display:flex}
+/* Intent toggle - always visible at top */
+.intent-toggle{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px;gap:4px;display:flex}
 .intent-btn{flex:1;padding:12px 8px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;color:var(--muted);background:none;display:flex;flex-direction:column;align-items:center;gap:3px}
 .intent-btn small{font-size:11px;font-weight:400;opacity:.75;text-align:center}
 .intent-btn.active{background:var(--accent);color:#fff}
@@ -359,6 +358,12 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
   </button>
 </header>
 <main>
+  <!-- Intent toggle - always first, before anything else -->
+  <div class="intent-toggle" id="intent-toggle">
+    <button class="intent-btn active" onclick="setIntent('cooking',this)">&#127859; Just Cooking<small>recipes for tonight</small></button>
+    <button class="intent-btn" onclick="setIntent('mealprep',this)">&#128230; Meal Prepping<small>batch cook &amp; store for the week</small></button>
+  </div>
+
   <div class="photo-zones">
     <div>
       <div class="photo-zone-label"><span class="required-dot"></span>Fridge photo</div>
@@ -412,12 +417,6 @@ main{width:100%;max-width:760px;padding:0 24px 80px;display:flex;flex-direction:
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Intent toggle -->
-  <div class="intent-toggle" id="intent-toggle">
-    <button class="intent-btn active" onclick="setIntent('cooking',this)">&#127859; Just Cooking<small>recipes for tonight</small></button>
-    <button class="intent-btn" onclick="setIntent('mealprep',this)">&#128230; Meal Prepping<small>batch cook &amp; store for the week</small></button>
   </div>
 
   <!-- People -->
@@ -1115,7 +1114,6 @@ function compressImage(file,maxPx,quality){
 /* ── File handling ───────────────────────────────── */
 function showScanPanels(){
   document.getElementById('spice-zone-wrap').style.display='block';
-  document.getElementById('intent-toggle').classList.add('visible');
   document.getElementById('people-row').classList.add('visible');
   document.getElementById('expiry-row').classList.add('visible');
   document.getElementById('time-row').style.display='flex';
@@ -1130,13 +1128,10 @@ function showScanPanels(){
 }
 function hideScanPanels(){
   document.getElementById('spice-zone-wrap').style.display='none';
-  document.getElementById('intent-toggle').classList.remove('visible');
   document.getElementById('people-row').classList.remove('visible');
   document.getElementById('expiry-row').classList.remove('visible');
   document.getElementById('expiry-row').classList.remove('checked');
   document.getElementById('expiry-check').checked=false;
-  cookingIntent='cooking';
-  document.querySelectorAll('.intent-btn').forEach(function(b,i){b.classList.toggle('active',i===0);});
   document.getElementById('allergy-panel').classList.remove('visible');
   document.getElementById('dislike-panel').classList.remove('visible');
   document.getElementById('protein-panel').classList.remove('visible');
@@ -1246,19 +1241,69 @@ function runScan(){
   document.getElementById('scan-btn').disabled=true;
   ['error-box','ing-section','chooser-section','detail-section','try-again'].forEach(H);
   document.getElementById('scan-feedback').classList.remove('visible');
-  S('loading');setMsg('Spotting ingredients...');
-  var uc=[{type:'image_url',image_url:{url:'data:'+fridgeType+';base64,'+fridgeB64,detail:'low'}}];
+  S('loading');setMsg('Scanning your fridge...');
+
+  // Build fridge-only scan first
+  var fridgeContent=[
+    {type:'image_url',image_url:{url:'data:'+fridgeType+';base64,'+fridgeB64,detail:'auto'}},
+    {type:'text',text:'List every food ingredient, produce, meat, dairy, sauce, and condiment you can see in this fridge photo.'}
+  ];
+
+  var scanPromise;
   if(spiceB64){
-    uc.push({type:'image_url',image_url:{url:'data:'+spiceType+';base64,'+spiceB64,detail:'low'}});
-    uc.push({type:'text',text:'First image is the fridge, second is the spice cabinet. What food ingredients and spices/seasonings/sauces do you see across both?'});
-  }else{uc.push({type:'text',text:'What food ingredients do you see?'});}
-  callBackend([
-    {role:'system',content:'You are a chef assistant. Respond ONLY with JSON: {"ingredients":["egg","milk","cheddar"]}. List every visible food item, spice, seasoning, sauce, condiment. Lowercase, concise, no duplicates.'},
-    {role:'user',content:uc}
-  ],500).then(function(raw){
-    try{ingredients=JSON.parse(raw.replace(/```json|```/g,'').trim()).ingredients||[];}
-    catch(e){var m=raw.match(/"ingredients"\s*:\s*\[([^\]]+)\]/);if(m)ingredients=m[1].split(',').map(function(s){return s.replace(/["\s]/g,'').trim();}).filter(Boolean);}
-    if(!ingredients.length)throw new Error('Could not spot ingredients. Try a clearer photo.');
+    // Scan fridge and spice cabinet as two separate calls, then merge
+    setMsg('Scanning fridge...');
+    var fridgeScan=callBackend([
+      {role:'system',content:'You are a chef assistant. Respond ONLY with a JSON array of ingredient strings. Example: ["eggs","milk","cheddar cheese","butter"]. List every visible food item. Lowercase, concise, no duplicates.'},
+      {role:'user',content:fridgeContent}
+    ],400);
+    var spiceContent=[
+      {type:'image_url',image_url:{url:'data:'+spiceType+';base64,'+spiceB64,detail:'auto'}},
+      {type:'text',text:'List every spice, seasoning, sauce, condiment, herb, and flavouring you can see in this photo.'}
+    ];
+    var spiceScan=callBackend([
+      {role:'system',content:'You are a chef assistant. Respond ONLY with a JSON array of ingredient strings. Example: ["cumin","paprika","soy sauce","olive oil"]. List every visible spice, seasoning, sauce and condiment. Lowercase, concise, no duplicates.'},
+      {role:'user',content:spiceContent}
+    ],400);
+    scanPromise=Promise.all([fridgeScan,spiceScan]).then(function(results){
+      setMsg('Combining ingredients...');
+      var combined=[];
+      results.forEach(function(raw){
+        var parsed=[];
+        try{
+          var clean=raw.replace(/```json|```/g,'').trim();
+          // Handle both array and object formats
+          if(clean.startsWith('['))parsed=JSON.parse(clean);
+          else parsed=JSON.parse(clean).ingredients||[];
+        }catch(e){
+          var m=raw.match(/\[([^\]]+)\]/);
+          if(m){parsed=m[1].split(',').map(function(s){return s.replace(/['"]/g,'').trim().toLowerCase();}).filter(Boolean);}
+        }
+        parsed.forEach(function(ing){if(ing&&combined.indexOf(ing.toLowerCase())===-1)combined.push(ing.toLowerCase());});
+      });
+      return combined;
+    });
+  }else{
+    scanPromise=callBackend([
+      {role:'system',content:'You are a chef assistant. Respond ONLY with a JSON array of ingredient strings. Example: ["eggs","milk","cheddar cheese"]. List every visible food item, spice, seasoning, sauce and condiment. Lowercase, concise, no duplicates.'},
+      {role:'user',content:fridgeContent}
+    ],400).then(function(raw){
+      var parsed=[];
+      try{
+        var clean=raw.replace(/```json|```/g,'').trim();
+        if(clean.startsWith('['))parsed=JSON.parse(clean);
+        else parsed=JSON.parse(clean).ingredients||[];
+      }catch(e){
+        var m=raw.match(/\[([^\]]+)\]/);
+        if(m){parsed=m[1].split(',').map(function(s){return s.replace(/['"]/g,'').trim().toLowerCase();}).filter(Boolean);}
+      }
+      return parsed;
+    });
+  }
+
+  scanPromise.then(function(detected){
+    if(!detected.length)throw new Error('Could not spot ingredients. Try a clearer photo.');
+    ingredients=detected;
     renderChips();S('ing-section');
     return generateRecipes();
   }).catch(function(err){
@@ -1288,15 +1333,16 @@ function generateRecipes(){
   var proteinNote=extraProteins.length
     ?'The user has specified proteins ('+extraProteins.join(', ')+') — at least 3 of the 5 recipes must feature one of these as the main protein.'
     :'No protein was specified. Assume the user likely has common proteins available (chicken, beef, eggs, etc.) even if not visible in the scan. Vary the proteins across all 5 recipes — do not give 5 egg-based dishes. Include a mix such as chicken, beef or pork, fish, and plant-based options.';
-  var sys='You are a creative home cook with nutrition expertise. '+peopleInstr+' '+intentInstr+' '+proteinNote+' '
-    +'Use the scanned ingredients as your starting point, but always recommend the BEST-RATED and most delicious dishes that make sense with those ingredients — even if that means one or two items might need to be grabbed. '
-    +'People often have ingredients not visible in the photo (meat on a counter, items in a cupboard), so never limit yourself strictly to only what was scanned. '
-    +'Think: given these ingredients, what are the 5 highest-rated dishes a home cook would most want to make? '
-    +'Include realistic internet ratings from AllRecipes/Food Network/Tasty. '
-    +'For every ingredient mark available (in fridge, in the extra proteins list, or a pantry staple: salt, pepper, oil, butter, garlic, onion, flour, sugar, soy sauce, vinegar, common spices, water) or missing (genuinely not likely to be on hand). '
+  var sys='You are a culinary expert who recommends real, well-known, beloved recipes that people genuinely love cooking. '+peopleInstr+' '+intentInstr+' '+proteinNote+' '
+    +'Use the scanned ingredients as your starting point, but recommend the most delicious, well-loved real dishes that make sense with those ingredients — even if one or two items need to be grabbed. '
+    +'ONLY recommend real, named dishes that are widely cooked and loved (e.g. "Chicken Tikka Masala", "Spaghetti Bolognese", "Pad Thai", "Beef Tacos") — never invent generic unnamed recipes. '
+    +'For each recipe, set sourceUrl to a real AllRecipes search URL for that dish: https://www.allrecipes.com/search?q= followed by the dish name URL-encoded (spaces as +). '
+    +'People often have ingredients not visible in the photo, so never limit yourself to only what was scanned. '
+    +'Think: given these ingredients, what are the 5 most delicious crowd-pleasing dishes this person would be genuinely excited to cook and eat tonight? Prioritise dishes people crave. '
+    +'For every ingredient mark available (in fridge, in the extra proteins list, or a pantry staple: salt, pepper, oil, butter, garlic, onion, flour, sugar, soy sauce, vinegar, common spices, water) or missing. '
     +'\n\nReply ONLY with valid JSON, no markdown:\n'
-    +'{"recipes":[{"name":"Pasta","time":"20 min","difficulty":"Easy","cuisine":"Italian","description":"Sentence.","tip":"Tip.","rating":4.7,"ratingCount":"2.1k","popularity":"Top Rated","nutrition":{"calories":450,"protein":"28g","carbs":"32g","fat":"18g","fiber":"4g"},"ingredients":[{"amount":"2 large","item":"eggs","available":true,"note":""},{"amount":"1 cup","item":"cream","available":false,"note":""}],"steps":["Step one.","Step two."]'+(isMealPrep?',"mealprep":{"batch_servings":"6-8 portions","batch_tips":["tip1","tip2","tip3"],"storage":{"fridge":"4-5 days","freezer":"3 months"},"reheat":"Best reheating instructions"}':'')+'}]}\n\n'
-    +'Rules: difficulty=Easy/Medium/Hard. Nutrition realistic per serving. calories is integer. Fit within '+selMin+' min. Steps have temperatures/times. rating 1.0-5.0. ratingCount like "1.2k".'
+    +'{"recipes":[{"name":"Chicken Tikka Masala","time":"40 min","difficulty":"Medium","cuisine":"Indian","description":"One sentence about why people love this dish.","tip":"One practical chef tip.","rating":4.8,"ratingCount":"Community Favourite","popularity":"Highly Rated","sourceUrl":"https://www.allrecipes.com/search?q=chicken+tikka+masala","nutrition":{"calories":520,"protein":"32g","carbs":"28g","fat":"22g","fiber":"3g"},"ingredients":[{"amount":"500g","item":"chicken breast","available":true,"note":""},{"amount":"1 cup","item":"heavy cream","available":false,"note":""}],"steps":["Step one with temperature.","Step two.","Step three."]'+(isMealPrep?',"mealprep":{"batch_servings":"6-8 portions","batch_tips":["tip1","tip2","tip3"],"storage":{"fridge":"4-5 days","freezer":"3 months"},"reheat":"Best reheating method"}':'')+'}]}\n\n'
+    +'Rules: difficulty=Easy/Medium/Hard. Nutrition realistic per serving. calories is integer. Fit within '+selMin+' min. Steps specific with temperatures/times. rating must be 4.3-4.9 (only beloved popular dishes). sourceUrl must be a real allrecipes.com search URL.'
     +(pc?' IMPORTANT: '+pc:'');
   var um='Scanned fridge ingredients: '+ingredients.join(', ')+'. Time: '+selMin+' min. Cooking for '+numPeople+' people.'
     +(extraProteins.length?' User is buying: '+extraProteins.join(', ')+'.':'')
@@ -1331,6 +1377,7 @@ function renderChooser(recipes){
     var mb=mc>0?'<span class="chooser-missing-count"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'+mc+' ingredient'+(mc>1?'s':'')+' needed</span>':'<span style="font-size:12px;color:#0F6E56;font-weight:500">&#10003; All ingredients available</span>';
     var cooked=hasCooked(r.name)?'<span class="cooked-badge" style="margin-left:4px">&#10003; Made</span>':'';
     var favActive=isFav(r.name);
+    var sourceLink=r.sourceUrl?'<a href="'+r.sourceUrl+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:11px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:3px;margin-top:6px">&#128279; View on AllRecipes</a>':'';
     return '<div class="chooser-card" onclick="openDetail('+ri+')">'
       +'<div class="chooser-card-top"><div class="chooser-name">'+esc(r.name)+cooked+'</div>'
       +'<button class="btn-fav'+(favActive?' active':'')+'" id="fav-btn-'+ri+'" onclick="event.stopPropagation();toggleFav('+ri+')" title="'+(favActive?'Remove from':'Save to')+' favourites">&#9829;</button></div>'
@@ -1339,11 +1386,13 @@ function renderChooser(recipes){
       +'<span class="badge '+dc+'">'+esc(r.difficulty||'Easy')+'</span></div>'
       +'<div style="display:flex;align-items:center;gap:8px;margin:8px 0">'+stars
       +'<span style="font-size:13px;font-weight:500">'+(r.rating||4.5).toFixed(1)+'</span>'
-      +'<span style="font-size:12px;color:var(--muted)">&middot; '+esc(r.ratingCount||'&mdash;')+'</span>'
+      +'<span style="font-size:12px;color:var(--muted)">'+(r.ratingCount?'&middot; '+esc(r.ratingCount):'')+'</span>'
       +(r.popularity?'<span class="badge badge-rating" style="font-size:10px;padding:2px 7px">'+esc(r.popularity)+'</span>':'')
       +'</div><div class="chooser-desc">'+esc(r.description)+'</div>'
       +'<div class="chooser-ing-preview">'+ip+extra+'</div>'
-      +'<div class="chooser-footer">'+mb+'<span class="chooser-cta">Full recipe <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span></div></div>';
+      +'<div class="chooser-footer">'+mb+'<span class="chooser-cta">Full recipe <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span></div>'
+      +sourceLink
+      +'</div>';
   }).join('');
 }
 
@@ -1452,6 +1501,7 @@ function openDetail(ri){
     +'<button class="btn-action btn-made'+(cookedAlready?' done':'')+'" id="made-btn-'+ri+'" onclick="markMade('+ri+',\''+esc(r.name)+'\')">&#127869; '+(cookedAlready?'Made it!':'I made this')+'</button>'
     +'<button class="btn-action btn-fav-detail'+(favActive?' active':'')+'" id="fav-detail-btn" onclick="toggleFav('+ri+')">&#9829; '+(favActive?'Saved':'Save')+'</button>'
     +'<button class="btn-action" id="share-btn-'+ri+'" onclick="shareRecipe('+ri+')">&#128279; Share</button>'
+    +(r.sourceUrl?'<a href="'+r.sourceUrl+'" target="_blank" rel="noopener" class="btn-action" style="text-decoration:none">&#128218; AllRecipes</a>':'')
     +'<button class="btn-action" onclick="exportPDF()"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> PDF</button>'
     +'</div>'+rw;
 
