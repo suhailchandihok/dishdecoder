@@ -171,6 +171,42 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 .delta-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
 .delta-val{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.4px}
 
+/* STRAIGHT BET COMPARISON */
+.split-panel{background:var(--ink);border-top:1px solid var(--line)}
+.split-panel-hdr{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:var(--ink3)}
+.sp-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--text)}
+.sp-close{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1;padding:0;transition:color .1s}
+.sp-close:hover{color:var(--red)}
+.split-leg{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line)}
+.split-leg:last-of-type{border-bottom:none}
+.sl-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sl-odds{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
+.sl-stake{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2)}
+.sl-ret{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500}
+.split-totals{display:grid;grid-template-columns:1fr 1px 1fr;border-top:2px solid var(--line2)}
+.st-col{padding:11px 14px;text-align:center}
+.st-div{background:var(--line2)}
+.st-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.st-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.4px}
+.st-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.split-delta{padding:10px 14px;text-align:center;border-top:1px solid var(--line)}
+.sd-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
+.sd-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.4px}
+.sd-msg{font-size:10px;color:var(--text3);margin-top:3px;line-height:1.5}
+
+/* LOCKED LEG BREAKDOWN */
+.ll-breakdown{background:var(--ink3);border-radius:0 0 var(--r) var(--r);overflow:hidden;margin:0 13px 13px;border:1px solid var(--line)}
+.llb-hdr{padding:7px 11px;display:grid;grid-template-columns:1fr 52px 60px 60px;gap:6px;border-bottom:1px solid var(--line)}
+.llb-col{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
+.llb-col.right{text-align:right}
+.llb-row{padding:7px 11px;display:grid;grid-template-columns:1fr 52px 60px 60px;gap:6px;border-bottom:1px solid var(--line);align-items:center}
+.llb-row:last-child{border-bottom:none}
+.llb-pick{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.llb-odds{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);text-align:right}
+.llb-stake{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);text-align:right}
+.llb-ret{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;text-align:right}
+.llb-status-dot{width:5px;height:5px;border-radius:50%;display:inline-block;margin-right:4px;flex-shrink:0}
+
 /* MISC */
 .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:12px}
 .spinner{width:22px;height:22px;border:2px solid var(--line2);border-top-color:var(--lime);border-radius:50%;animation:spin .7s linear infinite}
@@ -247,9 +283,20 @@ function addPick(key,label,odds,game){
 function removePick(key){slip=slip.filter(s=>s.key!==key);syncPill();renderSlip()}
 function syncPill(){const b=document.getElementById('slipBadge'),p=document.getElementById('slipPill');b.textContent=slip.length;if(slip.length){p.classList.add('on');b.style.display='block'}else{p.classList.remove('on');b.style.display='none'}}
 function focusSlip(){document.getElementById('slipCol').scrollIntoView({behavior:'smooth'})}
-function lockSlip(){if(!slip.length){toast('Add picks first');return}const{pay,prof}=calcP();const pl=+(stake/slip.length).toFixed(2);locked.unshift({legs:slip.map(s=>({...s,pl,sp:+(pl*dec(s.odds)).toFixed(2)})),stake,pay,prof,at:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});slip=[];syncPill();toast(`${locked[0].legs.length}-leg slip locked`);renderSlip();renderLocked()}
+function lockSlip(){
+  if(!slip.length){toast('Add picks first');return}
+  const{pay,prof}=calcP();
+  const pl=+(stake/slip.length).toFixed(2);
+  locked.unshift({
+    legs:slip.map(s=>({...s,pl,sp:+(pl*dec(s.odds)).toFixed(2)})),
+    stake,pay,prof,
+    at:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
+  });
+  slip=[];showSplitView=false;syncPill();
+  toast(`${locked[0].legs.length}-leg slip locked`);
+  renderSlip();renderLocked();
+}
 function setRes(si,li,r){locked[si].legs[li].result=r;renderLocked()}
-function showSplit(){const per=(stake/Math.max(slip.length,1)).toFixed(2);toast(`${slip.length} straight bets · $${per} each · $${stake.toFixed(2)} total`)}
 
 function fallback(){return[{home_team:'Orlando Magic',away_team:'Detroit Pistons',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Detroit Pistons',price:-125},{name:'Orlando Magic',price:105}]},{key:'spreads',outcomes:[{name:'Detroit Pistons',price:-108,point:-1.5},{name:'Orlando Magic',price:-112,point:1.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:211.5},{name:'Under',price:-110,point:211.5}]}]}]},{home_team:'Phoenix Suns',away_team:'Oklahoma City Thunder',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Oklahoma City Thunder',price:-400},{name:'Phoenix Suns',price:305}]},{key:'spreads',outcomes:[{name:'Oklahoma City Thunder',price:-108,point:-8.5},{name:'Phoenix Suns',price:-112,point:8.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:216.5},{name:'Under',price:-110,point:216.5}]}]}]},{home_team:'Denver Nuggets',away_team:'Minnesota Timberwolves',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Denver Nuggets',price:-255},{name:'Minnesota Timberwolves',price:210}]},{key:'spreads',outcomes:[{name:'Denver Nuggets',price:-112,point:-6.5},{name:'Minnesota Timberwolves',price:-108,point:6.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:213.5},{name:'Under',price:-110,point:213.5}]}]}]}]}
 
@@ -364,27 +411,221 @@ function renderMain(){
   document.getElementById('mainCol').innerHTML=h;
 }
 
+let showSplitView=false;
+
 function renderSlip(){
   const{pay,prof}=calcP();
+  const perLeg=slip.length?+(stake/slip.length).toFixed(2):0;
   let h=`<div class="slip-hdr"><div class="slip-title-row"><div class="slip-title">Bet Slip</div>${slip.length?`<div class="slip-legs-ct">${slip.length} LEG${slip.length!==1?'S':''}</div>`:''}</div></div>`;
-  if(!slip.length){h+=`<div class="slip-empty"><div class="se-mark">—</div><div class="se-txt">Your slip is empty.<br>Tap any line to add a pick.</div></div>`;document.getElementById('slipCol').innerHTML=h;return}
+
+  if(!slip.length){
+    h+=`<div class="slip-empty"><div class="se-mark">—</div><div class="se-txt">Your slip is empty.<br>Tap any line to add a pick.</div></div>`;
+    document.getElementById('slipCol').innerHTML=h;return;
+  }
+
+  // Legs list
   h+=`<div class="slip-items">`;
-  slip.forEach(s=>{const oc=s.odds>0?'var(--lime)':'var(--text)';h+=`<div class="slip-item"><div class="si-pick">${s.label}</div><div class="si-game">${s.game}</div><div class="si-row"><span class="si-odds" style="color:${oc}">${fo(s.odds)}</span><span class="si-time">LOCKED ${s.locked}</span></div><button class="si-rm" onclick="removePick('${s.key}')">×</button></div>`});
-  h+=`</div><div class="slip-foot"><div class="foot-lbl">Stake</div><div class="stake-wrap"><span class="stake-sign">$</span><input type="number" class="stake-in" value="${stake}" min="1" onchange="stake=parseFloat(this.value)||50;renderSlip()"></div><div class="presets">${[5,10,25,50,100].map(v=>`<button class="pre${stake===v?' on':''}" onclick="stake=${v};renderSlip()">$${v}</button>`).join('')}</div><div class="parlay-box"><div class="pb-row"><span class="pb-lbl">Stake</span><span class="pb-val">$${stake.toFixed(2)}</span></div><div class="pb-row"><span class="pb-lbl">${slip.length}-Leg Parlay</span><span class="pb-val g">$${pay.toFixed(2)}</span></div><div class="pb-row"><span class="pb-lbl">Est. Profit</span><span class="pb-val g">+$${prof.toFixed(2)}</span></div></div><button class="lock-btn" onclick="lockSlip()">LOCK PICKS — NO MONEY</button><button class="split-btn" onclick="showSplit()">View as straight bets</button></div>`;
+  slip.forEach(s=>{
+    const oc=s.odds>0?'var(--lime)':'var(--text)';
+    h+=`<div class="slip-item">
+      <div class="si-pick">${s.label}</div>
+      <div class="si-game">${s.game}</div>
+      <div class="si-row"><span class="si-odds" style="color:${oc}">${fo(s.odds)}</span><span class="si-time">LOCKED ${s.locked}</span></div>
+      <button class="si-rm" onclick="removePick('${s.key}')">×</button>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  // Stake + parlay summary
+  h+=`<div class="slip-foot">
+    <div class="foot-lbl">Stake</div>
+    <div class="stake-wrap"><span class="stake-sign">$</span><input type="number" class="stake-in" value="${stake}" min="1" onchange="stake=parseFloat(this.value)||50;renderSlip()"></div>
+    <div class="presets">${[5,10,25,50,100].map(v=>`<button class="pre${stake===v?' on':''}" onclick="stake=${v};renderSlip()">$${v}</button>`).join('')}</div>
+    <div class="parlay-box">
+      <div class="pb-row"><span class="pb-lbl">Stake</span><span class="pb-val">$${stake.toFixed(2)}</span></div>
+      <div class="pb-row"><span class="pb-lbl">${slip.length}-Leg Parlay Payout</span><span class="pb-val g">$${pay.toFixed(2)}</span></div>
+      <div class="pb-row"><span class="pb-lbl">Est. Profit if all hit</span><span class="pb-val g">+$${prof.toFixed(2)}</span></div>
+    </div>
+    <button class="lock-btn" onclick="lockSlip()">LOCK PICKS — NO MONEY</button>
+    <button class="split-btn" onclick="showSplitView=!showSplitView;renderSlip()">
+      ${showSplitView?'▲ Hide straight bet view':'▼ Compare vs straight bets'}
+    </button>
+  </div>`;
+
+  // Straight bet comparison panel — live as you build
+  if(showSplitView&&slip.length>0){
+    const straightTotal=slip.reduce((sum,s)=>{
+      const ret=+(perLeg*dec(s.odds)).toFixed(2);
+      return sum+ret-perLeg; // assume all win for preview
+    },0);
+    const diff=straightTotal-prof;
+
+    h+=`<div class="split-panel">
+      <div class="split-panel-hdr">
+        <div class="sp-title">If you bet each leg straight · $${perLeg.toFixed(2)} each</div>
+        <button class="sp-close" onclick="showSplitView=false;renderSlip()">×</button>
+      </div>
+      <div class="llb-hdr">
+        <div class="llb-col">Pick</div>
+        <div class="llb-col right">Odds</div>
+        <div class="llb-col right">Stake</div>
+        <div class="llb-col right">Return</div>
+      </div>`;
+
+    slip.forEach(s=>{
+      const ret=+(perLeg*dec(s.odds)).toFixed(2);
+      const profit=+(ret-perLeg).toFixed(2);
+      h+=`<div class="llb-row">
+        <div class="llb-pick">${s.label}</div>
+        <div class="llb-odds">${fo(s.odds)}</div>
+        <div class="llb-stake">$${perLeg.toFixed(2)}</div>
+        <div class="llb-ret" style="color:var(--lime)">+$${profit.toFixed(2)}</div>
+      </div>`;
+    });
+
+    h+=`<div class="split-totals">
+      <div class="st-col">
+        <div class="st-lbl">Parlay (all hit)</div>
+        <div class="st-val" style="color:var(--lime)">+$${prof.toFixed(2)}</div>
+        <div class="st-sub">One wrong = $0</div>
+      </div>
+      <div class="st-div"></div>
+      <div class="st-col">
+        <div class="st-lbl">Straight bets (all hit)</div>
+        <div class="st-val" style="color:var(--lime)">+$${straightTotal.toFixed(2)}</div>
+        <div class="st-sub">Each bet independent</div>
+      </div>
+    </div>
+    <div class="split-delta" style="background:${diff<0?'rgba(182,245,66,.04)':'rgba(255,77,77,.04)'}">
+      <div class="sd-lbl">${diff<0?'Parlay bonus if all legs hit':'Straight bets return more if all hit'}</div>
+      <div class="sd-val" style="color:${diff<0?'var(--lime)':'var(--text)'}">${diff<0?'+$'+Math.abs(diff).toFixed(2):'+$'+diff.toFixed(2)}</div>
+      <div class="sd-msg">${diff<0
+        ?`The parlay pays $${Math.abs(diff).toFixed(2)} more than straight bets IF all ${slip.length} legs hit. But one wrong leg and you lose everything.`
+        :`Straight bets return $${diff.toFixed(2)} more even when all legs hit. The parlay format is working against you on these odds.`
+      }</div>
+    </div>
+    </div>`;
+  }
+
   document.getElementById('slipCol').innerHTML=h;
 }
 
 function renderLocked(){
   if(!locked.length){document.getElementById('lockedArea').innerHTML='';return}
-  let h=`<div class="locked-area"><div class="locked-hdr">Locked slips</div>`;
+  let h=`<div class="locked-area"><div class="locked-hdr">Locked slips · mark results after each game</div>`;
+
   locked.forEach((ls,si)=>{
-    const wins=ls.legs.filter(l=>l.result==='win').length,losses=ls.legs.filter(l=>l.result==='loss').length,pend=ls.legs.filter(l=>!l.result).length,done=!pend,allW=done&&wins===ls.legs.length;
-    const pR=done?(allW?ls.prof:-ls.stake):null,sR=done?ls.legs.reduce((s,l)=>s+(l.result==='win'?l.sp-l.pl:-l.pl),0):null,diff=done?sR-pR:null;
-    h+=`<div class="locked-card"><div class="lc-hdr"><div class="lc-name">${ls.legs.length}-Leg Parlay · $${ls.stake}</div><div class="lc-meta">LOCKED ${ls.at} · ${wins}W ${losses}L ${pend}P</div></div>`;
-    ls.legs.forEach((l,li)=>{const dot=!l.result?'var(--fog)':l.result==='win'?'var(--lime)':'var(--red)';h+=`<div class="lc-leg"><div class="lc-dot" style="background:${dot}"></div><div class="lc-info"><div class="lc-pick">${l.label}</div><div class="lc-sub"><span>${fo(l.odds)}</span><span>${l.locked}</span></div></div><div class="lc-res"><button class="res-btn${l.result==='win'?' win':''}" onclick="setRes(${si},${li},'win')">WIN</button><button class="res-btn${l.result==='loss'?' loss':''}" onclick="setRes(${si},${li},'loss')">LOSS</button></div></div>`});
-    if(done){const pc=pR>=0?'var(--lime)':'var(--red)',sc=sR>=0?'var(--lime)':'var(--red)',dc=diff>0?'var(--lime)':'var(--text)';h+=`<div class="cmp-grid"><div class="cmp-col"><div class="cmp-lbl">Parlay</div><div class="cmp-val" style="color:${pc}">${fm(pR)}</div><div class="cmp-sub">All or nothing</div></div><div class="cmp-div"></div><div class="cmp-col"><div class="cmp-lbl">Straight bets</div><div class="cmp-val" style="color:${sc}">${fm(sR)}</div><div class="cmp-sub">Same stake split</div></div></div><div class="delta" style="background:${diff>0?'rgba(182,245,66,.05)':'transparent'}"><div class="delta-lbl">Parlay format cost you</div><div class="delta-val" style="color:${dc}">${fm(diff)}</div></div>`}
+    const wins=ls.legs.filter(l=>l.result==='win').length;
+    const losses=ls.legs.filter(l=>l.result==='loss').length;
+    const pend=ls.legs.filter(l=>!l.result).length;
+    const done=!pend;
+    const allW=done&&wins===ls.legs.length;
+
+    // Parlay result
+    const parlayResult=done?(allW?ls.prof:-ls.stake):null;
+
+    // Straight bet result — each leg gets equal share of stake
+    const straightResult=done?ls.legs.reduce((sum,l)=>{
+      const ret=l.result==='win'?+(l.pl*dec(l.odds)).toFixed(2):0;
+      return +(sum+ret-l.pl).toFixed(2);
+    },0):null;
+
+    const diff=done?+(straightResult-parlayResult).toFixed(2):null;
+
+    h+=`<div class="locked-card">
+      <div class="lc-hdr">
+        <div class="lc-name">${ls.legs.length}-Leg Parlay · $${ls.stake} stake</div>
+        <div class="lc-meta">LOCKED ${ls.at} · ${wins}W ${losses}L ${pend}P</div>
+      </div>`;
+
+    // Each leg with result buttons
+    ls.legs.forEach((l,li)=>{
+      const dot=!l.result?'var(--fog)':l.result==='win'?'var(--lime)':'var(--red)';
+      const straightRet=l.result?+(l.pl*dec(l.odds)).toFixed(2):null;
+      const straightProfit=l.result==='win'?+(straightRet-l.pl).toFixed(2):l.result==='loss'?-l.pl:null;
+      h+=`<div class="lc-leg">
+        <div class="lc-dot" style="background:${dot}"></div>
+        <div class="lc-info">
+          <div class="lc-pick">${l.label}</div>
+          <div class="lc-sub">
+            <span>${fo(l.odds)}</span>
+            <span>$${l.pl.toFixed(2)} straight</span>
+            ${l.result?`<span style="color:${l.result==='win'?'var(--lime)':'var(--red)'}">${l.result==='win'?'+$'+straightProfit.toFixed(2):'-$'+l.pl.toFixed(2)} straight</span>`:''}
+          </div>
+        </div>
+        <div class="lc-res">
+          <button class="res-btn${l.result==='win'?' win':''}" onclick="setRes(${si},${li},'win')">WIN</button>
+          <button class="res-btn${l.result==='loss'?' loss':''}" onclick="setRes(${si},${li},'loss')">LOSS</button>
+        </div>
+      </div>`;
+    });
+
+    // Leg by leg straight bet table — always visible once any result is marked
+    if(wins+losses>0){
+      h+=`<div class="ll-breakdown">
+        <div class="llb-hdr">
+          <div class="llb-col">Pick</div>
+          <div class="llb-col right">Odds</div>
+          <div class="llb-col right">Stake</div>
+          <div class="llb-col right">Straight ret.</div>
+        </div>`;
+      ls.legs.forEach(l=>{
+        const hasResult=!!l.result;
+        const ret=l.result==='win'?+(l.pl*dec(l.odds)).toFixed(2):null;
+        const profit=l.result==='win'?+(ret-l.pl).toFixed(2):l.result==='loss'?-l.pl:null;
+        const retColor=!hasResult?'var(--text3)':l.result==='win'?'var(--lime)':'var(--red)';
+        const retTxt=!hasResult?'Pending':l.result==='win'?'+$'+profit.toFixed(2):'-$'+l.pl.toFixed(2);
+        h+=`<div class="llb-row">
+          <div class="llb-pick" style="display:flex;align-items:center;gap:5px">
+            <span style="width:5px;height:5px;border-radius:50%;background:${!l.result?'var(--fog)':l.result==='win'?'var(--lime)':'var(--red)'};flex-shrink:0;display:inline-block"></span>
+            ${l.label}
+          </div>
+          <div class="llb-odds">${fo(l.odds)}</div>
+          <div class="llb-stake">$${l.pl.toFixed(2)}</div>
+          <div class="llb-ret" style="color:${retColor}">${retTxt}</div>
+        </div>`;
+      });
+      h+=`</div>`;
+    }
+
+    // Full comparison — only when all results marked
+    if(done){
+      const pc=parlayResult>=0?'var(--lime)':'var(--red)';
+      const sc=straightResult>=0?'var(--lime)':'var(--red)';
+      const dc=diff>0?'var(--lime)':'var(--red)';
+      const parlayWon=parlayResult>0;
+      const straightWon=straightResult>0;
+
+      h+=`<div class="cmp-grid">
+        <div class="cmp-col">
+          <div class="cmp-lbl">What you got · Parlay</div>
+          <div class="cmp-val" style="color:${pc}">${fm(parlayResult)}</div>
+          <div class="cmp-sub">${allW?`All ${ls.legs.length} legs hit`:`Lost — ${losses} wrong leg${losses>1?'s':''} wiped the slip`}</div>
+        </div>
+        <div class="cmp-div"></div>
+        <div class="cmp-col">
+          <div class="cmp-lbl">What you'd have · Straight</div>
+          <div class="cmp-val" style="color:${sc}">${fm(straightResult)}</div>
+          <div class="cmp-sub">${wins}/${ls.legs.length} correct · each bet independent</div>
+        </div>
+      </div>
+      <div class="delta" style="background:${diff>0?'rgba(255,77,77,.04)':'rgba(182,245,66,.04)'}">
+        <div class="delta-lbl">The parlay format ${diff>0?'cost':'saved'} you</div>
+        <div class="delta-val" style="color:${dc}">${diff>0?'+$'+diff.toFixed(2):'+$'+Math.abs(diff).toFixed(2)}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;line-height:1.6;padding:0 10px">
+          ${!allW&&wins>0
+            ?`You went ${wins}/${ls.legs.length}. If you had bet straight, those ${wins} correct pick${wins>1?'s':''} would have returned <strong style="color:var(--text)">+$${ls.legs.filter(l=>l.result==='win').reduce((s,l)=>+(s+(l.pl*dec(l.odds))-l.pl).toFixed(2),0).toFixed(2)}</strong> instead of losing everything.`
+            :!allW
+            ?`All ${ls.legs.length} legs missed. Both parlay and straight bets would have lost — but straight bets would have lost $${Math.abs(straightResult).toFixed(2)} vs your parlay loss of $${ls.stake.toFixed(2)}.`
+            :`Perfect card — all legs hit. The parlay paid $${Math.abs(diff).toFixed(2)} ${diff<0?'more':'less'} than straight bets would have.`
+          }
+        </div>
+      </div>`;
+    }
+
     h+=`</div>`;
   });
+
   h+=`</div>`;
   document.getElementById('lockedArea').innerHTML=h;
 }
