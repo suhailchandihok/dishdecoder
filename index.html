@@ -198,6 +198,7 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
   <div class="topbar-games" id="gameBar"></div>
   <div class="topbar-right">
     <div class="live-pill"><div class="live-pip"></div><span id="liveLabel">LOADING</span></div>
+    <button id="refreshBtn" onclick="fetchFreshOdds()" style="display:none;align-items:center;background:var(--ink3);border:1px solid var(--line2);border-radius:20px;padding:5px 12px;font-size:9px;color:var(--text2);cursor:pointer;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;transition:all .15s" onmouseover="this.style.borderColor='var(--lime-line)';this.style.color='var(--lime)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--text2)'">REFRESH LINES</button>
     <div class="slip-pill" id="slipPill" onclick="focusSlip()">
       <span>SLIP</span><span class="slip-badge" id="slipBadge">0</span>
     </div>
@@ -252,9 +253,59 @@ function showSplit(){const per=(stake/Math.max(slip.length,1)).toFixed(2);toast(
 
 function fallback(){return[{home_team:'Orlando Magic',away_team:'Detroit Pistons',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Detroit Pistons',price:-125},{name:'Orlando Magic',price:105}]},{key:'spreads',outcomes:[{name:'Detroit Pistons',price:-108,point:-1.5},{name:'Orlando Magic',price:-112,point:1.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:211.5},{name:'Under',price:-110,point:211.5}]}]}]},{home_team:'Phoenix Suns',away_team:'Oklahoma City Thunder',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Oklahoma City Thunder',price:-400},{name:'Phoenix Suns',price:305}]},{key:'spreads',outcomes:[{name:'Oklahoma City Thunder',price:-108,point:-8.5},{name:'Phoenix Suns',price:-112,point:8.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:216.5},{name:'Under',price:-110,point:216.5}]}]}]},{home_team:'Denver Nuggets',away_team:'Minnesota Timberwolves',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Denver Nuggets',price:-255},{name:'Minnesota Timberwolves',price:210}]},{key:'spreads',outcomes:[{name:'Denver Nuggets',price:-112,point:-6.5},{name:'Minnesota Timberwolves',price:-108,point:6.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:213.5},{name:'Under',price:-110,point:213.5}]}]}]}]}
 
-async function load(){
-  try{const r=await fetch(`${BASE}/sports/basketball_nba/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`);if(!r.ok)throw 0;const data=await r.json();const tn=new Set(['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets']);const f=data.filter(g=>tn.has(g.home_team)||tn.has(g.away_team));games=f.length?f.slice(0,3):fallback();loadedAt=new Date();document.getElementById('liveLabel').textContent='LIVE · '+loadedAt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
-  catch{games=fallback();loadedAt=new Date();document.getElementById('liveLabel').textContent='LINES LOADED'}
+const CACHE_KEY='legup_odds';
+
+function getCached(){
+  try{const raw=localStorage.getItem(CACHE_KEY);if(!raw)return null;return JSON.parse(raw)}catch{return null}
+}
+function setCache(data){
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify({data,ts:Date.now()}))}catch{}
+}
+
+// On page load — always use cache if it exists, never auto-call API
+function load(){
+  const cached=getCached();
+  if(cached){
+    const tn=new Set(['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets']);
+    const f=cached.data.filter(g=>tn.has(g.home_team)||tn.has(g.away_team));
+    games=f.length?f.slice(0,3):fallback();
+    loadedAt=new Date(cached.ts);
+    const age=Math.round((Date.now()-cached.ts)/60000);
+    document.getElementById('liveLabel').textContent=`CACHED · ${age}m AGO`;
+    document.getElementById('refreshBtn').style.display='flex';
+  } else {
+    // No cache yet — load fallback data, show refresh button
+    games=fallback();
+    loadedAt=new Date();
+    document.getElementById('liveLabel').textContent='DEMO DATA';
+    document.getElementById('refreshBtn').style.display='flex';
+  }
+  renderAll();
+}
+
+// Only hits API when YOU click the refresh button
+async function fetchFreshOdds(){
+  const btn=document.getElementById('refreshBtn');
+  btn.textContent='FETCHING...';
+  btn.style.opacity='.5';
+  btn.style.pointerEvents='none';
+  try{
+    const r=await fetch(`${BASE}/sports/basketball_nba/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`);
+    if(!r.ok)throw new Error('API '+r.status);
+    const data=await r.json();
+    setCache(data);
+    const tn=new Set(['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets']);
+    const f=data.filter(g=>tn.has(g.home_team)||tn.has(g.away_team));
+    games=f.length?f.slice(0,3):fallback();
+    loadedAt=new Date();
+    document.getElementById('liveLabel').textContent='LIVE · '+loadedAt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    toast('Lines updated');
+  }catch(e){
+    toast('API error — using cached data');
+  }
+  btn.textContent='REFRESH LINES';
+  btn.style.opacity='1';
+  btn.style.pointerEvents='auto';
   renderAll();
 }
 
