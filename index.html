@@ -5,654 +5,340 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leg Up — No money. Just your picks.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --bg2: #12121a;
-    --bg3: #1a1a26;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #f0f0f5;
-    --text2: #8888aa;
-    --text3: #555570;
-    --green: #22c55e;
-    --green-bg: rgba(34,197,94,0.12);
-    --red: #ef4444;
-    --red-bg: rgba(239,68,68,0.12);
-    --amber: #f59e0b;
-    --amber-bg: rgba(245,158,11,0.1);
-    --accent: #6366f1;
-    --accent-bg: rgba(99,102,241,0.15);
-    --radius: 10px;
-    --radius-lg: 14px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; min-height: 100vh; }
+:root{--ink:#0d0d12;--ink2:#16161f;--ink3:#1e1e2a;--ink4:#26263a;--line:rgba(255,255,255,0.07);--line2:rgba(255,255,255,0.12);--line3:rgba(255,255,255,0.18);--smoke:#6b6b8a;--text:#f2f2f8;--text2:#9090b0;--text3:#55556a;--lime:#b6f542;--lime-dim:rgba(182,245,66,0.1);--lime-line:rgba(182,245,66,0.28);--red:#ff4d4d;--red-dim:rgba(255,77,77,0.1);--red-line:rgba(255,77,77,0.28);--amber:#ffb347;--amber-dim:rgba(255,179,71,0.1);--r:8px;--r2:12px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px}
+body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-weight:400;min-height:100vh;-webkit-font-smoothing:antialiased}
 
-  /* TOPBAR */
-  .topbar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .brand { display: flex; align-items: center; gap: 10px; }
-  .brand-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-  .brand-icon svg { width: 18px; height: 18px; }
-  .brand-name { font-size: 18px; font-weight: 600; letter-spacing: -0.5px; }
-  .brand-tag { font-size: 11px; color: var(--text2); }
-  .top-right { display: flex; align-items: center; gap: 10px; }
-  .live-badge { display: flex; align-items: center; gap: 6px; background: var(--green-bg); border: 1px solid rgba(34,197,94,0.25); border-radius: 20px; padding: 4px 12px; font-size: 11px; color: var(--green); }
-  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-  .slip-toggle { background: var(--bg3); border: 1px solid var(--border2); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--text); cursor: pointer; font-family: inherit; transition: all .15s; }
-  .slip-toggle:hover { border-color: var(--accent); color: var(--accent); }
-  .slip-toggle.has-picks { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+/* TOPBAR */
+.topbar{height:54px;background:var(--ink2);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 18px;gap:0;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:9px;margin-right:24px;flex-shrink:0}
+.logo-mark{width:28px;height:28px;background:var(--lime);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:15px;height:15px}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.3px}
+.logo-sub{font-size:9px;color:var(--text3);letter-spacing:.04em;margin-top:1px}
+.topbar-games{display:flex;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none}
+.topbar-games::-webkit-scrollbar{display:none}
+.tg-btn{display:flex;flex-direction:column;align-items:center;padding:5px 14px;border-radius:var(--r);cursor:pointer;border:1px solid transparent;background:transparent;font-family:inherit;transition:all .15s;white-space:nowrap;gap:1px}
+.tg-btn:hover{background:var(--ink3)}
+.tg-btn.active{background:var(--lime-dim);border-color:var(--lime-line)}
+.tg-teams{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;color:var(--text)}
+.tg-btn.active .tg-teams{color:var(--lime)}
+.tg-info{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+.tg-btn.active .tg-info{color:rgba(182,245,66,.5)}
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0;padding-left:14px}
+.live-pill{display:flex;align-items:center;gap:5px;background:var(--lime-dim);border:1px solid var(--lime-line);border-radius:20px;padding:4px 10px;font-size:9px;color:var(--lime);font-family:'IBM Plex Mono',monospace;letter-spacing:.05em}
+.live-pip{width:5px;height:5px;border-radius:50%;background:var(--lime);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.slip-pill{display:flex;align-items:center;gap:6px;background:var(--ink3);border:1px solid var(--line2);border-radius:20px;padding:5px 13px;font-size:11px;color:var(--text2);cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.slip-pill:hover{border-color:var(--line3);color:var(--text)}
+.slip-pill.on{background:var(--lime-dim);border-color:var(--lime-line);color:var(--lime)}
+.slip-badge{background:var(--lime);color:var(--ink);border-radius:10px;padding:1px 5px;font-size:9px;font-weight:700;display:none;min-width:16px;text-align:center}
+.slip-pill.on .slip-badge{display:block}
 
-  /* GAME TABS */
-  .game-bar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 20px; display: flex; gap: 0; overflow-x: auto; }
-  .game-tab { padding: 12px 16px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; color: var(--text2); font-size: 13px; }
-  .game-tab:hover { color: var(--text); }
-  .game-tab.active { color: var(--text); border-bottom-color: var(--accent); }
-  .gt-teams { font-weight: 500; }
-  .gt-meta { font-size: 10px; color: var(--text3); margin-top: 2px; }
-  .game-tab.active .gt-meta { color: var(--text2); }
+/* CAT BAR */
+.cat-bar{background:var(--ink2);border-bottom:1px solid var(--line);padding:0 18px;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.cat-bar::-webkit-scrollbar{display:none}
+.cat-tab{padding:10px 13px;font-size:11px;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:'IBM Plex Sans',sans-serif;font-weight:400;transition:all .15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.cat-tab:hover{color:var(--text2)}
+.cat-tab.active{color:var(--lime);border-bottom-color:var(--lime);font-weight:500}
 
-  /* LAYOUT */
-  .layout { display: grid; grid-template-columns: 1fr 320px; gap: 0; height: calc(100vh - 97px); }
-  .left-col { overflow-y: auto; padding: 16px 20px; }
-  .right-col { border-left: 1px solid var(--border); overflow-y: auto; background: var(--bg2); }
+/* BODY */
+.body-wrap{display:grid;grid-template-columns:1fr 320px;min-height:calc(100vh - 90px)}
+.main-col{padding:18px;overflow-y:auto}
+.slip-col{border-left:1px solid var(--line);background:var(--ink2);display:flex;flex-direction:column;position:sticky;top:90px;max-height:calc(100vh - 90px);overflow-y:auto}
 
-  /* CAT TABS */
-  .cat-bar { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-  .cat-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; font-size: 11px; color: var(--text2); cursor: pointer; font-family: inherit; transition: all .15s; white-space: nowrap; }
-  .cat-btn:hover { border-color: var(--border2); color: var(--text); }
-  .cat-btn.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+/* SECTION LABEL */
+.sec-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--line)}
 
-  /* GAME LINE CARD */
-  .gl-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 10px; }
-  .gl-header { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .gl-title { font-size: 12px; font-weight: 500; color: var(--text); }
-  .gl-source { font-size: 10px; color: var(--text3); }
-  .gl-row { display: grid; grid-template-columns: 90px 1fr 1fr; border-bottom: 1px solid var(--border); }
-  .gl-row:last-child { border-bottom: none; }
-  .gl-label { padding: 10px 12px; font-size: 11px; color: var(--text2); display: flex; align-items: center; border-right: 1px solid var(--border); }
-  .bet-btn { padding: 10px 8px; text-align: center; cursor: pointer; border: none; background: transparent; font-family: inherit; transition: all .15s; border-right: 1px solid var(--border); }
-  .bet-btn:last-child { border-right: none; }
-  .bet-btn:hover { background: var(--bg3); }
-  .bet-btn.sel { background: var(--accent-bg); }
-  .bb-team { font-size: 10px; color: var(--text2); margin-bottom: 3px; }
-  .bet-btn.sel .bb-team { color: var(--accent); }
-  .bb-main { font-size: 14px; font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; }
-  .bet-btn.sel .bb-main { color: var(--accent); }
-  .bb-odds { font-size: 11px; color: var(--text2); margin-top: 2px; font-family: 'DM Mono', monospace; }
-  .bet-btn.sel .bb-odds { color: var(--accent); }
+/* GAME LINE CARD */
+.gl-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:16px}
+.gl-hdr{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.gl-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-.2px}
+.gl-src{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);background:var(--ink3);padding:2px 7px;border-radius:4px;letter-spacing:.04em}
+.mkt-block{border-bottom:1px solid var(--line)}
+.mkt-block:last-child{border-bottom:none}
+.mkt-lbl{padding:8px 14px 0;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.09em;text-transform:uppercase}
+.mkt-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:7px 14px 12px}
+.mkt-btn{background:var(--ink3);border:1px solid var(--line2);border-radius:var(--r);padding:10px 10px;text-align:center;cursor:pointer;transition:all .16s;font-family:inherit}
+.mkt-btn:hover{border-color:var(--line3)}
+.mkt-btn.sel{background:var(--lime-dim);border-color:var(--lime-line)}
+.mb-lbl{font-size:10px;color:var(--text3);margin-bottom:4px}
+.mkt-btn.sel .mb-lbl{color:rgba(182,245,66,.55)}
+.mb-main{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:var(--text);letter-spacing:-.3px}
+.mkt-btn.sel .mb-main{color:var(--lime)}
+.mb-odds{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);margin-top:3px}
+.mkt-btn.sel .mb-odds{color:rgba(182,245,66,.65)}
 
-  /* PLAYER CARD */
-  .player-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 8px; }
-  .player-hdr { padding: 9px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: var(--bg3); }
-  .p-av { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; flex-shrink: 0; font-family: 'DM Mono', monospace; }
-  .p-name { font-size: 13px; font-weight: 500; color: var(--text); }
-  .p-team { font-size: 10px; color: var(--text2); }
-  .p-badge { font-size: 9px; padding: 1px 6px; border-radius: 4px; font-weight: 500; margin-left: 4px; }
-  .badge-hot { background: rgba(245,158,11,.15); color: var(--amber); border: 1px solid rgba(245,158,11,.25); }
-  .badge-inj { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,.25); }
+/* PLAYER PROPS */
+.player-group{margin-bottom:8px}
+.player-hdr{display:flex;align-items:center;gap:10px;padding:9px 13px;background:var(--ink3);border:1px solid var(--line2);border-radius:var(--r2) var(--r2) 0 0}
+.p-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;flex-shrink:0}
+.p-name{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px}
+.p-team{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:1px;letter-spacing:.03em}
+.badge{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:500;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em}
+.badge-hot{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,179,71,.22)}
+.badge-inj{background:var(--red-dim);color:var(--red);border:1px solid var(--red-line)}
+.prop-list{background:var(--ink2);border:1px solid var(--line2);border-top:1px solid var(--line);border-radius:0 0 var(--r2) var(--r2);overflow:hidden}
+.prop-row{display:grid;grid-template-columns:1fr 48px 112px;align-items:center;padding:8px 13px;border-bottom:1px solid var(--line);gap:8px;transition:background .1s}
+.prop-row:last-child{border-bottom:none}
+.prop-row:hover{background:rgba(255,255,255,.02)}
+.pr-type{font-size:11px;color:var(--text2)}
+.pr-line{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--text);text-align:center}
+.pr-btns{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.ou-btn{padding:6px 0;border-radius:5px;border:1px solid var(--line2);background:var(--ink3);cursor:pointer;text-align:center;transition:all .14s;font-family:inherit}
+.ou-btn:hover{border-color:var(--line3)}
+.ou-dir{font-size:8px;color:var(--text3);display:block;text-transform:uppercase;letter-spacing:.05em;font-family:'IBM Plex Mono',monospace}
+.ou-odds{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--text);display:block;margin-top:1px}
+.ou-btn.sel-o{background:var(--lime-dim);border-color:var(--lime-line)}
+.ou-btn.sel-o .ou-dir{color:rgba(182,245,66,.5)}
+.ou-btn.sel-o .ou-odds{color:var(--lime)}
+.ou-btn.sel-u{background:var(--red-dim);border-color:var(--red-line)}
+.ou-btn.sel-u .ou-dir{color:rgba(255,77,77,.5)}
+.ou-btn.sel-u .ou-odds{color:var(--red)}
 
-  .prop-row { display: flex; align-items: center; padding: 9px 12px; border-bottom: 1px solid var(--border); gap: 8px; }
-  .prop-row:last-child { border-bottom: none; }
-  .pr-cat { font-size: 12px; color: var(--text2); flex: 1; }
-  .pr-line { font-size: 12px; font-weight: 500; color: var(--text); width: 40px; text-align: center; flex-shrink: 0; font-family: 'DM Mono', monospace; }
-  .pr-btns { display: flex; gap: 4px; }
-  .ou-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 11px; cursor: pointer; background: var(--bg3); color: var(--text2); min-width: 56px; text-align: center; transition: all .15s; font-family: inherit; }
-  .ou-btn:hover { border-color: var(--border2); color: var(--text); }
-  .ou-btn .ou-dir { font-size: 9px; display: block; opacity: .7; }
-  .ou-btn .ou-val { font-size: 12px; font-weight: 500; display: block; font-family: 'DM Mono', monospace; }
-  .ou-btn.sel-o { background: var(--green-bg); border-color: rgba(34,197,94,.4); color: var(--green); }
-  .ou-btn.sel-u { background: var(--red-bg); border-color: rgba(239,68,68,.4); color: var(--red); }
+/* SLIP */
+.slip-hdr{padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.slip-title-row{display:flex;align-items:baseline;justify-content:space-between}
+.slip-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:-.2px}
+.slip-legs-ct{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
+.slip-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 18px;text-align:center}
+.se-mark{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--ink4);margin-bottom:8px;letter-spacing:-3px}
+.se-txt{font-size:11px;color:var(--text3);line-height:1.7}
+.slip-items{overflow-y:auto}
+.slip-item{padding:10px 14px;border-bottom:1px solid var(--line);position:relative;transition:background .1s}
+.si-pick{font-weight:500;font-size:12px;color:var(--text);padding-right:18px;line-height:1.4}
+.si-game{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:2px;letter-spacing:.02em}
+.si-row{display:flex;align-items:center;gap:7px;margin-top:5px}
+.si-odds{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500}
+.si-time{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+.si-move{font-size:8px;padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-weight:500}
+.move-bad{background:var(--red-dim);color:var(--red)}
+.move-good{background:var(--lime-dim);color:var(--lime)}
+.si-rm{position:absolute;top:10px;right:13px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:15px;line-height:1;transition:color .1s;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+.si-rm:hover{color:var(--red)}
+.slip-foot{padding:12px 14px;border-top:1px solid var(--line)}
+.foot-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
+.stake-wrap{display:flex;align-items:center;background:var(--ink3);border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;margin-bottom:7px;transition:border-color .15s}
+.stake-wrap:focus-within{border-color:var(--lime-line)}
+.stake-sign{padding:0 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text3);border-right:1px solid var(--line)}
+.stake-in{flex:1;background:transparent;border:none;padding:8px 9px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--text);outline:none}
+.presets{display:flex;gap:3px;margin-bottom:10px}
+.pre{flex:1;padding:5px 0;border-radius:5px;border:1px solid var(--line);background:transparent;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);cursor:pointer;transition:all .12s;text-align:center}
+.pre:hover{border-color:var(--line2);color:var(--text2)}
+.pre.on{background:var(--lime-dim);border-color:var(--lime-line);color:var(--lime)}
+.parlay-box{background:var(--ink3);border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;margin-bottom:10px}
+.pb-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pb-row:last-child{margin-bottom:0;border-top:1px solid var(--line);padding-top:5px;margin-top:2px}
+.pb-lbl{font-size:10px;color:var(--text3)}
+.pb-val{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--text)}
+.pb-val.g{color:var(--lime)}
+.lock-btn{width:100%;padding:11px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.04em;cursor:pointer;transition:opacity .14s;margin-bottom:5px}
+.lock-btn:hover{opacity:.87}
+.lock-btn:disabled{opacity:.28;cursor:not-allowed}
+.split-btn{width:100%;padding:8px;background:transparent;border:1px solid var(--line2);border-radius:var(--r);font-size:11px;color:var(--text3);cursor:pointer;font-family:inherit;transition:all .14s}
+.split-btn:hover{border-color:var(--line3);color:var(--text2)}
 
-  /* SLIP */
-  .slip-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .slip-title { font-size: 14px; font-weight: 600; }
-  .slip-count { font-size: 11px; color: var(--text2); }
-  .slip-empty { padding: 40px 16px; text-align: center; }
-  .se-icon { width: 40px; height: 40px; background: var(--bg3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
-  .se-txt { font-size: 12px; color: var(--text2); line-height: 1.6; }
+/* LOCKED */
+.locked-area{padding:18px}
+.locked-hdr{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.locked-hdr::after{content:'';flex:1;height:1px;background:var(--line)}
+.locked-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:10px}
+.lc-hdr{padding:10px 13px;background:var(--ink3);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.lc-name{font-family:'Syne',sans-serif;font-weight:600;font-size:12px}
+.lc-meta{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3)}
+.lc-leg{display:flex;align-items:center;gap:9px;padding:8px 13px;border-bottom:1px solid var(--line)}
+.lc-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.lc-info{flex:1;min-width:0}
+.lc-pick{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);margin-top:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.lc-move{font-size:8px;padding:1px 4px;border-radius:3px;font-weight:500}
+.lc-res{display:flex;gap:3px;flex-shrink:0}
+.res-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--line);background:var(--ink3);font-size:9px;color:var(--text3);cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .12s;letter-spacing:.03em}
+.res-btn:hover{border-color:var(--line2);color:var(--text)}
+.res-btn.win{background:var(--lime-dim);border-color:var(--lime-line);color:var(--lime)}
+.res-btn.loss{background:var(--red-dim);border-color:var(--red-line);color:var(--red)}
+.cmp-grid{display:grid;grid-template-columns:1fr 1px 1fr;border-top:1px solid var(--line)}
+.cmp-col{padding:12px;text-align:center}
+.cmp-div{background:var(--line)}
+.cmp-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.cmp-val{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.4px}
+.cmp-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.delta{padding:11px 13px;text-align:center;border-top:1px solid var(--line)}
+.delta-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
+.delta-val{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.4px}
 
-  .slip-item { padding: 10px 14px; border-bottom: 1px solid var(--border); position: relative; }
-  .si-pick { font-size: 12px; font-weight: 500; color: var(--text); padding-right: 20px; line-height: 1.4; }
-  .si-game { font-size: 10px; color: var(--text3); margin-top: 2px; }
-  .si-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
-  .si-odds { font-size: 12px; font-weight: 500; font-family: 'DM Mono', monospace; }
-  .si-locked { font-size: 10px; color: var(--text3); }
-  .si-move { font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 500; }
-  .si-remove { position: absolute; top: 10px; right: 12px; border: none; background: transparent; color: var(--text3); cursor: pointer; font-size: 16px; line-height: 1; transition: color .1s; }
-  .si-remove:hover { color: var(--red); }
-
-  .slip-stake { padding: 12px 14px; border-bottom: 1px solid var(--border); }
-  .stake-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
-  .stake-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .stake-prefix { font-size: 14px; color: var(--text2); }
-  .stake-input { flex: 1; background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px; padding: 7px 10px; font-size: 15px; font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; }
-  .stake-input:focus { outline: none; border-color: var(--accent); }
-  .presets { display: flex; gap: 4px; }
-  .preset { flex: 1; padding: 5px 4px; border-radius: 6px; border: 1px solid var(--border); background: transparent; font-size: 11px; color: var(--text2); cursor: pointer; font-family: 'DM Mono', monospace; transition: all .15s; }
-  .preset:hover, .preset.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
-
-  .parlay-box { margin: 12px 14px; background: var(--bg3); border-radius: var(--radius); padding: 10px 12px; border: 1px solid var(--border); }
-  .pb-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-  .pb-row:last-child { margin-bottom: 0; border-top: 1px solid var(--border); padding-top: 5px; margin-top: 2px; }
-  .pb-lbl { font-size: 11px; color: var(--text2); }
-  .pb-val { font-size: 12px; font-weight: 500; font-family: 'DM Mono', monospace; }
-  .pb-val.green { color: var(--green); }
-
-  .slip-actions { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
-  .lock-btn { width: 100%; padding: 11px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .15s; letter-spacing: .01em; }
-  .lock-btn:hover { opacity: .88; }
-  .lock-btn:disabled { opacity: .35; cursor: not-allowed; }
-  .straight-btn { width: 100%; padding: 9px; background: transparent; border: 1px solid var(--border2); border-radius: var(--radius); font-size: 12px; color: var(--text2); cursor: pointer; font-family: inherit; transition: all .15s; }
-  .straight-btn:hover { background: var(--bg3); color: var(--text); }
-
-  /* LOCKED SLIPS */
-  .locked-section { padding: 16px 20px; }
-  .ls-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: var(--text2); margin-bottom: 10px; }
-  .locked-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 10px; }
-  .lc-hdr { padding: 10px 14px; background: var(--bg3); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .lc-name { font-size: 12px; font-weight: 500; }
-  .lc-time { font-size: 10px; color: var(--text2); }
-  .lc-leg { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--border); }
-  .lc-leg:last-of-type { border-bottom: 1px solid var(--border); }
-  .ll-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .ll-info { flex: 1; min-width: 0; }
-  .ll-pick { font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ll-meta { font-size: 10px; color: var(--text3); margin-top: 1px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-  .ll-move { font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 500; }
-  .move-bad { background: rgba(239,68,68,.12); color: var(--red); }
-  .move-good { background: rgba(34,197,94,.1); color: var(--green); }
-  .ll-res { display: flex; gap: 3px; flex-shrink: 0; }
-  .res-btn { padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border); font-size: 10px; cursor: pointer; background: transparent; color: var(--text2); font-family: inherit; transition: all .15s; }
-  .res-btn.win { background: var(--green-bg); color: var(--green); border-color: rgba(34,197,94,.3); }
-  .res-btn.loss { background: var(--red-bg); color: var(--red); border-color: rgba(239,68,68,.3); }
-
-  .result-grid { display: grid; grid-template-columns: 1fr 1px 1fr; border-top: 1px solid var(--border); }
-  .rg-col { padding: 12px; text-align: center; }
-  .rg-div { background: var(--border); }
-  .rg-lbl { font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: var(--text2); margin-bottom: 3px; }
-  .rg-val { font-size: 18px; font-weight: 600; font-family: 'DM Mono', monospace; }
-  .rg-sub { font-size: 10px; color: var(--text2); margin-top: 2px; }
-  .delta-row { padding: 10px 14px; text-align: center; border-top: 1px solid var(--border); }
-  .dr-lbl { font-size: 10px; color: var(--text2); margin-bottom: 2px; }
-  .dr-val { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; }
-
-  /* LOADING / ERROR */
-  .loading-screen { padding: 60px 20px; text-align: center; }
-  .spinner { width: 28px; height: 28px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 12px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-txt { font-size: 13px; color: var(--text2); }
-  .loading-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
-
-  .source-footer { font-size: 10px; color: var(--text3); text-align: center; padding: 12px 20px; border-top: 1px solid var(--border); margin-top: 4px; }
-
-  /* TOAST */
-  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--bg3); border: 1px solid var(--border2); color: var(--text); padding: 8px 20px; border-radius: 20px; font-size: 12px; display: none; z-index: 999; white-space: nowrap; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
-
-  /* MOBILE */
-  @media (max-width: 680px) {
-    .layout { grid-template-columns: 1fr; height: auto; }
-    .right-col { border-left: none; border-top: 1px solid var(--border); }
-    .left-col { padding: 12px; }
-  }
+/* MISC */
+.loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:12px}
+.spinner{width:22px;height:22px;border:2px solid var(--line2);border-top-color:var(--lime);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:12px;color:var(--text2)}
+.loading-sub{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+.src-footer{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);text-align:center;padding:14px;border-top:1px solid var(--line);margin-top:6px;letter-spacing:.03em}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink4);border:1px solid var(--line3);color:var(--text);padding:8px 18px;border-radius:20px;font-size:11px;display:none;z-index:999;white-space:nowrap;font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--ink4);border-radius:2px}
+@media(max-width:720px){.body-wrap{grid-template-columns:1fr}.slip-col{border-left:none;border-top:1px solid var(--line);position:static;max-height:none}}
 </style>
 </head>
 <body>
-
 <div id="toast"></div>
 
-<div class="topbar">
-  <div class="brand">
-    <div class="brand-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d0d12" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
     </div>
-    <div>
-      <div class="brand-name">Leg Up</div>
-      <div class="brand-tag">No money. Just your picks.</div>
+    <div><div class="logo-text">LEG UP</div><div class="logo-sub">NO MONEY · JUST YOUR PICKS</div></div>
+  </div>
+  <div class="topbar-games" id="gameBar"></div>
+  <div class="topbar-right">
+    <div class="live-pill"><div class="live-pip"></div><span id="liveLabel">LOADING</span></div>
+    <div class="slip-pill" id="slipPill" onclick="focusSlip()">
+      <span>SLIP</span><span class="slip-badge" id="slipBadge">0</span>
     </div>
   </div>
-  <div class="top-right">
-    <div class="live-badge"><div class="live-dot"></div><span id="liveLabel">Loading...</span></div>
-    <button class="slip-toggle" id="slipToggle" onclick="scrollToSlip()">Slip (0)</button>
-  </div>
+</header>
+
+<nav class="cat-bar" id="catBar"></nav>
+
+<div class="body-wrap">
+  <main class="main-col" id="mainCol">
+    <div class="loading-wrap"><div class="spinner"></div><div class="loading-txt">Connecting to live sportsbooks...</div><div class="loading-sub">FETCHING REAL LINES · DRAFTKINGS</div></div>
+  </main>
+  <aside class="slip-col" id="slipCol"></aside>
 </div>
 
-<div class="game-bar" id="gameBar"></div>
-
-<div class="layout">
-  <div class="left-col" id="leftCol">
-    <div class="loading-screen">
-      <div class="spinner"></div>
-      <div class="loading-txt">Connecting to live sportsbooks...</div>
-      <div class="loading-sub">Fetching real lines for tonight's games</div>
-    </div>
-  </div>
-  <div class="right-col" id="rightCol"></div>
-</div>
-
-<div id="lockedSection"></div>
+<div id="lockedArea"></div>
 
 <script>
-const API_KEY = '08157c28502f32fa0728d46f3445a0cd';
-const BASE = 'https://api.the-odds-api.com/v4';
+const API_KEY='08157c28502f32fa0728d46f3445a0cd';
+const BASE='https://api.the-odds-api.com/v4';
+let games=[],selGame=0,selCat='Game Lines',slip=[],stake=50,locked=[],loadedAt=null;
+const ABBR={'Detroit Pistons':'DET','Orlando Magic':'ORL','Oklahoma City Thunder':'OKC','Phoenix Suns':'PHX','Minnesota Timberwolves':'MIN','Denver Nuggets':'DEN','Boston Celtics':'BOS','Philadelphia 76ers':'PHI','New York Knicks':'NYK','Atlanta Hawks':'ATL','Cleveland Cavaliers':'CLE','Toronto Raptors':'TOR','Los Angeles Lakers':'LAL','Houston Rockets':'HOU','San Antonio Spurs':'SAS','Portland Trail Blazers':'POR'};
+const COLORS={'DET':'#4a8fd4','ORL':'#3aabff','OKC':'#007ac1','PHX':'#e56020','MIN':'#4a78b0','DEN':'#fec524','BOS':'#2da85a','PHI':'#2a5fbd','NYK':'#006bb6','ATL':'#e03a3e','CLE':'#a01030','TOR':'#ce1141','LAL':'#7a3fbf','HOU':'#ce1141','SAS':'#c4ced4','POR':'#e03a3e'};
+const SERIES={'Detroit Pistons':'DET 1–2','Orlando Magic':'DET 1–2','Oklahoma City Thunder':'OKC 3–0','Phoenix Suns':'OKC 3–0','Minnesota Timberwolves':'MIN 3–1','Denver Nuggets':'MIN 3–1'};
+const HOT=['Paolo Banchero','Shai Gilgeous-Alexander','Dillon Brooks','Nikola Jokic','Ayo Dosunmu'];
+const INJ=['Anthony Edwards'];
+const CATS=['Game Lines','Points','Rebounds','Assists','3-Pointers Made','Pts+Reb+Ast','Pts+Reb','Pts+Ast','Blocks','Steals','Specials'];
+const ROSTER={'Detroit Pistons':['Cade Cunningham','Tobias Harris','Jalen Duren','Ausar Thompson'],'Orlando Magic':['Paolo Banchero','Franz Wagner','Wendell Carter Jr.','Jalen Suggs'],'Oklahoma City Thunder':['Shai Gilgeous-Alexander','Jalen Williams','Isaiah Hartenstein','Chet Holmgren'],'Phoenix Suns':['Devin Booker','Dillon Brooks','Kevin Durant','Jusuf Nurkic'],'Minnesota Timberwolves':['Anthony Edwards','Rudy Gobert','Ayo Dosunmu','Julius Randle'],'Denver Nuggets':['Nikola Jokic','Jamal Murray','Aaron Gordon','Michael Porter Jr.']};
+const PROPS={'Cade Cunningham':{Points:{l:26.5,o:-110,u:-110},Rebounds:{l:4.5,o:-108,u:-112},Assists:{l:6.5,o:-115,u:-105},'3-Pointers Made':{l:1.5,o:-110,u:-110},'Pts+Reb+Ast':{l:37.5,o:-112,u:-108},Steals:{l:0.5,o:-145,u:115}},'Tobias Harris':{Points:{l:15.5,o:-112,u:-108},Rebounds:{l:6.5,o:-115,u:-105},'Pts+Reb':{l:21.5,o:-110,u:-110}},'Jalen Duren':{Points:{l:11.5,o:-110,u:-110},Rebounds:{l:11.5,o:-115,u:-105},Blocks:{l:0.5,o:-160,u:130},'Pts+Reb':{l:22.5,o:-112,u:-108}},'Ausar Thompson':{Points:{l:12.5,o:-112,u:-108},Rebounds:{l:4.5,o:-110,u:-110},Steals:{l:1.5,o:-108,u:-112}},'Paolo Banchero':{Points:{l:21.5,o:-118,u:-102},Rebounds:{l:7.5,o:-115,u:-105},Assists:{l:4.5,o:-112,u:-108},'3-Pointers Made':{l:1.5,o:115,u:-140},'Pts+Reb+Ast':{l:32.5,o:-115,u:-105},Blocks:{l:0.5,o:-165,u:135}},'Franz Wagner':{Points:{l:17.5,o:-112,u:-108},Rebounds:{l:4.5,o:-115,u:-105},Assists:{l:3.5,o:-108,u:-112},'Pts+Reb+Ast':{l:25.5,o:-110,u:-110}},'Wendell Carter Jr.':{Points:{l:10.5,o:-120,u:-100},Rebounds:{l:7.5,o:-115,u:-105},'Pts+Reb':{l:17.5,o:-112,u:-108}},'Jalen Suggs':{Points:{l:12.5,o:-110,u:-110},Assists:{l:4.5,o:-112,u:-108},'3-Pointers Made':{l:1.5,o:-115,u:-105}},'Shai Gilgeous-Alexander':{Points:{l:32.5,o:-115,u:-105},Rebounds:{l:4.5,o:-108,u:-112},Assists:{l:7.5,o:-108,u:-112},'3-Pointers Made':{l:2.5,o:-110,u:-110},'Pts+Reb+Ast':{l:44.5,o:-115,u:-105},Steals:{l:1.5,o:-108,u:-112},Blocks:{l:0.5,o:-140,u:110}},'Jalen Williams':{Points:{l:19.5,o:-115,u:-105},Rebounds:{l:4.5,o:-112,u:-108},Assists:{l:3.5,o:-108,u:-112},'Pts+Reb+Ast':{l:27.5,o:-110,u:-110}},'Isaiah Hartenstein':{Points:{l:10.5,o:-112,u:-108},Rebounds:{l:10.5,o:-115,u:-105},Blocks:{l:0.5,o:-155,u:125},'Pts+Reb':{l:20.5,o:-112,u:-108}},'Chet Holmgren':{Points:{l:14.5,o:-112,u:-108},Rebounds:{l:6.5,o:-110,u:-110},Blocks:{l:1.5,o:-115,u:-105},'Pts+Reb':{l:20.5,o:-110,u:-110}},'Devin Booker':{Points:{l:21.5,o:-112,u:-108},Rebounds:{l:4.5,o:-110,u:-110},Assists:{l:5.5,o:-108,u:-112},'3-Pointers Made':{l:2.5,o:-115,u:-105},'Pts+Reb+Ast':{l:31.5,o:-115,u:-105}},'Dillon Brooks':{Points:{l:18.5,o:-110,u:-110},Rebounds:{l:5.5,o:-112,u:-108},'3-Pointers Made':{l:3.5,o:-105,u:-115},'Pts+Reb+Ast':{l:26.5,o:-110,u:-110}},'Kevin Durant':{Points:{l:26.5,o:-112,u:-108},Rebounds:{l:6.5,o:-110,u:-110},Assists:{l:4.5,o:-108,u:-112},'Pts+Reb+Ast':{l:37.5,o:-112,u:-108}},'Jusuf Nurkic':{Points:{l:10.5,o:-110,u:-110},Rebounds:{l:9.5,o:-115,u:-105},'Pts+Reb':{l:19.5,o:-112,u:-108}},'Anthony Edwards':{Points:{l:24.5,o:-115,u:-105},Rebounds:{l:5.5,o:-108,u:-112},Assists:{l:4.5,o:-110,u:-110},'3-Pointers Made':{l:2.5,o:-112,u:-108},'Pts+Reb+Ast':{l:34.5,o:-112,u:-108}},'Rudy Gobert':{Points:{l:12.5,o:-110,u:-110},Rebounds:{l:13.5,o:-112,u:-108},Blocks:{l:1.5,o:-115,u:-105},'Pts+Reb':{l:25.5,o:-112,u:-108}},'Ayo Dosunmu':{Points:{l:21.5,o:-108,u:-112},Rebounds:{l:3.5,o:-112,u:-108},Assists:{l:4.5,o:-110,u:-110},'3-Pointers Made':{l:1.5,o:-115,u:-105},'Pts+Reb+Ast':{l:29.5,o:-110,u:-110}},'Julius Randle':{Points:{l:17.5,o:-112,u:-108},Rebounds:{l:6.5,o:-115,u:-105},'Pts+Reb':{l:23.5,o:-110,u:-110}},'Nikola Jokic':{Points:{l:28.5,o:-118,u:-102},Rebounds:{l:12.5,o:-115,u:-105},Assists:{l:9.5,o:-108,u:-112},'Pts+Reb+Ast':{l:50.5,o:-115,u:-105},'Triple Double':{l:null,o:140,u:-170,sp:1},'Double Double':{l:null,o:-550,u:380,sp:1}},'Jamal Murray':{Points:{l:19.5,o:-112,u:-108},Assists:{l:5.5,o:-108,u:-112},'3-Pointers Made':{l:1.5,o:-115,u:-105},'Pts+Ast':{l:24.5,o:-110,u:-110}},'Aaron Gordon':{Points:{l:14.5,o:-112,u:-108},Rebounds:{l:7.5,o:-115,u:-105},'Pts+Reb':{l:21.5,o:-110,u:-110},Blocks:{l:0.5,o:-130,u:100}},'Michael Porter Jr.':{Points:{l:16.5,o:-112,u:-108},Rebounds:{l:6.5,o:-110,u:-110},'3-Pointers Made':{l:1.5,o:-112,u:-108}}};
 
-let allGames = [], selGame = 0, selCat = 'Game Lines', slip = [], stake = 50, lockedSlips = [], loadedAt = null;
+const fo=o=>(o>0?'+':'')+o;
+const fm=n=>(n>=0?'+':'-')+'$'+Math.abs(n).toFixed(2);
+const dec=o=>o>0?o/100+1:100/Math.abs(o)+1;
+const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)};
+const pk=(g,t,s)=>`G${g}_${t}_${s}`;
+const ppk=(g,p,c,s)=>`G${g}_${p.replace(/\W+/g,'_')}_${c.replace(/\W+/g,'_')}_${s}`;
+const inSlip=k=>slip.some(s=>s.key===k);
+const calcP=()=>{if(!slip.length)return{pay:0,prof:0};const d=slip.reduce((a,s)=>a*dec(s.odds),1);return{pay:+(stake*d).toFixed(2),prof:+(stake*d-stake).toFixed(2)}};
 
-const ABBR = {'Detroit Pistons':'DET','Orlando Magic':'ORL','Oklahoma City Thunder':'OKC','Phoenix Suns':'PHX','Minnesota Timberwolves':'MIN','Denver Nuggets':'DEN','Boston Celtics':'BOS','Philadelphia 76ers':'PHI','New York Knicks':'NYK','Atlanta Hawks':'ATL','Cleveland Cavaliers':'CLE','Toronto Raptors':'TOR','Los Angeles Lakers':'LAL','Houston Rockets':'HOU','San Antonio Spurs':'SAS','Portland Trail Blazers':'POR'};
-const COLORS = {'DET':'#4a8fd4','ORL':'#4a9fd4','OKC':'#3b9fd4','PHX':'#f5813a','MIN':'#4a78b0','DEN':'#f5c842','BOS':'#2da85a','PHI':'#2a5fbd','NYK':'#2a6fbd','ATL':'#e03a3e','CLE':'#a01030','TOR':'#ce1141','LAL':'#7a3fbf','HOU':'#ce1141','SAS':'#aab0b8','POR':'#e03a3e'};
-const SERIES = {'Detroit Pistons':'DET leads 1-2','Orlando Magic':'DET leads 1-2','Oklahoma City Thunder':'OKC leads 3-0','Phoenix Suns':'OKC leads 3-0','Minnesota Timberwolves':'MIN leads 3-1','Denver Nuggets':'MIN leads 3-1'};
-
-const PROP_PLAYERS = {
-  'Detroit Pistons': ['Cade Cunningham','Tobias Harris','Jalen Duren','Ausar Thompson'],
-  'Orlando Magic': ['Paolo Banchero','Franz Wagner','Wendell Carter Jr.','Jalen Suggs'],
-  'Oklahoma City Thunder': ['Shai Gilgeous-Alexander','Jalen Williams','Isaiah Hartenstein','Chet Holmgren'],
-  'Phoenix Suns': ['Devin Booker','Dillon Brooks','Kevin Durant','Jusuf Nurkic'],
-  'Minnesota Timberwolves': ['Anthony Edwards','Rudy Gobert','Ayo Dosunmu','Julius Randle'],
-  'Denver Nuggets': ['Nikola Jokic','Jamal Murray','Aaron Gordon','Michael Porter Jr.']
-};
-
-const HOT = ['Paolo Banchero','Shai Gilgeous-Alexander','Dillon Brooks','Nikola Jokic','Ayo Dosunmu'];
-const INJ = ['Anthony Edwards'];
-
-const PROP_LINES = {
-  'Cade Cunningham': {Points:{line:26.5,over:-110,under:-110},Rebounds:{line:4.5,over:-108,under:-112},Assists:{line:6.5,over:-115,under:-105},'3-Pointers Made':{line:1.5,over:-110,under:-110},'Pts+Reb+Ast':{line:37.5,over:-112,under:-108},Steals:{line:0.5,over:-145,under:+115}},
-  'Tobias Harris': {Points:{line:15.5,over:-112,under:-108},Rebounds:{line:6.5,over:-115,under:-105},'Pts+Reb':{line:21.5,over:-110,under:-110}},
-  'Jalen Duren': {Points:{line:11.5,over:-110,under:-110},Rebounds:{line:11.5,over:-115,under:-105},Blocks:{line:0.5,over:-160,under:+130},'Pts+Reb':{line:22.5,over:-112,under:-108}},
-  'Ausar Thompson': {Points:{line:12.5,over:-112,under:-108},Rebounds:{line:4.5,over:-110,under:-110},Steals:{line:1.5,over:-108,under:-112}},
-  'Paolo Banchero': {Points:{line:21.5,over:-118,under:-102},Rebounds:{line:7.5,over:-115,under:-105},Assists:{line:4.5,over:-112,under:-108},'3-Pointers Made':{line:1.5,over:+115,under:-140},'Pts+Reb+Ast':{line:32.5,over:-115,under:-105},Blocks:{line:0.5,over:-165,under:+135}},
-  'Franz Wagner': {Points:{line:17.5,over:-112,under:-108},Rebounds:{line:4.5,over:-115,under:-105},Assists:{line:3.5,over:-108,under:-112},'Pts+Reb+Ast':{line:25.5,over:-110,under:-110}},
-  'Wendell Carter Jr.': {Points:{line:10.5,over:-120,under:-100},Rebounds:{line:7.5,over:-115,under:-105},'Pts+Reb':{line:17.5,over:-112,under:-108}},
-  'Jalen Suggs': {Points:{line:12.5,over:-110,under:-110},Assists:{line:4.5,over:-112,under:-108},'3-Pointers Made':{line:1.5,over:-115,under:-105}},
-  'Shai Gilgeous-Alexander': {Points:{line:32.5,over:-115,under:-105},Rebounds:{line:4.5,over:-108,under:-112},Assists:{line:7.5,over:-108,under:-112},'3-Pointers Made':{line:2.5,over:-110,under:-110},'Pts+Reb+Ast':{line:44.5,over:-115,under:-105},Steals:{line:1.5,over:-108,under:-112},Blocks:{line:0.5,over:-140,under:+110}},
-  'Jalen Williams': {Points:{line:19.5,over:-115,under:-105},Rebounds:{line:4.5,over:-112,under:-108},Assists:{line:3.5,over:-108,under:-112},'Pts+Reb+Ast':{line:27.5,over:-110,under:-110}},
-  'Isaiah Hartenstein': {Points:{line:10.5,over:-112,under:-108},Rebounds:{line:10.5,over:-115,under:-105},Blocks:{line:0.5,over:-155,under:+125},'Pts+Reb':{line:20.5,over:-112,under:-108}},
-  'Chet Holmgren': {Points:{line:14.5,over:-112,under:-108},Rebounds:{line:6.5,over:-110,under:-110},Blocks:{line:1.5,over:-115,under:-105},'Pts+Reb':{line:20.5,over:-110,under:-110}},
-  'Devin Booker': {Points:{line:21.5,over:-112,under:-108},Rebounds:{line:4.5,over:-110,under:-110},Assists:{line:5.5,over:-108,under:-112},'3-Pointers Made':{line:2.5,over:-115,under:-105},'Pts+Reb+Ast':{line:31.5,over:-115,under:-105}},
-  'Dillon Brooks': {Points:{line:18.5,over:-110,under:-110},Rebounds:{line:5.5,over:-112,under:-108},'3-Pointers Made':{line:3.5,over:-105,under:-115},'Pts+Reb+Ast':{line:26.5,over:-110,under:-110}},
-  'Kevin Durant': {Points:{line:26.5,over:-112,under:-108},Rebounds:{line:6.5,over:-110,under:-110},Assists:{line:4.5,over:-108,under:-112},'Pts+Reb+Ast':{line:37.5,over:-112,under:-108}},
-  'Jusuf Nurkic': {Points:{line:10.5,over:-110,under:-110},Rebounds:{line:9.5,over:-115,under:-105},'Pts+Reb':{line:19.5,over:-112,under:-108}},
-  'Anthony Edwards': {Points:{line:24.5,over:-115,under:-105},Rebounds:{line:5.5,over:-108,under:-112},Assists:{line:4.5,over:-110,under:-110},'3-Pointers Made':{line:2.5,over:-112,under:-108},'Pts+Reb+Ast':{line:34.5,over:-112,under:-108}},
-  'Rudy Gobert': {Points:{line:12.5,over:-110,under:-110},Rebounds:{line:13.5,over:-112,under:-108},Blocks:{line:1.5,over:-115,under:-105},'Pts+Reb':{line:25.5,over:-112,under:-108}},
-  'Ayo Dosunmu': {Points:{line:21.5,over:-108,under:-112},Rebounds:{line:3.5,over:-112,under:-108},Assists:{line:4.5,over:-110,under:-110},'3-Pointers Made':{line:1.5,over:-115,under:-105},'Pts+Reb+Ast':{line:29.5,over:-110,under:-110}},
-  'Julius Randle': {Points:{line:17.5,over:-112,under:-108},Rebounds:{line:6.5,over:-115,under:-105},'Pts+Reb':{line:23.5,over:-110,under:-110}},
-  'Nikola Jokic': {Points:{line:28.5,over:-118,under:-102},Rebounds:{line:12.5,over:-115,under:-105},Assists:{line:9.5,over:-108,under:-112},'Pts+Reb+Ast':{line:50.5,over:-115,under:-105},'Triple Double':{line:null,over:+140,under:-170,special:true},'Double Double':{line:null,over:-550,under:+380,special:true}},
-  'Jamal Murray': {Points:{line:19.5,over:-112,under:-108},Assists:{line:5.5,over:-108,under:-112},'3-Pointers Made':{line:1.5,over:-115,under:-105},'Pts+Ast':{line:24.5,over:-110,under:-110}},
-  'Aaron Gordon': {Points:{line:14.5,over:-112,under:-108},Rebounds:{line:7.5,over:-115,under:-105},'Pts+Reb':{line:21.5,over:-110,under:-110},Blocks:{line:0.5,over:-130,under:+100}},
-  'Michael Porter Jr.': {Points:{line:16.5,over:-112,under:-108},Rebounds:{line:6.5,over:-110,under:-110},'3-Pointers Made':{line:1.5,over:-112,under:-108}}
-};
-
-const CATS = ['Game Lines','Points','Rebounds','Assists','3-Pointers Made','Pts+Reb+Ast','Pts+Reb','Pts+Ast','Blocks','Steals','Specials'];
-
-function fmt(o) { return (o > 0 ? '+' : '') + o; }
-function fmtMoney(n) { return (n >= 0 ? '+' : '-') + '$' + Math.abs(n).toFixed(2); }
-function amToDec(o) { return o > 0 ? (o / 100) + 1 : (100 / Math.abs(o)) + 1; }
-
-function calcParlay() {
-  if (!slip.length) return { payout: 0, profit: 0 };
-  const dec = slip.reduce((a, s) => a * amToDec(s.lockedOdds), 1);
-  return { payout: parseFloat((stake * dec).toFixed(2)), profit: parseFloat((stake * dec - stake).toFixed(2)) };
+function addPick(key,label,odds,game){
+  const base=key.split('_').slice(0,-1).join('_');
+  slip=slip.filter(s=>!s.key.startsWith(base+'_'));
+  if(!inSlip(key)){slip.push({key,label,odds,game,locked:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),result:null});toast('Added to slip')}
+  syncPill();renderSlip();
 }
+function removePick(key){slip=slip.filter(s=>s.key!==key);syncPill();renderSlip()}
+function syncPill(){const b=document.getElementById('slipBadge'),p=document.getElementById('slipPill');b.textContent=slip.length;if(slip.length){p.classList.add('on');b.style.display='block'}else{p.classList.remove('on');b.style.display='none'}}
+function focusSlip(){document.getElementById('slipCol').scrollIntoView({behavior:'smooth'})}
+function lockSlip(){if(!slip.length){toast('Add picks first');return}const{pay,prof}=calcP();const pl=+(stake/slip.length).toFixed(2);locked.unshift({legs:slip.map(s=>({...s,pl,sp:+(pl*dec(s.odds)).toFixed(2)})),stake,pay,prof,at:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});slip=[];syncPill();toast(`${locked[0].legs.length}-leg slip locked`);renderSlip();renderLocked()}
+function setRes(si,li,r){locked[si].legs[li].result=r;renderLocked()}
+function showSplit(){const per=(stake/Math.max(slip.length,1)).toFixed(2);toast(`${slip.length} straight bets · $${per} each · $${stake.toFixed(2)} total`)}
 
-function pickKey(gIdx, type, side) { return `g${gIdx}_${type}_${side}`; }
-function propKey(gIdx, player, cat, side) { return `g${gIdx}_${player.replace(/\s+/g,'_')}_${cat.replace(/\+/g,'p')}_${side}`; }
-function isInSlip(key) { return slip.some(s => s.key === key); }
+function fallback(){return[{home_team:'Orlando Magic',away_team:'Detroit Pistons',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Detroit Pistons',price:-125},{name:'Orlando Magic',price:105}]},{key:'spreads',outcomes:[{name:'Detroit Pistons',price:-108,point:-1.5},{name:'Orlando Magic',price:-112,point:1.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:211.5},{name:'Under',price:-110,point:211.5}]}]}]},{home_team:'Phoenix Suns',away_team:'Oklahoma City Thunder',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Oklahoma City Thunder',price:-400},{name:'Phoenix Suns',price:305}]},{key:'spreads',outcomes:[{name:'Oklahoma City Thunder',price:-108,point:-8.5},{name:'Phoenix Suns',price:-112,point:8.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:216.5},{name:'Under',price:-110,point:216.5}]}]}]},{home_team:'Denver Nuggets',away_team:'Minnesota Timberwolves',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Denver Nuggets',price:-255},{name:'Minnesota Timberwolves',price:210}]},{key:'spreads',outcomes:[{name:'Denver Nuggets',price:-112,point:-6.5},{name:'Minnesota Timberwolves',price:-108,point:6.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:213.5},{name:'Under',price:-110,point:213.5}]}]}]}]}
 
-function addPick(key, pick, odds, meta) {
-  const base = key.split('_').slice(0, -1).join('_');
-  slip = slip.filter(s => !s.key.startsWith(base + '_') && !s.key.startsWith(base.replace(/_over$|_under$/,'')));
-  if (!isInSlip(key)) {
-    slip.push({ key, pick, lockedOdds: odds, currentOdds: odds, meta, lockedAt: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}), result: null });
-    showToast('Added to slip');
-  }
-  updateSlipToggle();
+async function load(){
+  try{const r=await fetch(`${BASE}/sports/basketball_nba/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`);if(!r.ok)throw 0;const data=await r.json();const tn=new Set(['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets']);const f=data.filter(g=>tn.has(g.home_team)||tn.has(g.away_team));games=f.length?f.slice(0,3):fallback();loadedAt=new Date();document.getElementById('liveLabel').textContent='LIVE · '+loadedAt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+  catch{games=fallback();loadedAt=new Date();document.getElementById('liveLabel').textContent='LINES LOADED'}
   renderAll();
 }
 
-function removePick(key) {
-  slip = slip.filter(s => s.key !== key);
-  updateSlipToggle();
-  renderAll();
-}
+function renderAll(){renderGameBar();renderCatBar();renderMain();renderSlip();renderLocked()}
 
-function setResult(key, res) {
-  const s = slip.find(s => s.key === key);
-  if (s) { s.result = res; renderAll(); }
-}
-
-function lockSlip() {
-  if (!slip.length) { showToast('Add picks first'); return; }
-  const { payout, profit } = calcParlay();
-  const perLeg = parseFloat((stake / slip.length).toFixed(2));
-  lockedSlips.unshift({
-    legs: slip.map(s => ({ ...s, perLeg, straightPayout: parseFloat((perLeg * amToDec(s.lockedOdds)).toFixed(2)) })),
-    stake, parlayPayout: payout, parlayProfit: profit,
-    lockedAt: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
-  });
-  slip = [];
-  showToast(`${lockedSlips[0].legs.length}-leg slip locked on your record`);
-  updateSlipToggle();
-  renderAll();
-}
-
-function setLockedResult(slipIdx, legIdx, res) {
-  lockedSlips[slipIdx].legs[legIdx].result = res;
-  renderAll();
-}
-
-function updateSlipToggle() {
-  const btn = document.getElementById('slipToggle');
-  btn.textContent = `Slip (${slip.length})`;
-  btn.className = 'slip-toggle' + (slip.length ? ' has-picks' : '');
-}
-
-function scrollToSlip() {
-  document.getElementById('rightCol').scrollIntoView({ behavior: 'smooth' });
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 2200);
-}
-
-function buildFallback() {
-  return [
-    { id:'det_orl', home_team:'Orlando Magic', away_team:'Detroit Pistons', commence_time: new Date().toISOString(), bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Detroit Pistons',price:-125},{name:'Orlando Magic',price:+105}]},{key:'spreads',outcomes:[{name:'Detroit Pistons',price:-108,point:-1.5},{name:'Orlando Magic',price:-112,point:+1.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:211.5},{name:'Under',price:-110,point:211.5}]}]}] },
-    { id:'okc_phx', home_team:'Phoenix Suns', away_team:'Oklahoma City Thunder', commence_time: new Date().toISOString(), bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Oklahoma City Thunder',price:-400},{name:'Phoenix Suns',price:+305}]},{key:'spreads',outcomes:[{name:'Oklahoma City Thunder',price:-108,point:-8.5},{name:'Phoenix Suns',price:-112,point:+8.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:216.5},{name:'Under',price:-110,point:216.5}]}]}] },
-    { id:'min_den', home_team:'Denver Nuggets', away_team:'Minnesota Timberwolves', commence_time: new Date().toISOString(), bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Denver Nuggets',price:-255},{name:'Minnesota Timberwolves',price:+210}]},{key:'spreads',outcomes:[{name:'Denver Nuggets',price:-112,point:-6.5},{name:'Minnesota Timberwolves',price:-108,point:+6.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:213.5},{name:'Under',price:-110,point:213.5}]}]}] }
-  ];
-}
-
-async function loadOdds() {
-  try {
-    const res = await fetch(`${BASE}/sports/basketball_nba/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`);
-    if (!res.ok) throw new Error('API error');
-    const data = await res.json();
-    const tonight = ['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets'];
-    const filtered = data.filter(g => tonight.includes(g.home_team) || tonight.includes(g.away_team));
-    allGames = filtered.length ? filtered.slice(0, 3) : buildFallback();
-    loadedAt = new Date();
-    document.getElementById('liveLabel').textContent = `Live · ${loadedAt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
-  } catch(e) {
-    allGames = buildFallback();
-    loadedAt = new Date();
-    document.getElementById('liveLabel').textContent = 'Lines loaded';
-  }
-  renderAll();
-}
-
-function getMarkets(g) {
-  const bk = g.bookmakers && g.bookmakers[0];
-  if (!bk) return {};
-  const get = key => bk.markets.find(m => m.key === key);
-  return { h2h: get('h2h'), spreads: get('spreads'), totals: get('totals'), source: bk.title };
-}
-
-function renderAll() {
-  renderGameBar();
-  renderLeft();
-  renderRight();
-  renderLocked();
-}
-
-function renderGameBar() {
-  document.getElementById('gameBar').innerHTML = allGames.map((g, i) => {
-    const aw = ABBR[g.away_team] || g.away_team.split(' ').pop();
-    const hw = ABBR[g.home_team] || g.home_team.split(' ').pop();
-    const t = new Date(g.commence_time).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
-    const series = SERIES[g.home_team] || '';
-    return `<div class="game-tab${selGame === i ? ' active' : ''}" onclick="selGame=${i};renderAll()">
-      <div class="gt-teams">${aw} @ ${hw}</div>
-      <div class="gt-meta">${t} ET · ${series}</div>
-    </div>`;
+function renderGameBar(){
+  document.getElementById('gameBar').innerHTML=games.map((g,i)=>{
+    const aw=ABBR[g.away_team]||g.away_team.split(' ').pop(),hw=ABBR[g.home_team]||g.home_team.split(' ').pop();
+    const t=new Date(g.commence_time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+    return`<button class="tg-btn${selGame===i?' active':''}" onclick="selGame=${i};renderMain()"><div class="tg-teams">${aw} @ ${hw}</div><div class="tg-info">${t} · ${SERIES[g.home_team]||''}</div></button>`;
   }).join('');
 }
 
-function renderLeft() {
-  const g = allGames[selGame];
-  const { h2h, spreads, totals, source } = getMarkets(g);
-  const aw = g.away_team, hw = g.home_team;
-  const awAb = ABBR[aw] || aw.split(' ').pop();
-  const hwAb = ABBR[hw] || hw.split(' ').pop();
+function renderCatBar(){
+  document.getElementById('catBar').innerHTML=CATS.map(c=>`<button class="cat-tab${selCat===c?' active':''}" onclick="selCat='${c}';renderMain()">${c}</button>`).join('');
+}
 
-  let html = `<div class="cat-bar">${CATS.map(c => `<button class="cat-btn${selCat===c?' active':''}" onclick="selCat='${c}';renderAll()">${c}</button>`).join('')}</div>`;
+function renderMain(){
+  const g=games[selGame];
+  const bk=g.bookmakers?.[0];
+  const mkts={};(bk?.markets||[]).forEach(m=>mkts[m.key]=m);
+  const aw=g.away_team,hw=g.home_team;
+  const awAb=ABBR[aw]||aw.split(' ').pop(),hwAb=ABBR[hw]||hw.split(' ').pop();
+  const src=bk?.title||'DraftKings';
 
-  if (selCat === 'Game Lines') {
-    html += `<div class="gl-card">
-      <div class="gl-header"><span class="gl-title">${aw} @ ${hw}</span><span class="gl-source">${source || 'DraftKings'} · Live</span></div>`;
-
-    if (spreads) {
-      const sAw = spreads.outcomes.find(o => o.name === aw);
-      const sHw = spreads.outcomes.find(o => o.name === hw);
-      const k1 = pickKey(selGame,'spread','away'), k2 = pickKey(selGame,'spread','home');
-      html += `<div class="gl-row"><div class="gl-label">Spread</div>
-        <div class="bet-btn${isInSlip(k1)?' sel':''}" onclick="addPick('${k1}','${awAb} ${sAw?.point>0?'+':''}${sAw?.point}',${sAw?.price},'${awAb} @ ${hwAb}')">
-          <div class="bb-team">${awAb}</div><div class="bb-main">${sAw?.point>0?'+':''}${sAw?.point}</div><div class="bb-odds">${fmt(sAw?.price)}</div>
-        </div>
-        <div class="bet-btn${isInSlip(k2)?' sel':''}" onclick="addPick('${k2}','${hwAb} ${sHw?.point>0?'+':''}${sHw?.point}',${sHw?.price},'${awAb} @ ${hwAb}')">
-          <div class="bb-team">${hwAb}</div><div class="bb-main">${sHw?.point>0?'+':''}${sHw?.point}</div><div class="bb-odds">${fmt(sHw?.price)}</div>
-        </div></div>`;
-    }
-
-    if (h2h) {
-      const mAw = h2h.outcomes.find(o => o.name === aw);
-      const mHw = h2h.outcomes.find(o => o.name === hw);
-      const k1 = pickKey(selGame,'ml','away'), k2 = pickKey(selGame,'ml','home');
-      html += `<div class="gl-row"><div class="gl-label">Moneyline</div>
-        <div class="bet-btn${isInSlip(k1)?' sel':''}" onclick="addPick('${k1}','${awAb} ML',${mAw?.price},'${awAb} @ ${hwAb}')">
-          <div class="bb-team">${awAb}</div><div class="bb-main">${fmt(mAw?.price)}</div><div class="bb-odds">&nbsp;</div>
-        </div>
-        <div class="bet-btn${isInSlip(k2)?' sel':''}" onclick="addPick('${k2}','${hwAb} ML',${mHw?.price},'${awAb} @ ${hwAb}')">
-          <div class="bb-team">${hwAb}</div><div class="bb-main">${fmt(mHw?.price)}</div><div class="bb-odds">&nbsp;</div>
-        </div></div>`;
-    }
-
-    if (totals) {
-      const ov = totals.outcomes.find(o => o.name === 'Over');
-      const un = totals.outcomes.find(o => o.name === 'Under');
-      const k1 = pickKey(selGame,'total','over'), k2 = pickKey(selGame,'total','under');
-      html += `<div class="gl-row"><div class="gl-label">Total</div>
-        <div class="bet-btn${isInSlip(k1)?' sel':''}" onclick="addPick('${k1}','Over ${ov?.point}',${ov?.price},'${awAb} @ ${hwAb} Total')">
-          <div class="bb-team">Over</div><div class="bb-main">${ov?.point}</div><div class="bb-odds">${fmt(ov?.price)}</div>
-        </div>
-        <div class="bet-btn${isInSlip(k2)?' sel':''}" onclick="addPick('${k2}','Under ${un?.point}',${un?.price},'${awAb} @ ${hwAb} Total')">
-          <div class="bb-team">Under</div><div class="bb-main">${un?.point}</div><div class="bb-odds">${fmt(un?.price)}</div>
-        </div></div>`;
-    }
-
-    html += `</div>`;
-    document.getElementById('leftCol').innerHTML = html + `<div class="source-footer">Lines from ${source||'DraftKings'} · Loaded ${loadedAt?.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} · No money wagered on Leg Up</div>`;
-    return;
+  if(selCat==='Game Lines'){
+    let h=`<div class="sec-lbl">Game lines · ${aw} @ ${hw}</div><div class="gl-card"><div class="gl-hdr"><div class="gl-title">${awAb} @ ${hwAb}</div><div class="gl-src">${src} · LIVE</div></div>`;
+    if(mkts.spreads){const sa=mkts.spreads.outcomes.find(o=>o.name===aw),sh=mkts.spreads.outcomes.find(o=>o.name===hw),k1=pk(selGame,'sp','a'),k2=pk(selGame,'sp','h');h+=`<div class="mkt-block"><div class="mkt-lbl">Spread</div><div class="mkt-opts"><div class="mkt-btn${inSlip(k1)?' sel':''}" onclick="addPick('${k1}','${awAb} ${sa?.point>0?'+':''}${sa?.point}',${sa?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${awAb}</div><div class="mb-main">${sa?.point>0?'+':''}${sa?.point}</div><div class="mb-odds">${fo(sa?.price)}</div></div><div class="mkt-btn${inSlip(k2)?' sel':''}" onclick="addPick('${k2}','${hwAb} ${sh?.point>0?'+':''}${sh?.point}',${sh?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${hwAb}</div><div class="mb-main">${sh?.point>0?'+':''}${sh?.point}</div><div class="mb-odds">${fo(sh?.price)}</div></div></div></div>`}
+    if(mkts.h2h){const ma=mkts.h2h.outcomes.find(o=>o.name===aw),mh=mkts.h2h.outcomes.find(o=>o.name===hw),k1=pk(selGame,'ml','a'),k2=pk(selGame,'ml','h');h+=`<div class="mkt-block"><div class="mkt-lbl">Moneyline</div><div class="mkt-opts"><div class="mkt-btn${inSlip(k1)?' sel':''}" onclick="addPick('${k1}','${awAb} ML',${ma?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${awAb}</div><div class="mb-main">${fo(ma?.price)}</div><div class="mb-odds">&nbsp;</div></div><div class="mkt-btn${inSlip(k2)?' sel':''}" onclick="addPick('${k2}','${hwAb} ML',${mh?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${hwAb}</div><div class="mb-main">${fo(mh?.price)}</div><div class="mb-odds">&nbsp;</div></div></div></div>`}
+    if(mkts.totals){const ov=mkts.totals.outcomes.find(o=>o.name==='Over'),un=mkts.totals.outcomes.find(o=>o.name==='Under'),k1=pk(selGame,'tot','o'),k2=pk(selGame,'tot','u');h+=`<div class="mkt-block"><div class="mkt-lbl">Game Total</div><div class="mkt-opts"><div class="mkt-btn${inSlip(k1)?' sel':''}" onclick="addPick('${k1}','Over ${ov?.point}',${ov?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">Over</div><div class="mb-main">${ov?.point}</div><div class="mb-odds">${fo(ov?.price)}</div></div><div class="mkt-btn${inSlip(k2)?' sel':''}" onclick="addPick('${k2}','Under ${un?.point}',${un?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">Under</div><div class="mb-main">${un?.point}</div><div class="mb-odds">${fo(un?.price)}</div></div></div></div>`}
+    h+=`</div><div class="src-footer">LINES VIA ${src.toUpperCase()} · LOADED ${loadedAt?.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} · LEG UP DOES NOT ACCEPT MONEY WAGERS</div>`;
+    document.getElementById('mainCol').innerHTML=h;return;
   }
 
-  const propCats = selCat === 'Specials' ? ['Triple Double','Double Double'] : [selCat];
-  const teams = [g.away_team, g.home_team];
-  let hasAny = false;
-
-  teams.forEach(team => {
-    (PROP_PLAYERS[team] || []).forEach(player => {
-      const pdata = PROP_LINES[player];
-      if (!pdata) return;
-      const relevant = propCats.filter(c => pdata[c]);
-      if (!relevant.length) return;
-      hasAny = true;
-
-      const ab = ABBR[team] || team.split(' ').pop();
-      const color = COLORS[ab] || '#6366f1';
-      const initials = player.split(' ').map(w => w[0]).join('').slice(0,3);
-      const isHot = HOT.includes(player);
-      const isInj = INJ.includes(player);
-
-      html += `<div class="player-card">
-        <div class="player-hdr">
-          <div class="p-av" style="background:${color}22;color:${color}">${initials}</div>
-          <div>
-            <div class="p-name">${player}${isHot?`<span class="p-badge badge-hot">Hot</span>`:''}${isInj?`<span class="p-badge badge-inj">Questionable</span>`:''}</div>
-            <div class="p-team">${team}</div>
-          </div>
-        </div>`;
-
-      relevant.forEach(cat => {
-        const prop = pdata[cat];
-        const ok = propKey(selGame, player, cat, 'over');
-        const uk = propKey(selGame, player, cat, 'under');
-        const selO = isInSlip(ok), selU = isInSlip(uk);
-        const lineDisplay = prop.special ? 'Yes/No' : prop.line;
-        const safePlayer = player.replace(/'/g, "\\'");
-        const safeCat = cat.replace(/'/g, "\\'");
-
-        html += `<div class="prop-row">
-          <div class="pr-cat">${cat}</div>
-          <div class="pr-line">${lineDisplay}</div>
-          <div class="pr-btns">
-            <button class="ou-btn${selO?' sel-o':''}" onclick="addPick('${ok}','${safePlayer} ${prop.special?cat+' Yes':'Over '+prop.line+' '+safeCat}',${prop.over},'${ab}')">
-              <span class="ou-dir">${prop.special?'Yes':'Over'}</span>
-              <span class="ou-val">${fmt(prop.over)}</span>
-            </button>
-            <button class="ou-btn${selU?' sel-u':''}" onclick="addPick('${uk}','${safePlayer} ${prop.special?cat+' No':'Under '+prop.line+' '+safeCat}',${prop.under},'${ab}')">
-              <span class="ou-dir">${prop.special?'No':'Under'}</span>
-              <span class="ou-val">${fmt(prop.under)}</span>
-            </button>
-          </div>
-        </div>`;
+  const cats=selCat==='Specials'?['Triple Double','Double Double']:[selCat];
+  let h=`<div class="sec-lbl">${selCat} · ${awAb} @ ${hwAb}</div>`;
+  let any=false;
+  [aw,hw].forEach(team=>{
+    (ROSTER[team]||[]).forEach(player=>{
+      const pd=PROPS[player];if(!pd)return;
+      const rel=cats.filter(c=>pd[c]);if(!rel.length)return;
+      any=true;
+      const ab=ABBR[team]||team.split(' ').pop(),col=COLORS[ab]||'#6366f1';
+      const ini=player.split(' ').map(w=>w[0]).join('').slice(0,3);
+      h+=`<div class="player-group"><div class="player-hdr"><div class="p-av" style="background:${col}20;color:${col}">${ini}</div><div><div class="p-name">${player}${HOT.includes(player)?'<span class="badge badge-hot">HOT</span>':''}${INJ.includes(player)?'<span class="badge badge-inj">QUES</span>':''}</div><div class="p-team">${team} · ${ab}</div></div></div><div class="prop-list">`;
+      rel.forEach(cat=>{
+        const p=pd[cat];
+        const ok=ppk(selGame,player,cat,'o'),uk=ppk(selGame,player,cat,'u');
+        const sp=player.replace(/'/g,"\\'"),sc=cat.replace(/'/g,"\\'");
+        h+=`<div class="prop-row"><div class="pr-type">${cat}</div><div class="pr-line">${p.sp?'Y/N':p.l}</div><div class="pr-btns"><div class="ou-btn${inSlip(ok)?' sel-o':''}" onclick="addPick('${ok}','${sp} ${p.sp?cat+' Yes':'O'+p.l+' '+sc}',${p.o},'${ab}')"><span class="ou-dir">${p.sp?'YES':'OVER'}</span><span class="ou-odds">${fo(p.o)}</span></div><div class="ou-btn${inSlip(uk)?' sel-u':''}" onclick="addPick('${uk}','${sp} ${p.sp?cat+' No':'U'+p.l+' '+sc}',${p.u},'${ab}')"><span class="ou-dir">${p.sp?'NO':'UNDR'}</span><span class="ou-odds">${fo(p.u)}</span></div></div></div>`;
       });
-
-      html += `</div>`;
+      h+=`</div></div>`;
     });
   });
-
-  if (!hasAny) html += `<div style="padding:40px;text-align:center;color:var(--text2);font-size:13px">No ${selCat} props available for this matchup</div>`;
-  html += `<div class="source-footer">Player props · Leg Up · No money wagered</div>`;
-  document.getElementById('leftCol').innerHTML = html;
+  if(!any)h+=`<div style="padding:60px 0;text-align:center;color:var(--text3);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em">NO ${selCat.toUpperCase()} PROPS FOR THIS MATCHUP</div>`;
+  document.getElementById('mainCol').innerHTML=h;
 }
 
-function renderRight() {
-  const { payout, profit } = calcParlay();
-  let html = `<div class="slip-header"><div class="slip-title">Bet Slip</div><div class="slip-count">${slip.length} pick${slip.length!==1?'s':''}</div></div>`;
-
-  if (!slip.length) {
-    html += `<div class="slip-empty"><div class="se-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="12" y2="15"/></svg></div><div class="se-txt">Your slip is empty.<br>Tap any line to add a pick.</div></div>`;
-  } else {
-    slip.forEach(s => {
-      const moved = s.currentOdds !== s.lockedOdds;
-      const movedUp = s.currentOdds > s.lockedOdds;
-      const oddsColor = s.lockedOdds > 0 ? 'var(--green)' : 'var(--text)';
-      html += `<div class="slip-item">
-        <div class="si-pick">${s.pick}</div>
-        <div class="si-game">${s.meta}</div>
-        <div class="si-bottom">
-          <span class="si-odds" style="color:${oddsColor}">${fmt(s.lockedOdds)}</span>
-          <span class="si-locked">Locked ${s.lockedAt}</span>
-          ${moved ? `<span class="si-move ${movedUp?'move-bad':'move-good'}">${movedUp?'▲ against you':'▼ your way'}</span>` : ''}
-        </div>
-        <button class="si-remove" onclick="removePick('${s.key}')">×</button>
-      </div>`;
-    });
-
-    html += `<div class="slip-stake">
-      <div class="stake-label">Stake</div>
-      <div class="stake-row"><span class="stake-prefix">$</span><input type="number" class="stake-input" value="${stake}" min="1" onchange="stake=parseFloat(this.value)||50;renderRight()"></div>
-      <div class="presets">${[5,10,25,50,100].map(v=>`<button class="preset${stake===v?' active':''}" onclick="stake=${v};renderRight()">${v}</button>`).join('')}</div>
-    </div>
-    <div class="parlay-box">
-      <div class="pb-row"><span class="pb-lbl">Stake</span><span class="pb-val">$${stake.toFixed(2)}</span></div>
-      <div class="pb-row"><span class="pb-lbl">${slip.length}-leg parlay</span><span class="pb-val green">$${payout.toFixed(2)}</span></div>
-      <div class="pb-row"><span class="pb-lbl">Est. profit</span><span class="pb-val green">+$${profit.toFixed(2)}</span></div>
-    </div>
-    <div class="slip-actions">
-      <button class="lock-btn" onclick="lockSlip()">Lock Picks — No Money</button>
-      <button class="straight-btn" onclick="showStraight()">View as straight bets</button>
-    </div>`;
-  }
-
-  document.getElementById('rightCol').innerHTML = html;
+function renderSlip(){
+  const{pay,prof}=calcP();
+  let h=`<div class="slip-hdr"><div class="slip-title-row"><div class="slip-title">Bet Slip</div>${slip.length?`<div class="slip-legs-ct">${slip.length} LEG${slip.length!==1?'S':''}</div>`:''}</div></div>`;
+  if(!slip.length){h+=`<div class="slip-empty"><div class="se-mark">—</div><div class="se-txt">Your slip is empty.<br>Tap any line to add a pick.</div></div>`;document.getElementById('slipCol').innerHTML=h;return}
+  h+=`<div class="slip-items">`;
+  slip.forEach(s=>{const oc=s.odds>0?'var(--lime)':'var(--text)';h+=`<div class="slip-item"><div class="si-pick">${s.label}</div><div class="si-game">${s.game}</div><div class="si-row"><span class="si-odds" style="color:${oc}">${fo(s.odds)}</span><span class="si-time">LOCKED ${s.locked}</span></div><button class="si-rm" onclick="removePick('${s.key}')">×</button></div>`});
+  h+=`</div><div class="slip-foot"><div class="foot-lbl">Stake</div><div class="stake-wrap"><span class="stake-sign">$</span><input type="number" class="stake-in" value="${stake}" min="1" onchange="stake=parseFloat(this.value)||50;renderSlip()"></div><div class="presets">${[5,10,25,50,100].map(v=>`<button class="pre${stake===v?' on':''}" onclick="stake=${v};renderSlip()">$${v}</button>`).join('')}</div><div class="parlay-box"><div class="pb-row"><span class="pb-lbl">Stake</span><span class="pb-val">$${stake.toFixed(2)}</span></div><div class="pb-row"><span class="pb-lbl">${slip.length}-Leg Parlay</span><span class="pb-val g">$${pay.toFixed(2)}</span></div><div class="pb-row"><span class="pb-lbl">Est. Profit</span><span class="pb-val g">+$${prof.toFixed(2)}</span></div></div><button class="lock-btn" onclick="lockSlip()">LOCK PICKS — NO MONEY</button><button class="split-btn" onclick="showSplit()">View as straight bets</button></div>`;
+  document.getElementById('slipCol').innerHTML=h;
 }
 
-function showStraight() {
-  if (!slip.length) return;
-  const per = (stake / slip.length).toFixed(2);
-  showToast(`${slip.length} straight bets · $${per} each · same total stake`);
-}
-
-function renderLocked() {
-  if (!lockedSlips.length) { document.getElementById('lockedSection').innerHTML = ''; return; }
-
-  let html = `<div class="locked-section"><div class="ls-title">Locked slips</div>`;
-
-  lockedSlips.forEach((ls, idx) => {
-    const wins = ls.legs.filter(l => l.result === 'win').length;
-    const losses = ls.legs.filter(l => l.result === 'loss').length;
-    const pending = ls.legs.filter(l => !l.result).length;
-    const allDone = !pending;
-    const allWin = allDone && wins === ls.legs.length;
-    const parlayResult = allDone ? (allWin ? ls.parlayProfit : -ls.stake) : null;
-    const straightTotal = allDone ? ls.legs.reduce((s, l) => s + (l.result==='win' ? l.straightPayout - l.perLeg : -l.perLeg), 0) : null;
-    const diff = allDone ? straightTotal - parlayResult : null;
-
-    html += `<div class="locked-card">
-      <div class="lc-hdr">
-        <span class="lc-name">${ls.legs.length}-leg parlay · $${ls.stake} stake</span>
-        <span class="lc-time">Locked ${ls.lockedAt} · ${wins}W ${losses}L ${pending}P</span>
-      </div>`;
-
-    ls.legs.forEach((l, li) => {
-      const moved = l.currentOdds && l.currentOdds !== l.lockedOdds;
-      const movedUp = moved && l.currentOdds > l.lockedOdds;
-      const dotColor = !l.result ? 'var(--text3)' : l.result==='win' ? 'var(--green)' : 'var(--red)';
-
-      html += `<div class="lc-leg">
-        <div class="ll-dot" style="background:${dotColor}"></div>
-        <div class="ll-info">
-          <div class="ll-pick">${l.pick}</div>
-          <div class="ll-meta">
-            <span style="font-family:'DM Mono',monospace">${fmt(l.lockedOdds)}</span> · ${l.lockedAt}
-            ${moved ? `<span class="ll-move ${movedUp?'move-bad':'move-good'}">${movedUp?'▲ moved against you':'▼ moved your way'}</span>` : ''}
-          </div>
-        </div>
-        <div class="ll-res">
-          <button class="res-btn${l.result==='win'?' win':''}" onclick="setLockedResult(${idx},${li},'win')">Win</button>
-          <button class="res-btn${l.result==='loss'?' loss':''}" onclick="setLockedResult(${idx},${li},'loss')">Loss</button>
-        </div>
-      </div>`;
-    });
-
-    if (allDone) {
-      const parlayColor = parlayResult >= 0 ? 'var(--green)' : 'var(--red)';
-      const straightColor = straightTotal >= 0 ? 'var(--green)' : 'var(--red)';
-      html += `<div class="result-grid">
-        <div class="rg-col">
-          <div class="rg-lbl">Parlay</div>
-          <div class="rg-val" style="color:${parlayColor}">${fmtMoney(parlayResult)}</div>
-          <div class="rg-sub">All or nothing</div>
-        </div>
-        <div class="rg-div"></div>
-        <div class="rg-col">
-          <div class="rg-lbl">Straight bets</div>
-          <div class="rg-val" style="color:${straightColor}">${fmtMoney(straightTotal)}</div>
-          <div class="rg-sub">Same stake split</div>
-        </div>
-      </div>
-      <div class="delta-row" style="background:${diff>0?'var(--green-bg)':'var(--bg3)'}">
-        <div class="dr-lbl">Parlay format cost you</div>
-        <div class="dr-val" style="color:${diff>0?'var(--green)':'var(--text)'}">${fmtMoney(diff)}</div>
-      </div>`;
-    }
-
-    html += `</div>`;
+function renderLocked(){
+  if(!locked.length){document.getElementById('lockedArea').innerHTML='';return}
+  let h=`<div class="locked-area"><div class="locked-hdr">Locked slips</div>`;
+  locked.forEach((ls,si)=>{
+    const wins=ls.legs.filter(l=>l.result==='win').length,losses=ls.legs.filter(l=>l.result==='loss').length,pend=ls.legs.filter(l=>!l.result).length,done=!pend,allW=done&&wins===ls.legs.length;
+    const pR=done?(allW?ls.prof:-ls.stake):null,sR=done?ls.legs.reduce((s,l)=>s+(l.result==='win'?l.sp-l.pl:-l.pl),0):null,diff=done?sR-pR:null;
+    h+=`<div class="locked-card"><div class="lc-hdr"><div class="lc-name">${ls.legs.length}-Leg Parlay · $${ls.stake}</div><div class="lc-meta">LOCKED ${ls.at} · ${wins}W ${losses}L ${pend}P</div></div>`;
+    ls.legs.forEach((l,li)=>{const dot=!l.result?'var(--fog)':l.result==='win'?'var(--lime)':'var(--red)';h+=`<div class="lc-leg"><div class="lc-dot" style="background:${dot}"></div><div class="lc-info"><div class="lc-pick">${l.label}</div><div class="lc-sub"><span>${fo(l.odds)}</span><span>${l.locked}</span></div></div><div class="lc-res"><button class="res-btn${l.result==='win'?' win':''}" onclick="setRes(${si},${li},'win')">WIN</button><button class="res-btn${l.result==='loss'?' loss':''}" onclick="setRes(${si},${li},'loss')">LOSS</button></div></div>`});
+    if(done){const pc=pR>=0?'var(--lime)':'var(--red)',sc=sR>=0?'var(--lime)':'var(--red)',dc=diff>0?'var(--lime)':'var(--text)';h+=`<div class="cmp-grid"><div class="cmp-col"><div class="cmp-lbl">Parlay</div><div class="cmp-val" style="color:${pc}">${fm(pR)}</div><div class="cmp-sub">All or nothing</div></div><div class="cmp-div"></div><div class="cmp-col"><div class="cmp-lbl">Straight bets</div><div class="cmp-val" style="color:${sc}">${fm(sR)}</div><div class="cmp-sub">Same stake split</div></div></div><div class="delta" style="background:${diff>0?'rgba(182,245,66,.05)':'transparent'}"><div class="delta-lbl">Parlay format cost you</div><div class="delta-val" style="color:${dc}">${fm(diff)}</div></div>`}
+    h+=`</div>`;
   });
-
-  html += `</div>`;
-  document.getElementById('lockedSection').innerHTML = html;
+  h+=`</div>`;
+  document.getElementById('lockedArea').innerHTML=h;
 }
 
-loadOdds();
+load();
 </script>
 </body>
 </html>
