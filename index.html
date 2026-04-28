@@ -7,14 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0d0d12;--ink2:#16161f;--ink3:#1e1e2a;--ink4:#26263a;--line:rgba(255,255,255,0.07);--line2:rgba(255,255,255,0.12);--line3:rgba(255,255,255,0.18);--smoke:#6b6b8a;--text:#f2f2f8;--text2:#9090b0;--text3:#55556a;--lime:#b6f542;--lime-dim:rgba(182,245,66,0.1);--lime-line:rgba(182,245,66,0.28);--red:#ff4d4d;--red-dim:rgba(255,77,77,0.1);--red-line:rgba(255,77,77,0.28);--amber:#ffb347;--amber-dim:rgba(255,179,71,0.1);--r:8px;--r2:12px}
+:root{--ink:#0d0d12;--ink2:#16161f;--ink3:#1e1e2a;--ink4:#26263a;--line:rgba(255,255,255,0.07);--line2:rgba(255,255,255,0.12);--line3:rgba(255,255,255,0.18);--text:#f2f2f8;--text2:#9090b0;--text3:#55556a;--lime:#b6f542;--lime-dim:rgba(182,245,66,0.1);--lime-line:rgba(182,245,66,0.28);--red:#ff4d4d;--red-dim:rgba(255,77,77,0.1);--red-line:rgba(255,77,77,0.28);--amber:#ffb347;--amber-dim:rgba(255,179,71,0.1);--r:8px;--r2:12px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:14px}
-body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-weight:400;min-height:100vh;-webkit-font-smoothing:antialiased}
+body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* TOPBAR */
-.topbar{height:54px;background:var(--ink2);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 18px;gap:0;position:sticky;top:0;z-index:200}
-.logo{display:flex;align-items:center;gap:9px;margin-right:24px;flex-shrink:0}
+.topbar{height:54px;background:var(--ink2);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 18px;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:9px;margin-right:20px;flex-shrink:0}
 .logo-mark{width:28px;height:28px;background:var(--lime);border-radius:6px;display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:15px;height:15px}
 .logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.3px}
@@ -28,42 +28,49 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 .tg-btn.active .tg-teams{color:var(--lime)}
 .tg-info{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
 .tg-btn.active .tg-info{color:rgba(182,245,66,.5)}
-.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0;padding-left:14px}
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0;padding-left:12px}
 .live-pill{display:flex;align-items:center;gap:5px;background:var(--lime-dim);border:1px solid var(--lime-line);border-radius:20px;padding:4px 10px;font-size:9px;color:var(--lime);font-family:'IBM Plex Mono',monospace;letter-spacing:.05em}
 .live-pip{width:5px;height:5px;border-radius:50%;background:var(--lime);animation:blink 2s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.top-btn{background:var(--ink3);border:1px solid var(--line2);border-radius:20px;padding:5px 12px;font-size:9px;color:var(--text2);cursor:pointer;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;transition:all .15s;display:none}
+.top-btn:hover{border-color:var(--lime-line);color:var(--lime)}
 .slip-pill{display:flex;align-items:center;gap:6px;background:var(--ink3);border:1px solid var(--line2);border-radius:20px;padding:5px 13px;font-size:11px;color:var(--text2);cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
 .slip-pill:hover{border-color:var(--line3);color:var(--text)}
 .slip-pill.on{background:var(--lime-dim);border-color:var(--lime-line);color:var(--lime)}
 .slip-badge{background:var(--lime);color:var(--ink);border-radius:10px;padding:1px 5px;font-size:9px;font-weight:700;display:none;min-width:16px;text-align:center}
 .slip-pill.on .slip-badge{display:block}
 
-/* CAT BAR */
+/* NAV BARS */
+.page-nav{background:var(--ink2);border-bottom:1px solid var(--line);padding:0 18px;display:flex;gap:0}
+.pn-tab{padding:10px 15px;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;text-transform:uppercase;background:transparent;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.pn-tab:hover{color:var(--text2)}
+.pn-tab.active{color:var(--lime);border-bottom-color:var(--lime)}
 .cat-bar{background:var(--ink2);border-bottom:1px solid var(--line);padding:0 18px;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
 .cat-bar::-webkit-scrollbar{display:none}
-.cat-tab{padding:10px 13px;font-size:11px;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:'IBM Plex Sans',sans-serif;font-weight:400;transition:all .15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.cat-tab{padding:10px 13px;font-size:11px;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:'IBM Plex Sans',sans-serif;transition:all .15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit}
 .cat-tab:hover{color:var(--text2)}
 .cat-tab.active{color:var(--lime);border-bottom-color:var(--lime);font-weight:500}
 
-/* BODY */
-.body-wrap{display:grid;grid-template-columns:1fr 320px;min-height:calc(100vh - 90px)}
+/* LAYOUT */
+.body-wrap{display:grid;grid-template-columns:1fr 320px;min-height:calc(100vh - 114px)}
 .main-col{padding:18px;overflow-y:auto}
-.slip-col{border-left:1px solid var(--line);background:var(--ink2);display:flex;flex-direction:column;position:sticky;top:90px;max-height:calc(100vh - 90px);overflow-y:auto}
+.slip-col{border-left:1px solid var(--line);background:var(--ink2);display:flex;flex-direction:column;position:sticky;top:114px;max-height:calc(100vh - 114px);overflow-y:auto}
+.page-col{padding:18px;max-width:860px;margin:0 auto;width:100%}
 
-/* SECTION LABEL */
+/* SEC LABEL */
 .sec-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .sec-lbl::after{content:'';flex:1;height:1px;background:var(--line)}
 
 /* GAME LINE CARD */
-.gl-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:16px}
+.gl-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:14px}
 .gl-hdr{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
 .gl-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-.2px}
-.gl-src{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);background:var(--ink3);padding:2px 7px;border-radius:4px;letter-spacing:.04em}
+.gl-src{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);background:var(--ink3);padding:2px 7px;border-radius:4px}
 .mkt-block{border-bottom:1px solid var(--line)}
 .mkt-block:last-child{border-bottom:none}
 .mkt-lbl{padding:8px 14px 0;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.09em;text-transform:uppercase}
 .mkt-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:7px 14px 12px}
-.mkt-btn{background:var(--ink3);border:1px solid var(--line2);border-radius:var(--r);padding:10px 10px;text-align:center;cursor:pointer;transition:all .16s;font-family:inherit}
+.mkt-btn{background:var(--ink3);border:1px solid var(--line2);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;transition:all .16s;font-family:inherit}
 .mkt-btn:hover{border-color:var(--line3)}
 .mkt-btn.sel{background:var(--lime-dim);border-color:var(--lime-line)}
 .mb-lbl{font-size:10px;color:var(--text3);margin-bottom:4px}
@@ -78,7 +85,7 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 .player-hdr{display:flex;align-items:center;gap:10px;padding:9px 13px;background:var(--ink3);border:1px solid var(--line2);border-radius:var(--r2) var(--r2) 0 0}
 .p-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;flex-shrink:0}
 .p-name{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px}
-.p-team{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:1px;letter-spacing:.03em}
+.p-team{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:1px}
 .badge{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:500;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em}
 .badge-hot{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,179,71,.22)}
 .badge-inj{background:var(--red-dim);color:var(--red);border:1px solid var(--red-line)}
@@ -109,16 +116,14 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 .se-mark{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--ink4);margin-bottom:8px;letter-spacing:-3px}
 .se-txt{font-size:11px;color:var(--text3);line-height:1.7}
 .slip-items{overflow-y:auto}
-.slip-item{padding:10px 14px;border-bottom:1px solid var(--line);position:relative;transition:background .1s}
+.slip-item{padding:10px 14px;border-bottom:1px solid var(--line);position:relative}
 .si-pick{font-weight:500;font-size:12px;color:var(--text);padding-right:18px;line-height:1.4}
-.si-game{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:2px;letter-spacing:.02em}
-.si-row{display:flex;align-items:center;gap:7px;margin-top:5px}
+.si-game{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:2px}
+.si-row{display:flex;align-items:center;gap:7px;margin-top:5px;flex-wrap:wrap}
 .si-odds{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500}
 .si-time{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
-.si-move{font-size:8px;padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-weight:500}
-.move-bad{background:var(--red-dim);color:var(--red)}
-.move-good{background:var(--lime-dim);color:var(--lime)}
-.si-rm{position:absolute;top:10px;right:13px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:15px;line-height:1;transition:color .1s;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+.si-pts{font-size:9px;padding:1px 5px;border-radius:3px;background:var(--lime-dim);border:1px solid var(--lime-line);color:var(--lime);font-family:'IBM Plex Mono',monospace;font-weight:500}
+.si-rm{position:absolute;top:10px;right:13px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:15px;line-height:1;transition:color .1s}
 .si-rm:hover{color:var(--red)}
 .slip-foot{padding:12px 14px;border-top:1px solid var(--line)}
 .foot-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
@@ -138,11 +143,36 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 .pb-val.g{color:var(--lime)}
 .lock-btn{width:100%;padding:11px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.04em;cursor:pointer;transition:opacity .14s;margin-bottom:5px}
 .lock-btn:hover{opacity:.87}
-.lock-btn:disabled{opacity:.28;cursor:not-allowed}
 .split-btn{width:100%;padding:8px;background:transparent;border:1px solid var(--line2);border-radius:var(--r);font-size:11px;color:var(--text3);cursor:pointer;font-family:inherit;transition:all .14s}
 .split-btn:hover{border-color:var(--line3);color:var(--text2)}
 
-/* LOCKED */
+/* STRAIGHT BET PREVIEW */
+.split-panel{background:var(--ink);border-top:1px solid var(--line)}
+.split-panel-hdr{padding:9px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:var(--ink3)}
+.sp-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:var(--text)}
+.sp-close{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1}
+.sp-close:hover{color:var(--red)}
+.llb-hdr{padding:6px 11px;display:grid;grid-template-columns:1fr 52px 58px 64px;gap:6px;border-bottom:1px solid var(--line);background:var(--ink3)}
+.llb-col{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);text-align:right}
+.llb-col:first-child{text-align:left}
+.llb-row{padding:7px 11px;display:grid;grid-template-columns:1fr 52px 58px 64px;gap:6px;border-bottom:1px solid var(--line);align-items:center}
+.llb-row:last-child{border-bottom:none}
+.llb-pick{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px}
+.llb-odds{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);text-align:right}
+.llb-stake{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);text-align:right}
+.llb-ret{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;text-align:right}
+.split-totals{display:grid;grid-template-columns:1fr 1px 1fr;border-top:2px solid var(--line2)}
+.st-col{padding:11px 14px;text-align:center}
+.st-div{background:var(--line2)}
+.st-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.st-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.4px}
+.st-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.split-delta{padding:10px 14px;text-align:center;border-top:1px solid var(--line)}
+.sd-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
+.sd-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.4px}
+.sd-msg{font-size:10px;color:var(--text3);margin-top:4px;line-height:1.6;padding:0 6px}
+
+/* LOCKED SLIPS */
 .locked-area{padding:18px}
 .locked-hdr{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .locked-hdr::after{content:'';flex:1;height:1px;background:var(--line)}
@@ -154,13 +184,14 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 .lc-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .lc-info{flex:1;min-width:0}
 .lc-pick{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lc-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);margin-top:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.lc-move{font-size:8px;padding:1px 4px;border-radius:3px;font-weight:500}
+.lc-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.lc-pts{font-size:9px;padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-weight:500}
 .lc-res{display:flex;gap:3px;flex-shrink:0}
-.res-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--line);background:var(--ink3);font-size:9px;color:var(--text3);cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .12s;letter-spacing:.03em}
+.res-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--line);background:var(--ink3);font-size:9px;color:var(--text3);cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .12s}
 .res-btn:hover{border-color:var(--line2);color:var(--text)}
 .res-btn.win{background:var(--lime-dim);border-color:var(--lime-line);color:var(--lime)}
 .res-btn.loss{background:var(--red-dim);border-color:var(--red-line);color:var(--red)}
+.ll-breakdown{margin:0 12px 12px;background:var(--ink3);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .cmp-grid{display:grid;grid-template-columns:1fr 1px 1fr;border-top:1px solid var(--line)}
 .cmp-col{padding:12px;text-align:center}
 .cmp-div{background:var(--line)}
@@ -170,42 +201,81 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 .delta{padding:11px 13px;text-align:center;border-top:1px solid var(--line)}
 .delta-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
 .delta-val{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.4px}
+.delta-msg{font-size:10px;color:var(--text3);margin-top:5px;line-height:1.6;padding:0 8px}
 
-/* STRAIGHT BET COMPARISON */
-.split-panel{background:var(--ink);border-top:1px solid var(--line)}
-.split-panel-hdr{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:var(--ink3)}
-.sp-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--text)}
-.sp-close{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1;padding:0;transition:color .1s}
-.sp-close:hover{color:var(--red)}
-.split-leg{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line)}
-.split-leg:last-of-type{border-bottom:none}
-.sl-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sl-odds{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
-.sl-stake{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2)}
-.sl-ret{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500}
-.split-totals{display:grid;grid-template-columns:1fr 1px 1fr;border-top:2px solid var(--line2)}
-.st-col{padding:11px 14px;text-align:center}
-.st-div{background:var(--line2)}
-.st-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
-.st-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.4px}
-.st-sub{font-size:9px;color:var(--text3);margin-top:2px}
-.split-delta{padding:10px 14px;text-align:center;border-top:1px solid var(--line)}
-.sd-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
-.sd-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.4px}
-.sd-msg{font-size:10px;color:var(--text3);margin-top:3px;line-height:1.5}
+/* STATS / PROFILE */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);padding:14px;text-align:center}
+.sc-val{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.5px;margin-bottom:3px}
+.sc-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.sc-sub{font-size:9px;color:var(--text3);margin-top:3px}
 
-/* LOCKED LEG BREAKDOWN */
-.ll-breakdown{background:var(--ink3);border-radius:0 0 var(--r) var(--r);overflow:hidden;margin:0 13px 13px;border:1px solid var(--line)}
-.llb-hdr{padding:7px 11px;display:grid;grid-template-columns:1fr 52px 60px 60px;gap:6px;border-bottom:1px solid var(--line)}
-.llb-col{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
-.llb-col.right{text-align:right}
-.llb-row{padding:7px 11px;display:grid;grid-template-columns:1fr 52px 60px 60px;gap:6px;border-bottom:1px solid var(--line);align-items:center}
-.llb-row:last-child{border-bottom:none}
-.llb-pick{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.llb-odds{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);text-align:right}
-.llb-stake{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);text-align:right}
-.llb-ret{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;text-align:right}
-.llb-status-dot{width:5px;height:5px;border-radius:50%;display:inline-block;margin-right:4px;flex-shrink:0}
+/* HISTORY */
+.history-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.hc-hdr{padding:10px 14px;background:var(--ink3);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.hc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px}
+.hc-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3)}
+.hist-row{display:grid;grid-template-columns:1fr 64px 56px 64px;gap:8px;padding:9px 14px;border-bottom:1px solid var(--line);align-items:center}
+.hist-row:last-child{border-bottom:none}
+.hist-row:hover{background:rgba(255,255,255,.02)}
+.hr-pick{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hr-type{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);margin-top:1px}
+.hr-val{font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right}
+.hr-result{text-align:right}
+.hr-pts{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;text-align:right}
+.col-hdr{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);text-align:right}
+.col-hdr:first-child{text-align:left}
+
+/* BREAKDOWN BARS */
+.breakdown-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.bk-hdr{padding:10px 14px;background:var(--ink3);border-bottom:1px solid var(--line)}
+.bk-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px}
+.bk-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.bk-row:last-child{border-bottom:none}
+.bk-label{font-size:11px;color:var(--text2);width:120px;flex-shrink:0}
+.bk-track{flex:1;height:5px;background:var(--ink3);border-radius:3px;overflow:hidden}
+.bk-fill{height:100%;border-radius:3px;transition:width .7s ease}
+.bk-pct{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text2);width:32px;text-align:right;flex-shrink:0}
+.bk-pts{font-family:'IBM Plex Mono',monospace;font-size:10px;width:48px;text-align:right;flex-shrink:0;color:var(--lime)}
+
+/* LEADERBOARD */
+.lb-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.lb-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line);transition:background .1s}
+.lb-row:last-child{border-bottom:none}
+.lb-row:hover{background:rgba(255,255,255,.02)}
+.lb-row.me{background:var(--lime-dim);border-left:2px solid var(--lime)}
+.lb-rank{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;width:22px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:#ffd700}
+.lb-rank.silver{color:#c0c0c0}
+.lb-rank.bronze{color:#cd7f32}
+.lb-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;flex-shrink:0}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-size:12px;font-weight:500;color:var(--text)}
+.lb-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);margin-top:1px}
+.lb-pts{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--lime)}
+.lb-acc{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);margin-top:1px;text-align:right}
+
+/* SCORING GUIDE */
+.sg-card{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.sg-hdr{padding:10px 14px;background:var(--ink3);border-bottom:1px solid var(--line)}
+.sg-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px}
+.sg-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.sg-row{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--line)}
+.sg-row:last-child{border-bottom:none}
+.sg-left{flex:1}
+.sg-label{font-size:11px;color:var(--text2)}
+.sg-range{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);margin-top:1px}
+.sg-pts{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:var(--lime);flex-shrink:0}
+.sg-mult{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--amber);flex-shrink:0}
+
+/* USERNAME MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center}
+.modal{background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);padding:24px;width:300px}
+.modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-bottom:6px}
+.modal-sub{font-size:11px;color:var(--text3);margin-bottom:16px;line-height:1.6}
+.modal-input{width:100%;background:var(--ink3);border:1px solid var(--line2);border-radius:var(--r);padding:9px 12px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--text);outline:none;margin-bottom:10px;transition:border-color .15s}
+.modal-input:focus{border-color:var(--lime-line)}
+.modal-btn{width:100%;padding:11px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:800;font-size:13px;cursor:pointer}
 
 /* MISC */
 .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:12px}
@@ -213,16 +283,17 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-txt{font-size:12px;color:var(--text2)}
 .loading-sub{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
-.src-footer{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);text-align:center;padding:14px;border-top:1px solid var(--line);margin-top:6px;letter-spacing:.03em}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink4);border:1px solid var(--line3);color:var(--text);padding:8px 18px;border-radius:20px;font-size:11px;display:none;z-index:999;white-space:nowrap;font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+.src-footer{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);text-align:center;padding:14px;border-top:1px solid var(--line);margin-top:6px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink4);border:1px solid var(--line3);color:var(--text);padding:8px 18px;border-radius:20px;font-size:11px;display:none;z-index:999;white-space:nowrap;font-family:'IBM Plex Mono',monospace}
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--ink4);border-radius:2px}
-@media(max-width:720px){.body-wrap{grid-template-columns:1fr}.slip-col{border-left:none;border-top:1px solid var(--line);position:static;max-height:none}}
+@media(max-width:720px){.body-wrap{grid-template-columns:1fr}.slip-col{border-left:none;border-top:1px solid var(--line);position:static;max-height:none}.stats-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 <div id="toast"></div>
+<div id="modalArea"></div>
 
 <header class="topbar">
   <div class="logo">
@@ -234,28 +305,64 @@ body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans',sans-se
   <div class="topbar-games" id="gameBar"></div>
   <div class="topbar-right">
     <div class="live-pill"><div class="live-pip"></div><span id="liveLabel">LOADING</span></div>
-    <button id="refreshBtn" onclick="fetchFreshOdds()" style="display:none;align-items:center;background:var(--ink3);border:1px solid var(--line2);border-radius:20px;padding:5px 12px;font-size:9px;color:var(--text2);cursor:pointer;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;transition:all .15s" onmouseover="this.style.borderColor='var(--lime-line)';this.style.color='var(--lime)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--text2)'">REFRESH LINES</button>
+    <button id="refreshBtn" class="top-btn" onclick="fetchFreshOdds()">REFRESH LINES</button>
     <div class="slip-pill" id="slipPill" onclick="focusSlip()">
       <span>SLIP</span><span class="slip-badge" id="slipBadge">0</span>
     </div>
   </div>
 </header>
 
-<nav class="cat-bar" id="catBar"></nav>
+<nav class="page-nav">
+  <button class="pn-tab active" id="pn-board" onclick="switchPage('board',this)">Board</button>
+  <button class="pn-tab" id="pn-record" onclick="switchPage('record',this)">My Record</button>
+  <button class="pn-tab" id="pn-leaderboard" onclick="switchPage('leaderboard',this)">Leaderboard</button>
+  <button class="pn-tab" id="pn-scoring" onclick="switchPage('scoring',this)">How Points Work</button>
+</nav>
 
-<div class="body-wrap">
-  <main class="main-col" id="mainCol">
-    <div class="loading-wrap"><div class="spinner"></div><div class="loading-txt">Connecting to live sportsbooks...</div><div class="loading-sub">FETCHING REAL LINES · DRAFTKINGS</div></div>
-  </main>
-  <aside class="slip-col" id="slipCol"></aside>
+<!-- BOARD PAGE -->
+<div id="boardPage">
+  <nav class="cat-bar" id="catBar"></nav>
+  <div class="body-wrap">
+    <main class="main-col" id="mainCol">
+      <div class="loading-wrap"><div class="spinner"></div><div class="loading-txt">Loading...</div><div class="loading-sub">CONNECTING TO SUPABASE</div></div>
+    </main>
+    <aside class="slip-col" id="slipCol"></aside>
+  </div>
+  <div id="lockedArea"></div>
 </div>
 
-<div id="lockedArea"></div>
+<!-- RECORD PAGE -->
+<div id="recordPage" style="display:none">
+  <div class="page-col" id="recordCol">
+    <div class="loading-wrap"><div class="spinner"></div><div class="loading-txt">Loading your record...</div></div>
+  </div>
+</div>
+
+<!-- LEADERBOARD PAGE -->
+<div id="leaderboardPage" style="display:none">
+  <div class="page-col" id="leaderboardCol">
+    <div class="loading-wrap"><div class="spinner"></div><div class="loading-txt">Loading leaderboard...</div></div>
+  </div>
+</div>
+
+<!-- SCORING PAGE -->
+<div id="scoringPage" style="display:none">
+  <div class="page-col" id="scoringCol"></div>
+</div>
 
 <script>
+// ── CONFIG ────────────────────────────────
 const API_KEY='08157c28502f32fa0728d46f3445a0cd';
-const BASE='https://api.the-odds-api.com/v4';
+const ODDS_BASE='https://api.the-odds-api.com/v4';
+const SB_URL='https://oykmltysvbcspwvjiusq.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95a21sdHlzdmJjc3B3dmppdXNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMDIxOTksImV4cCI6MjA5MTY3ODE5OX0.XPcPAku6Ax17FDAVzH0qQLbDquOb0jr0vpLfhy3Qdmw';
+
+// ── STATE ─────────────────────────────────
 let games=[],selGame=0,selCat='Game Lines',slip=[],stake=50,locked=[],loadedAt=null;
+let sessionId=null,username='Anonymous',showSplitView=false,currentPage='board';
+let dbPicks=[]; // picks loaded from Supabase
+
+// ── CONSTANTS ─────────────────────────────
 const ABBR={'Detroit Pistons':'DET','Orlando Magic':'ORL','Oklahoma City Thunder':'OKC','Phoenix Suns':'PHX','Minnesota Timberwolves':'MIN','Denver Nuggets':'DEN','Boston Celtics':'BOS','Philadelphia 76ers':'PHI','New York Knicks':'NYK','Atlanta Hawks':'ATL','Cleveland Cavaliers':'CLE','Toronto Raptors':'TOR','Los Angeles Lakers':'LAL','Houston Rockets':'HOU','San Antonio Spurs':'SAS','Portland Trail Blazers':'POR'};
 const COLORS={'DET':'#4a8fd4','ORL':'#3aabff','OKC':'#007ac1','PHX':'#e56020','MIN':'#4a78b0','DEN':'#fec524','BOS':'#2da85a','PHI':'#2a5fbd','NYK':'#006bb6','ATL':'#e03a3e','CLE':'#a01030','TOR':'#ce1141','LAL':'#7a3fbf','HOU':'#ce1141','SAS':'#c4ced4','POR':'#e03a3e'};
 const SERIES={'Detroit Pistons':'DET 1–2','Orlando Magic':'DET 1–2','Oklahoma City Thunder':'OKC 3–0','Phoenix Suns':'OKC 3–0','Minnesota Timberwolves':'MIN 3–1','Denver Nuggets':'MIN 3–1'};
@@ -265,80 +372,190 @@ const CATS=['Game Lines','Points','Rebounds','Assists','3-Pointers Made','Pts+Re
 const ROSTER={'Detroit Pistons':['Cade Cunningham','Tobias Harris','Jalen Duren','Ausar Thompson'],'Orlando Magic':['Paolo Banchero','Franz Wagner','Wendell Carter Jr.','Jalen Suggs'],'Oklahoma City Thunder':['Shai Gilgeous-Alexander','Jalen Williams','Isaiah Hartenstein','Chet Holmgren'],'Phoenix Suns':['Devin Booker','Dillon Brooks','Kevin Durant','Jusuf Nurkic'],'Minnesota Timberwolves':['Anthony Edwards','Rudy Gobert','Ayo Dosunmu','Julius Randle'],'Denver Nuggets':['Nikola Jokic','Jamal Murray','Aaron Gordon','Michael Porter Jr.']};
 const PROPS={'Cade Cunningham':{Points:{l:26.5,o:-110,u:-110},Rebounds:{l:4.5,o:-108,u:-112},Assists:{l:6.5,o:-115,u:-105},'3-Pointers Made':{l:1.5,o:-110,u:-110},'Pts+Reb+Ast':{l:37.5,o:-112,u:-108},Steals:{l:0.5,o:-145,u:115}},'Tobias Harris':{Points:{l:15.5,o:-112,u:-108},Rebounds:{l:6.5,o:-115,u:-105},'Pts+Reb':{l:21.5,o:-110,u:-110}},'Jalen Duren':{Points:{l:11.5,o:-110,u:-110},Rebounds:{l:11.5,o:-115,u:-105},Blocks:{l:0.5,o:-160,u:130},'Pts+Reb':{l:22.5,o:-112,u:-108}},'Ausar Thompson':{Points:{l:12.5,o:-112,u:-108},Rebounds:{l:4.5,o:-110,u:-110},Steals:{l:1.5,o:-108,u:-112}},'Paolo Banchero':{Points:{l:21.5,o:-118,u:-102},Rebounds:{l:7.5,o:-115,u:-105},Assists:{l:4.5,o:-112,u:-108},'3-Pointers Made':{l:1.5,o:115,u:-140},'Pts+Reb+Ast':{l:32.5,o:-115,u:-105},Blocks:{l:0.5,o:-165,u:135}},'Franz Wagner':{Points:{l:17.5,o:-112,u:-108},Rebounds:{l:4.5,o:-115,u:-105},Assists:{l:3.5,o:-108,u:-112},'Pts+Reb+Ast':{l:25.5,o:-110,u:-110}},'Wendell Carter Jr.':{Points:{l:10.5,o:-120,u:-100},Rebounds:{l:7.5,o:-115,u:-105},'Pts+Reb':{l:17.5,o:-112,u:-108}},'Jalen Suggs':{Points:{l:12.5,o:-110,u:-110},Assists:{l:4.5,o:-112,u:-108},'3-Pointers Made':{l:1.5,o:-115,u:-105}},'Shai Gilgeous-Alexander':{Points:{l:32.5,o:-115,u:-105},Rebounds:{l:4.5,o:-108,u:-112},Assists:{l:7.5,o:-108,u:-112},'3-Pointers Made':{l:2.5,o:-110,u:-110},'Pts+Reb+Ast':{l:44.5,o:-115,u:-105},Steals:{l:1.5,o:-108,u:-112},Blocks:{l:0.5,o:-140,u:110}},'Jalen Williams':{Points:{l:19.5,o:-115,u:-105},Rebounds:{l:4.5,o:-112,u:-108},Assists:{l:3.5,o:-108,u:-112},'Pts+Reb+Ast':{l:27.5,o:-110,u:-110}},'Isaiah Hartenstein':{Points:{l:10.5,o:-112,u:-108},Rebounds:{l:10.5,o:-115,u:-105},Blocks:{l:0.5,o:-155,u:125},'Pts+Reb':{l:20.5,o:-112,u:-108}},'Chet Holmgren':{Points:{l:14.5,o:-112,u:-108},Rebounds:{l:6.5,o:-110,u:-110},Blocks:{l:1.5,o:-115,u:-105},'Pts+Reb':{l:20.5,o:-110,u:-110}},'Devin Booker':{Points:{l:21.5,o:-112,u:-108},Rebounds:{l:4.5,o:-110,u:-110},Assists:{l:5.5,o:-108,u:-112},'3-Pointers Made':{l:2.5,o:-115,u:-105},'Pts+Reb+Ast':{l:31.5,o:-115,u:-105}},'Dillon Brooks':{Points:{l:18.5,o:-110,u:-110},Rebounds:{l:5.5,o:-112,u:-108},'3-Pointers Made':{l:3.5,o:-105,u:-115},'Pts+Reb+Ast':{l:26.5,o:-110,u:-110}},'Kevin Durant':{Points:{l:26.5,o:-112,u:-108},Rebounds:{l:6.5,o:-110,u:-110},Assists:{l:4.5,o:-108,u:-112},'Pts+Reb+Ast':{l:37.5,o:-112,u:-108}},'Jusuf Nurkic':{Points:{l:10.5,o:-110,u:-110},Rebounds:{l:9.5,o:-115,u:-105},'Pts+Reb':{l:19.5,o:-112,u:-108}},'Anthony Edwards':{Points:{l:24.5,o:-115,u:-105},Rebounds:{l:5.5,o:-108,u:-112},Assists:{l:4.5,o:-110,u:-110},'3-Pointers Made':{l:2.5,o:-112,u:-108},'Pts+Reb+Ast':{l:34.5,o:-112,u:-108}},'Rudy Gobert':{Points:{l:12.5,o:-110,u:-110},Rebounds:{l:13.5,o:-112,u:-108},Blocks:{l:1.5,o:-115,u:-105},'Pts+Reb':{l:25.5,o:-112,u:-108}},'Ayo Dosunmu':{Points:{l:21.5,o:-108,u:-112},Rebounds:{l:3.5,o:-112,u:-108},Assists:{l:4.5,o:-110,u:-110},'3-Pointers Made':{l:1.5,o:-115,u:-105},'Pts+Reb+Ast':{l:29.5,o:-110,u:-110}},'Julius Randle':{Points:{l:17.5,o:-112,u:-108},Rebounds:{l:6.5,o:-115,u:-105},'Pts+Reb':{l:23.5,o:-110,u:-110}},'Nikola Jokic':{Points:{l:28.5,o:-118,u:-102},Rebounds:{l:12.5,o:-115,u:-105},Assists:{l:9.5,o:-108,u:-112},'Pts+Reb+Ast':{l:50.5,o:-115,u:-105},'Triple Double':{l:null,o:140,u:-170,sp:1},'Double Double':{l:null,o:-550,u:380,sp:1}},'Jamal Murray':{Points:{l:19.5,o:-112,u:-108},Assists:{l:5.5,o:-108,u:-112},'3-Pointers Made':{l:1.5,o:-115,u:-105},'Pts+Ast':{l:24.5,o:-110,u:-110}},'Aaron Gordon':{Points:{l:14.5,o:-112,u:-108},Rebounds:{l:7.5,o:-115,u:-105},'Pts+Reb':{l:21.5,o:-110,u:-110},Blocks:{l:0.5,o:-130,u:100}},'Michael Porter Jr.':{Points:{l:16.5,o:-112,u:-108},Rebounds:{l:6.5,o:-110,u:-110},'3-Pointers Made':{l:1.5,o:-112,u:-108}}};
 
+// ── HELPERS ───────────────────────────────
 const fo=o=>(o>0?'+':'')+o;
 const fm=n=>(n>=0?'+':'-')+'$'+Math.abs(n).toFixed(2);
 const dec=o=>o>0?o/100+1:100/Math.abs(o)+1;
-const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)};
+const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2400)};
 const pk=(g,t,s)=>`G${g}_${t}_${s}`;
 const ppk=(g,p,c,s)=>`G${g}_${p.replace(/\W+/g,'_')}_${c.replace(/\W+/g,'_')}_${s}`;
 const inSlip=k=>slip.some(s=>s.key===k);
 const calcP=()=>{if(!slip.length)return{pay:0,prof:0};const d=slip.reduce((a,s)=>a*dec(s.odds),1);return{pay:+(stake*d).toFixed(2),prof:+(stake*d-stake).toFixed(2)}};
 
-function addPick(key,label,odds,game){
-  const base=key.split('_').slice(0,-1).join('_');
-  slip=slip.filter(s=>!s.key.startsWith(base+'_'));
-  if(!inSlip(key)){slip.push({key,label,odds,game,locked:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),result:null});toast('Added to slip')}
-  syncPill();renderSlip();
+// ── SCORING ENGINE ────────────────────────
+const SCORE_TIERS=[
+  {label:'Lock',min:-Infinity,max:-300,pts:5},
+  {label:'Heavy Fav',min:-299,max:-150,pts:8},
+  {label:'Favorite',min:-149,max:-110,pts:12},
+  {label:'Pick\'em',min:-109,max:100,pts:18},
+  {label:'Underdog',min:101,max:200,pts:28},
+  {label:'Big Dog',min:201,max:350,pts:45},
+  {label:'Huge Dog',min:351,max:Infinity,pts:70}
+];
+const PARLAY_MULT={1:1,2:1.5,3:2,4:2.75,5:3.5};
+const parlayMult=n=>n>=6?4.5:(PARLAY_MULT[n]||1);
+
+function getTier(odds){
+  return SCORE_TIERS.find(t=>odds>=t.min&&odds<=t.max)||SCORE_TIERS[0];
 }
-function removePick(key){slip=slip.filter(s=>s.key!==key);syncPill();renderSlip()}
-function syncPill(){const b=document.getElementById('slipBadge'),p=document.getElementById('slipPill');b.textContent=slip.length;if(slip.length){p.classList.add('on');b.style.display='block'}else{p.classList.remove('on');b.style.display='none'}}
-function focusSlip(){document.getElementById('slipCol').scrollIntoView({behavior:'smooth'})}
-function lockSlip(){
-  if(!slip.length){toast('Add picks first');return}
-  const{pay,prof}=calcP();
-  const pl=+(stake/slip.length).toFixed(2);
-  locked.unshift({
-    legs:slip.map(s=>({...s,pl,sp:+(pl*dec(s.odds)).toFixed(2)})),
-    stake,pay,prof,
-    at:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
+function calcPoints(odds,legs,allHit){
+  if(legs<=1)return getTier(odds).pts;
+  return allHit?Math.round(getTier(odds).pts*parlayMult(legs)):getTier(odds).pts;
+}
+
+// ── SUPABASE ──────────────────────────────
+const sbFetch=async(path,opts={})=>{
+  const r=await fetch(`${SB_URL}/rest/v1/${path}`,{
+    headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
+    ...opts
   });
-  slip=[];showSplitView=false;syncPill();
-  toast(`${locked[0].legs.length}-leg slip locked`);
-  renderSlip();renderLocked();
+  if(!r.ok){const e=await r.text();console.error('SB error',e);return null}
+  const txt=await r.text();
+  return txt?JSON.parse(txt):null;
+};
+
+async function ensureSession(){
+  let sid=localStorage.getItem('legup_session');
+  if(!sid){sid=crypto.randomUUID();localStorage.setItem('legup_session',sid)}
+  sessionId=sid;
+  username=localStorage.getItem('legup_username')||'Anonymous';
+  // ensure row exists
+  const ex=await sbFetch(`sessions?id=eq.${sid}&select=id,username`);
+  if(!ex||!ex.length){
+    await sbFetch('sessions',{method:'POST',body:JSON.stringify({id:sid,username})});
+  } else {
+    username=ex[0].username||'Anonymous';
+    localStorage.setItem('legup_username',username);
+  }
+  if(username==='Anonymous')showUsernameModal();
 }
-function setRes(si,li,r){locked[si].legs[li].result=r;renderLocked()}
 
-function fallback(){return[{home_team:'Orlando Magic',away_team:'Detroit Pistons',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Detroit Pistons',price:-125},{name:'Orlando Magic',price:105}]},{key:'spreads',outcomes:[{name:'Detroit Pistons',price:-108,point:-1.5},{name:'Orlando Magic',price:-112,point:1.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:211.5},{name:'Under',price:-110,point:211.5}]}]}]},{home_team:'Phoenix Suns',away_team:'Oklahoma City Thunder',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Oklahoma City Thunder',price:-400},{name:'Phoenix Suns',price:305}]},{key:'spreads',outcomes:[{name:'Oklahoma City Thunder',price:-108,point:-8.5},{name:'Phoenix Suns',price:-112,point:8.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:216.5},{name:'Under',price:-110,point:216.5}]}]}]},{home_team:'Denver Nuggets',away_team:'Minnesota Timberwolves',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Denver Nuggets',price:-255},{name:'Minnesota Timberwolves',price:210}]},{key:'spreads',outcomes:[{name:'Denver Nuggets',price:-112,point:-6.5},{name:'Minnesota Timberwolves',price:-108,point:6.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:213.5},{name:'Under',price:-110,point:213.5}]}]}]}]}
+async function saveUsername(name){
+  if(!name.trim())return;
+  username=name.trim();
+  localStorage.setItem('legup_username',username);
+  await sbFetch(`sessions?id=eq.${sessionId}`,{method:'PATCH',body:JSON.stringify({username})});
+  document.getElementById('modalArea').innerHTML='';
+  toast(`Welcome, ${username}`);
+}
 
+function showUsernameModal(){
+  document.getElementById('modalArea').innerHTML=`
+    <div class="modal-bg">
+      <div class="modal">
+        <div class="modal-title">Set your name</div>
+        <div class="modal-sub">Your picks go on the public leaderboard. Pick a name so people know who you are.</div>
+        <input class="modal-input" id="nameInput" placeholder="e.g. SharpShooter99" maxlength="24" onkeydown="if(event.key==='Enter')saveUsername(document.getElementById('nameInput').value)">
+        <button class="modal-btn" onclick="saveUsername(document.getElementById('nameInput').value)">SET NAME</button>
+      </div>
+    </div>`;
+  setTimeout(()=>document.getElementById('nameInput')?.focus(),100);
+}
+
+async function savePick(pick,slipId,isParlay,legs,allHit){
+  const pts=allHit||!isParlay?calcPoints(pick.odds,isParlay?legs:1,allHit):0;
+  const row={
+    session_id:sessionId,
+    label:pick.label,
+    odds:pick.odds,
+    odds_label:getTier(pick.odds).label,
+    result:pick.result||'pending',
+    points:pick.result==='win'?pts:0,
+    is_parlay:isParlay,
+    parlay_legs:legs,
+    parlay_all_hit:allHit
+  };
+  return await sbFetch('picks',{method:'POST',body:JSON.stringify(row)});
+}
+
+async function updatePickResult(pickId,result,pts){
+  await sbFetch(`picks?id=eq.${pickId}`,{method:'PATCH',body:JSON.stringify({result,points:pts})});
+}
+
+async function loadMyPicks(){
+  const data=await sbFetch(`picks?session_id=eq.${sessionId}&order=locked_at.desc&select=*`);
+  dbPicks=data||[];
+}
+
+async function loadLeaderboard(){
+  const data=await sbFetch(`picks?select=session_id,points,result,odds_label&result=eq.win`,{headers:{'Range':'0-199'}});
+  if(!data)return[];
+  // aggregate by session
+  const map={};
+  data.forEach(p=>{
+    if(!map[p.session_id])map[p.session_id]={sid:p.session_id,pts:0,wins:0};
+    map[p.session_id].pts+=p.points||0;
+    map[p.session_id].wins++;
+  });
+  // get total picks per session for accuracy
+  const totals=await sbFetch(`picks?select=session_id,result`,{headers:{'Range':'0-499'}});
+  const totMap={};
+  (totals||[]).forEach(p=>{
+    if(!totMap[p.session_id])totMap[p.session_id]={total:0,wins:0};
+    totMap[p.session_id].total++;
+    if(p.result==='win')totMap[p.session_id].wins++;
+  });
+  // get usernames
+  const sids=Object.keys(map);
+  if(!sids.length)return[];
+  const sessions=await sbFetch(`sessions?id=in.(${sids.join(',')})&select=id,username`);
+  const nameMap={};
+  (sessions||[]).forEach(s=>nameMap[s.id]=s.username);
+  return Object.values(map).map(m=>({
+    ...m,
+    username:nameMap[m.sid]||'Anonymous',
+    total:totMap[m.sid]?.total||0,
+    acc:totMap[m.sid]?.total?Math.round(totMap[m.sid].wins/totMap[m.sid].total*100):0,
+    isMe:m.sid===sessionId
+  })).sort((a,b)=>b.pts-a.pts);
+}
+
+// ── SESSION & LOCKED SLIP PERSISTENCE ────
+function saveLockedLocal(){
+  try{localStorage.setItem('legup_locked',JSON.stringify(locked))}catch{}
+}
+function loadLockedLocal(){
+  try{const r=localStorage.getItem('legup_locked');if(r)locked=JSON.parse(r)}catch{}
+}
+
+// ── ODDS CACHE ────────────────────────────
 const CACHE_KEY='legup_odds';
+function getCached(){try{const r=localStorage.getItem(CACHE_KEY);return r?JSON.parse(r):null}catch{return null}}
+function setCache(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify({data,ts:Date.now()}))}catch{}}
 
-function getCached(){
-  try{const raw=localStorage.getItem(CACHE_KEY);if(!raw)return null;return JSON.parse(raw)}catch{return null}
-}
-function setCache(data){
-  try{localStorage.setItem(CACHE_KEY,JSON.stringify({data,ts:Date.now()}))}catch{}
-}
+function fallback(){return[
+  {home_team:'Orlando Magic',away_team:'Detroit Pistons',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Detroit Pistons',price:-125},{name:'Orlando Magic',price:105}]},{key:'spreads',outcomes:[{name:'Detroit Pistons',price:-108,point:-1.5},{name:'Orlando Magic',price:-112,point:1.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:211.5},{name:'Under',price:-110,point:211.5}]}]}]},
+  {home_team:'Phoenix Suns',away_team:'Oklahoma City Thunder',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Oklahoma City Thunder',price:-400},{name:'Phoenix Suns',price:305}]},{key:'spreads',outcomes:[{name:'Oklahoma City Thunder',price:-108,point:-8.5},{name:'Phoenix Suns',price:-112,point:8.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:216.5},{name:'Under',price:-110,point:216.5}]}]}]},
+  {home_team:'Denver Nuggets',away_team:'Minnesota Timberwolves',commence_time:new Date().toISOString(),bookmakers:[{key:'draftkings',title:'DraftKings',markets:[{key:'h2h',outcomes:[{name:'Denver Nuggets',price:-255},{name:'Minnesota Timberwolves',price:210}]},{key:'spreads',outcomes:[{name:'Denver Nuggets',price:-112,point:-6.5},{name:'Minnesota Timberwolves',price:-108,point:6.5}]},{key:'totals',outcomes:[{name:'Over',price:-110,point:213.5},{name:'Under',price:-110,point:213.5}]}]}]}
+];}
 
-// On page load — always use cache if it exists, never auto-call API
-function load(){
+// ── INIT ──────────────────────────────────
+async function init(){
+  await ensureSession();
+  loadLockedLocal();
   const cached=getCached();
+  const tn=new Set(['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets']);
   if(cached){
-    const tn=new Set(['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets']);
     const f=cached.data.filter(g=>tn.has(g.home_team)||tn.has(g.away_team));
     games=f.length?f.slice(0,3):fallback();
     loadedAt=new Date(cached.ts);
     const age=Math.round((Date.now()-cached.ts)/60000);
     document.getElementById('liveLabel').textContent=`CACHED · ${age}m AGO`;
-    document.getElementById('refreshBtn').style.display='flex';
   } else {
-    // No cache yet — load fallback data, show refresh button
     games=fallback();
     loadedAt=new Date();
     document.getElementById('liveLabel').textContent='DEMO DATA';
-    document.getElementById('refreshBtn').style.display='flex';
   }
+  document.getElementById('refreshBtn').style.display='block';
   renderAll();
 }
 
-// Only hits API when YOU click the refresh button
 async function fetchFreshOdds(){
   const btn=document.getElementById('refreshBtn');
-  btn.textContent='FETCHING...';
-  btn.style.opacity='.5';
-  btn.style.pointerEvents='none';
+  btn.textContent='FETCHING...';btn.style.opacity='.5';btn.style.pointerEvents='none';
   try{
-    const r=await fetch(`${BASE}/sports/basketball_nba/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`);
-    if(!r.ok)throw new Error('API '+r.status);
+    const r=await fetch(`${ODDS_BASE}/sports/basketball_nba/odds/?apiKey=${API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`);
+    if(!r.ok)throw 0;
     const data=await r.json();
     setCache(data);
     const tn=new Set(['Detroit Pistons','Orlando Magic','Oklahoma City Thunder','Phoenix Suns','Minnesota Timberwolves','Denver Nuggets']);
@@ -347,15 +564,26 @@ async function fetchFreshOdds(){
     loadedAt=new Date();
     document.getElementById('liveLabel').textContent='LIVE · '+loadedAt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
     toast('Lines updated');
-  }catch(e){
-    toast('API error — using cached data');
-  }
-  btn.textContent='REFRESH LINES';
-  btn.style.opacity='1';
-  btn.style.pointerEvents='auto';
+  }catch{toast('API error — using cached data')}
+  btn.textContent='REFRESH LINES';btn.style.opacity='1';btn.style.pointerEvents='auto';
   renderAll();
 }
 
+// ── PAGE SWITCHING ────────────────────────
+function switchPage(page,el){
+  currentPage=page;
+  document.querySelectorAll('.pn-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('boardPage').style.display=page==='board'?'':'none';
+  document.getElementById('recordPage').style.display=page==='record'?'':'none';
+  document.getElementById('leaderboardPage').style.display=page==='leaderboard'?'':'none';
+  document.getElementById('scoringPage').style.display=page==='scoring'?'':'none';
+  if(page==='record')renderRecord();
+  if(page==='leaderboard')renderLeaderboard();
+  if(page==='scoring')renderScoring();
+}
+
+// ── RENDER ALL ────────────────────────────
 function renderAll(){renderGameBar();renderCatBar();renderMain();renderSlip();renderLocked()}
 
 function renderGameBar(){
@@ -383,7 +611,7 @@ function renderMain(){
     if(mkts.spreads){const sa=mkts.spreads.outcomes.find(o=>o.name===aw),sh=mkts.spreads.outcomes.find(o=>o.name===hw),k1=pk(selGame,'sp','a'),k2=pk(selGame,'sp','h');h+=`<div class="mkt-block"><div class="mkt-lbl">Spread</div><div class="mkt-opts"><div class="mkt-btn${inSlip(k1)?' sel':''}" onclick="addPick('${k1}','${awAb} ${sa?.point>0?'+':''}${sa?.point}',${sa?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${awAb}</div><div class="mb-main">${sa?.point>0?'+':''}${sa?.point}</div><div class="mb-odds">${fo(sa?.price)}</div></div><div class="mkt-btn${inSlip(k2)?' sel':''}" onclick="addPick('${k2}','${hwAb} ${sh?.point>0?'+':''}${sh?.point}',${sh?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${hwAb}</div><div class="mb-main">${sh?.point>0?'+':''}${sh?.point}</div><div class="mb-odds">${fo(sh?.price)}</div></div></div></div>`}
     if(mkts.h2h){const ma=mkts.h2h.outcomes.find(o=>o.name===aw),mh=mkts.h2h.outcomes.find(o=>o.name===hw),k1=pk(selGame,'ml','a'),k2=pk(selGame,'ml','h');h+=`<div class="mkt-block"><div class="mkt-lbl">Moneyline</div><div class="mkt-opts"><div class="mkt-btn${inSlip(k1)?' sel':''}" onclick="addPick('${k1}','${awAb} ML',${ma?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${awAb}</div><div class="mb-main">${fo(ma?.price)}</div><div class="mb-odds">&nbsp;</div></div><div class="mkt-btn${inSlip(k2)?' sel':''}" onclick="addPick('${k2}','${hwAb} ML',${mh?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">${hwAb}</div><div class="mb-main">${fo(mh?.price)}</div><div class="mb-odds">&nbsp;</div></div></div></div>`}
     if(mkts.totals){const ov=mkts.totals.outcomes.find(o=>o.name==='Over'),un=mkts.totals.outcomes.find(o=>o.name==='Under'),k1=pk(selGame,'tot','o'),k2=pk(selGame,'tot','u');h+=`<div class="mkt-block"><div class="mkt-lbl">Game Total</div><div class="mkt-opts"><div class="mkt-btn${inSlip(k1)?' sel':''}" onclick="addPick('${k1}','Over ${ov?.point}',${ov?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">Over</div><div class="mb-main">${ov?.point}</div><div class="mb-odds">${fo(ov?.price)}</div></div><div class="mkt-btn${inSlip(k2)?' sel':''}" onclick="addPick('${k2}','Under ${un?.point}',${un?.price},'${awAb} @ ${hwAb}')"><div class="mb-lbl">Under</div><div class="mb-main">${un?.point}</div><div class="mb-odds">${fo(un?.price)}</div></div></div></div>`}
-    h+=`</div><div class="src-footer">LINES VIA ${src.toUpperCase()} · LOADED ${loadedAt?.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} · LEG UP DOES NOT ACCEPT MONEY WAGERS</div>`;
+    h+=`</div><div class="src-footer">LINES VIA ${src.toUpperCase()} · ${loadedAt?.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} · LEG UP DOES NOT ACCEPT MONEY WAGERS</div>`;
     document.getElementById('mainCol').innerHTML=h;return;
   }
 
@@ -402,114 +630,152 @@ function renderMain(){
         const p=pd[cat];
         const ok=ppk(selGame,player,cat,'o'),uk=ppk(selGame,player,cat,'u');
         const sp=player.replace(/'/g,"\\'"),sc=cat.replace(/'/g,"\\'");
+        // show potential points on each button
+        const oPts=getTier(p.o).pts,uPts=getTier(p.u).pts;
         h+=`<div class="prop-row"><div class="pr-type">${cat}</div><div class="pr-line">${p.sp?'Y/N':p.l}</div><div class="pr-btns"><div class="ou-btn${inSlip(ok)?' sel-o':''}" onclick="addPick('${ok}','${sp} ${p.sp?cat+' Yes':'O'+p.l+' '+sc}',${p.o},'${ab}')"><span class="ou-dir">${p.sp?'YES':'OVER'}</span><span class="ou-odds">${fo(p.o)}</span></div><div class="ou-btn${inSlip(uk)?' sel-u':''}" onclick="addPick('${uk}','${sp} ${p.sp?cat+' No':'U'+p.l+' '+sc}',${p.u},'${ab}')"><span class="ou-dir">${p.sp?'NO':'UNDR'}</span><span class="ou-odds">${fo(p.u)}</span></div></div></div>`;
       });
       h+=`</div></div>`;
     });
   });
-  if(!any)h+=`<div style="padding:60px 0;text-align:center;color:var(--text3);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em">NO ${selCat.toUpperCase()} PROPS FOR THIS MATCHUP</div>`;
+  if(!any)h+=`<div style="padding:60px 0;text-align:center;color:var(--text3);font-family:'IBM Plex Mono',monospace;font-size:10px">NO ${selCat.toUpperCase()} PROPS FOR THIS MATCHUP</div>`;
   document.getElementById('mainCol').innerHTML=h;
 }
 
-let showSplitView=false;
+// ── SLIP ──────────────────────────────────
+function addPick(key,label,odds,game){
+  const base=key.split('_').slice(0,-1).join('_');
+  slip=slip.filter(s=>!s.key.startsWith(base+'_'));
+  if(!inSlip(key)){slip.push({key,label,odds,game,locked:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),result:null});toast('Added')}
+  syncPill();renderSlip();
+}
+function removePick(key){slip=slip.filter(s=>s.key!==key);syncPill();renderSlip()}
+function syncPill(){
+  const b=document.getElementById('slipBadge'),p=document.getElementById('slipPill');
+  b.textContent=slip.length;
+  slip.length?p.classList.add('on'):p.classList.remove('on');
+  b.style.display=slip.length?'block':'none';
+}
+function focusSlip(){document.getElementById('slipCol').scrollIntoView({behavior:'smooth'})}
+
+async function lockSlip(){
+  if(!slip.length){toast('Add picks first');return}
+  const{pay,prof}=calcP();
+  const pl=+(stake/slip.length).toFixed(2);
+  const isParlay=slip.length>1;
+  const ls={
+    legs:slip.map(s=>({...s,pl,sp:+(pl*dec(s.odds)).toFixed(2),dbId:null})),
+    stake,pay,prof,isParlay,
+    at:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
+  };
+  locked.unshift(ls);
+  slip=[];showSplitView=false;syncPill();
+  saveLockedLocal();
+  // Save to Supabase (pending, no result yet)
+  for(const leg of ls.legs){
+    const row=await savePick(leg,null,isParlay,ls.legs.length,false);
+    if(row&&row[0])leg.dbId=row[0].id;
+  }
+  toast(`${ls.legs.length}-leg slip locked`);
+  renderSlip();renderLocked();
+}
+
+async function setRes(si,li,r){
+  const ls=locked[si];
+  const leg=ls.legs[li];
+  leg.result=r;
+  saveLockedLocal();
+  // Check if all results are marked to apply parlay multiplier
+  const allDone=ls.legs.every(l=>l.result);
+  const allHit=allDone&&ls.legs.every(l=>l.result==='win');
+  // Update this leg in Supabase with correct points
+  if(leg.dbId){
+    const pts=r==='win'?calcPoints(leg.odds,ls.isParlay?ls.legs.length:1,allHit):0;
+    await updatePickResult(leg.dbId,r,pts);
+    // If parlay just completed, update all other legs too with correct multiplier
+    if(allDone&&ls.isParlay){
+      for(const l of ls.legs){
+        if(l.dbId&&l!==leg){
+          const p=l.result==='win'?calcPoints(l.odds,ls.legs.length,allHit):0;
+          await updatePickResult(l.dbId,l.result,p);
+        }
+      }
+    }
+  }
+  renderLocked();
+}
 
 function renderSlip(){
   const{pay,prof}=calcP();
   const perLeg=slip.length?+(stake/slip.length).toFixed(2):0;
+  const potentialPts=slip.length>1
+    ?Math.round(slip.reduce((s,l)=>s+getTier(l.odds).pts,0)*parlayMult(slip.length))
+    :slip.reduce((s,l)=>s+getTier(l.odds).pts,0);
+
   let h=`<div class="slip-hdr"><div class="slip-title-row"><div class="slip-title">Bet Slip</div>${slip.length?`<div class="slip-legs-ct">${slip.length} LEG${slip.length!==1?'S':''}</div>`:''}</div></div>`;
+  if(!slip.length){h+=`<div class="slip-empty"><div class="se-mark">—</div><div class="se-txt">Your slip is empty.<br>Tap any line to add a pick.</div></div>`;document.getElementById('slipCol').innerHTML=h;return}
 
-  if(!slip.length){
-    h+=`<div class="slip-empty"><div class="se-mark">—</div><div class="se-txt">Your slip is empty.<br>Tap any line to add a pick.</div></div>`;
-    document.getElementById('slipCol').innerHTML=h;return;
-  }
-
-  // Legs list
   h+=`<div class="slip-items">`;
   slip.forEach(s=>{
     const oc=s.odds>0?'var(--lime)':'var(--text)';
+    const tier=getTier(s.odds);
+    const basePts=tier.pts;
     h+=`<div class="slip-item">
       <div class="si-pick">${s.label}</div>
       <div class="si-game">${s.game}</div>
-      <div class="si-row"><span class="si-odds" style="color:${oc}">${fo(s.odds)}</span><span class="si-time">LOCKED ${s.locked}</span></div>
+      <div class="si-row">
+        <span class="si-odds" style="color:${oc}">${fo(s.odds)}</span>
+        <span class="si-time">${s.locked}</span>
+        <span class="si-pts">${tier.label} · ${basePts}pts base</span>
+      </div>
       <button class="si-rm" onclick="removePick('${s.key}')">×</button>
     </div>`;
   });
   h+=`</div>`;
 
-  // Stake + parlay summary
   h+=`<div class="slip-foot">
     <div class="foot-lbl">Stake</div>
     <div class="stake-wrap"><span class="stake-sign">$</span><input type="number" class="stake-in" value="${stake}" min="1" onchange="stake=parseFloat(this.value)||50;renderSlip()"></div>
     <div class="presets">${[5,10,25,50,100].map(v=>`<button class="pre${stake===v?' on':''}" onclick="stake=${v};renderSlip()">$${v}</button>`).join('')}</div>
     <div class="parlay-box">
       <div class="pb-row"><span class="pb-lbl">Stake</span><span class="pb-val">$${stake.toFixed(2)}</span></div>
-      <div class="pb-row"><span class="pb-lbl">${slip.length}-Leg Parlay Payout</span><span class="pb-val g">$${pay.toFixed(2)}</span></div>
-      <div class="pb-row"><span class="pb-lbl">Est. Profit if all hit</span><span class="pb-val g">+$${prof.toFixed(2)}</span></div>
+      <div class="pb-row"><span class="pb-lbl">${slip.length>1?`${slip.length}-Leg Parlay payout`:'Straight bet payout'}</span><span class="pb-val g">$${pay.toFixed(2)}</span></div>
+      ${slip.length>1?`<div class="pb-row"><span class="pb-lbl">Parlay mult</span><span class="pb-val" style="color:var(--amber)">${parlayMult(slip.length)}x if all hit</span></div>`:''}
+      <div class="pb-row"><span class="pb-lbl">Points if correct</span><span class="pb-val g">+${potentialPts} pts</span></div>
     </div>
     <button class="lock-btn" onclick="lockSlip()">LOCK PICKS — NO MONEY</button>
-    <button class="split-btn" onclick="showSplitView=!showSplitView;renderSlip()">
-      ${showSplitView?'▲ Hide straight bet view':'▼ Compare vs straight bets'}
-    </button>
+    <button class="split-btn" onclick="showSplitView=!showSplitView;renderSlip()">${showSplitView?'▲ Hide':'▼ Compare vs straight bets'}</button>
   </div>`;
 
-  // Straight bet comparison panel — live as you build
-  if(showSplitView&&slip.length>0){
-    const straightTotal=slip.reduce((sum,s)=>{
-      const ret=+(perLeg*dec(s.odds)).toFixed(2);
-      return sum+ret-perLeg; // assume all win for preview
-    },0);
-    const diff=straightTotal-prof;
-
+  if(showSplitView){
+    const straightTotal=slip.reduce((sum,s)=>+(sum+(perLeg*dec(s.odds))-perLeg).toFixed(2),0);
+    const diff=+(straightTotal-prof).toFixed(2);
     h+=`<div class="split-panel">
-      <div class="split-panel-hdr">
-        <div class="sp-title">If you bet each leg straight · $${perLeg.toFixed(2)} each</div>
-        <button class="sp-close" onclick="showSplitView=false;renderSlip()">×</button>
-      </div>
-      <div class="llb-hdr">
-        <div class="llb-col">Pick</div>
-        <div class="llb-col right">Odds</div>
-        <div class="llb-col right">Stake</div>
-        <div class="llb-col right">Return</div>
-      </div>`;
-
+      <div class="split-panel-hdr"><div class="sp-title">If each pick was a straight bet · $${perLeg.toFixed(2)} each</div><button class="sp-close" onclick="showSplitView=false;renderSlip()">×</button></div>
+      <div class="llb-hdr"><div class="llb-col">Pick</div><div class="llb-col">Odds</div><div class="llb-col">Stake</div><div class="llb-col">If correct</div></div>`;
     slip.forEach(s=>{
       const ret=+(perLeg*dec(s.odds)).toFixed(2);
       const profit=+(ret-perLeg).toFixed(2);
-      h+=`<div class="llb-row">
-        <div class="llb-pick">${s.label}</div>
-        <div class="llb-odds">${fo(s.odds)}</div>
-        <div class="llb-stake">$${perLeg.toFixed(2)}</div>
-        <div class="llb-ret" style="color:var(--lime)">+$${profit.toFixed(2)}</div>
-      </div>`;
+      h+=`<div class="llb-row"><div class="llb-pick">${s.label}</div><div class="llb-odds">${fo(s.odds)}</div><div class="llb-stake">$${perLeg.toFixed(2)}</div><div class="llb-ret" style="color:var(--lime)">+$${profit.toFixed(2)}</div></div>`;
     });
-
     h+=`<div class="split-totals">
-      <div class="st-col">
-        <div class="st-lbl">Parlay (all hit)</div>
-        <div class="st-val" style="color:var(--lime)">+$${prof.toFixed(2)}</div>
-        <div class="st-sub">One wrong = $0</div>
-      </div>
+      <div class="st-col"><div class="st-lbl">Parlay (all hit)</div><div class="st-val" style="color:var(--lime)">+$${prof.toFixed(2)}</div><div class="st-sub">One miss = $0</div></div>
       <div class="st-div"></div>
-      <div class="st-col">
-        <div class="st-lbl">Straight bets (all hit)</div>
-        <div class="st-val" style="color:var(--lime)">+$${straightTotal.toFixed(2)}</div>
-        <div class="st-sub">Each bet independent</div>
-      </div>
+      <div class="st-col"><div class="st-lbl">Straight (all hit)</div><div class="st-val" style="color:var(--lime)">+$${straightTotal.toFixed(2)}</div><div class="st-sub">Each bet independent</div></div>
     </div>
-    <div class="split-delta" style="background:${diff<0?'rgba(182,245,66,.04)':'rgba(255,77,77,.04)'}">
-      <div class="sd-lbl">${diff<0?'Parlay bonus if all legs hit':'Straight bets return more if all hit'}</div>
+    <div class="split-delta">
+      <div class="sd-lbl">${diff<0?'Parlay bonus vs straight (all hit)':'Straight returns more even all-in'}</div>
       <div class="sd-val" style="color:${diff<0?'var(--lime)':'var(--text)'}">${diff<0?'+$'+Math.abs(diff).toFixed(2):'+$'+diff.toFixed(2)}</div>
       <div class="sd-msg">${diff<0
-        ?`The parlay pays $${Math.abs(diff).toFixed(2)} more than straight bets IF all ${slip.length} legs hit. But one wrong leg and you lose everything.`
-        :`Straight bets return $${diff.toFixed(2)} more even when all legs hit. The parlay format is working against you on these odds.`
+        ?`The parlay pays $${Math.abs(diff).toFixed(2)} more IF all ${slip.length} legs hit. Miss one and you get nothing.`
+        :`Straight bets return $${diff.toFixed(2)} more even when every leg hits. These odds don't justify the parlay format.`
       }</div>
-    </div>
-    </div>`;
+    </div></div>`;
   }
 
   document.getElementById('slipCol').innerHTML=h;
 }
 
+// ── LOCKED SLIPS ──────────────────────────
 function renderLocked(){
   if(!locked.length){document.getElementById('lockedArea').innerHTML='';return}
   let h=`<div class="locked-area"><div class="locked-hdr">Locked slips · mark results after each game</div>`;
@@ -519,38 +785,31 @@ function renderLocked(){
     const losses=ls.legs.filter(l=>l.result==='loss').length;
     const pend=ls.legs.filter(l=>!l.result).length;
     const done=!pend;
-    const allW=done&&wins===ls.legs.length;
-
-    // Parlay result
-    const parlayResult=done?(allW?ls.prof:-ls.stake):null;
-
-    // Straight bet result — each leg gets equal share of stake
-    const straightResult=done?ls.legs.reduce((sum,l)=>{
-      const ret=l.result==='win'?+(l.pl*dec(l.odds)).toFixed(2):0;
-      return +(sum+ret-l.pl).toFixed(2);
-    },0):null;
-
+    const allHit=done&&wins===ls.legs.length;
+    const parlayResult=done?(allHit?ls.prof:-ls.stake):null;
+    const straightResult=done?+ls.legs.reduce((s,l)=>s+(l.result==='win'?l.pl*dec(l.odds)-l.pl:-l.pl),0).toFixed(2):null;
     const diff=done?+(straightResult-parlayResult).toFixed(2):null;
+    const totalPts=done?ls.legs.reduce((s,l)=>s+(l.result==='win'?calcPoints(l.odds,ls.isParlay?ls.legs.length:1,allHit):0),0):null;
 
-    h+=`<div class="locked-card">
-      <div class="lc-hdr">
-        <div class="lc-name">${ls.legs.length}-Leg Parlay · $${ls.stake} stake</div>
-        <div class="lc-meta">LOCKED ${ls.at} · ${wins}W ${losses}L ${pend}P</div>
-      </div>`;
+    h+=`<div class="locked-card"><div class="lc-hdr">
+      <div class="lc-name">${ls.legs.length>1?ls.legs.length+'-Leg Parlay':'Straight Pick'} · $${ls.stake}</div>
+      <div class="lc-meta">${ls.at} · ${wins}W ${losses}L ${pend}P${totalPts?` · +${totalPts}pts`:''}</div>
+    </div>`;
 
-    // Each leg with result buttons
     ls.legs.forEach((l,li)=>{
       const dot=!l.result?'var(--fog)':l.result==='win'?'var(--lime)':'var(--red)';
-      const straightRet=l.result?+(l.pl*dec(l.odds)).toFixed(2):null;
-      const straightProfit=l.result==='win'?+(straightRet-l.pl).toFixed(2):l.result==='loss'?-l.pl:null;
+      const tier=getTier(l.odds);
+      const legPts=l.result==='win'?calcPoints(l.odds,ls.isParlay?ls.legs.length:1,allHit):0;
+      const straightProfit=l.result==='win'?+(l.pl*dec(l.odds)-l.pl).toFixed(2):null;
       h+=`<div class="lc-leg">
         <div class="lc-dot" style="background:${dot}"></div>
         <div class="lc-info">
           <div class="lc-pick">${l.label}</div>
           <div class="lc-sub">
             <span>${fo(l.odds)}</span>
-            <span>$${l.pl.toFixed(2)} straight</span>
-            ${l.result?`<span style="color:${l.result==='win'?'var(--lime)':'var(--red)'}">${l.result==='win'?'+$'+straightProfit.toFixed(2):'-$'+l.pl.toFixed(2)} straight</span>`:''}
+            <span style="color:var(--text3)">${tier.label}</span>
+            ${l.result==='win'?`<span style="color:var(--lime)">+${legPts}pts</span><span style="color:var(--lime)">+$${straightProfit?.toFixed(2)} straight</span>`:''}
+            ${l.result==='loss'?`<span style="color:var(--red)">0pts · -$${l.pl.toFixed(2)} straight</span>`:''}
           </div>
         </div>
         <div class="lc-res">
@@ -560,66 +819,51 @@ function renderLocked(){
       </div>`;
     });
 
-    // Leg by leg straight bet table — always visible once any result is marked
+    // Leg breakdown table once any result marked
     if(wins+losses>0){
       h+=`<div class="ll-breakdown">
-        <div class="llb-hdr">
-          <div class="llb-col">Pick</div>
-          <div class="llb-col right">Odds</div>
-          <div class="llb-col right">Stake</div>
-          <div class="llb-col right">Straight ret.</div>
-        </div>`;
+        <div class="llb-hdr"><div class="llb-col">Pick</div><div class="llb-col">Odds</div><div class="llb-col">Straight</div><div class="llb-col">Points</div></div>`;
       ls.legs.forEach(l=>{
-        const hasResult=!!l.result;
-        const ret=l.result==='win'?+(l.pl*dec(l.odds)).toFixed(2):null;
-        const profit=l.result==='win'?+(ret-l.pl).toFixed(2):l.result==='loss'?-l.pl:null;
-        const retColor=!hasResult?'var(--text3)':l.result==='win'?'var(--lime)':'var(--red)';
-        const retTxt=!hasResult?'Pending':l.result==='win'?'+$'+profit.toFixed(2):'-$'+l.pl.toFixed(2);
+        const ret=l.result==='win'?+(l.pl*dec(l.odds)-l.pl).toFixed(2):l.result==='loss'?-l.pl:null;
+        const pts=l.result==='win'?calcPoints(l.odds,ls.isParlay?ls.legs.length:1,allHit):l.result==='loss'?0:null;
+        const rc=!l.result?'var(--text3)':l.result==='win'?'var(--lime)':'var(--red)';
         h+=`<div class="llb-row">
-          <div class="llb-pick" style="display:flex;align-items:center;gap:5px">
-            <span style="width:5px;height:5px;border-radius:50%;background:${!l.result?'var(--fog)':l.result==='win'?'var(--lime)':'var(--red)'};flex-shrink:0;display:inline-block"></span>
-            ${l.label}
-          </div>
+          <div class="llb-pick" style="display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:${!l.result?'var(--fog)':l.result==='win'?'var(--lime)':'var(--red)'};flex-shrink:0;display:inline-block"></span>${l.label}</div>
           <div class="llb-odds">${fo(l.odds)}</div>
-          <div class="llb-stake">$${l.pl.toFixed(2)}</div>
-          <div class="llb-ret" style="color:${retColor}">${retTxt}</div>
+          <div class="llb-stake" style="color:${rc}">${ret===null?'—':ret>=0?'+$'+ret.toFixed(2):'-$'+Math.abs(ret).toFixed(2)}</div>
+          <div class="llb-ret" style="color:${rc}">${pts===null?'—':pts>0?'+'+pts:'0'}</div>
         </div>`;
       });
       h+=`</div>`;
     }
 
-    // Full comparison — only when all results marked
+    // Full comparison when done
     if(done){
       const pc=parlayResult>=0?'var(--lime)':'var(--red)';
       const sc=straightResult>=0?'var(--lime)':'var(--red)';
-      const dc=diff>0?'var(--lime)':'var(--red)';
-      const parlayWon=parlayResult>0;
-      const straightWon=straightResult>0;
-
       h+=`<div class="cmp-grid">
         <div class="cmp-col">
           <div class="cmp-lbl">What you got · Parlay</div>
           <div class="cmp-val" style="color:${pc}">${fm(parlayResult)}</div>
-          <div class="cmp-sub">${allW?`All ${ls.legs.length} legs hit`:`Lost — ${losses} wrong leg${losses>1?'s':''} wiped the slip`}</div>
+          <div class="cmp-sub">${allHit?'All legs hit':losses+' wrong leg'+(losses>1?'s':'')+' ended it'}</div>
         </div>
         <div class="cmp-div"></div>
         <div class="cmp-col">
-          <div class="cmp-lbl">What you'd have · Straight</div>
+          <div class="cmp-lbl">If straight bets</div>
           <div class="cmp-val" style="color:${sc}">${fm(straightResult)}</div>
-          <div class="cmp-sub">${wins}/${ls.legs.length} correct · each bet independent</div>
+          <div class="cmp-sub">${wins}/${ls.legs.length} correct · independent</div>
         </div>
       </div>
-      <div class="delta" style="background:${diff>0?'rgba(255,77,77,.04)':'rgba(182,245,66,.04)'}">
-        <div class="delta-lbl">The parlay format ${diff>0?'cost':'saved'} you</div>
-        <div class="delta-val" style="color:${dc}">${diff>0?'+$'+diff.toFixed(2):'+$'+Math.abs(diff).toFixed(2)}</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:4px;line-height:1.6;padding:0 10px">
-          ${!allW&&wins>0
-            ?`You went ${wins}/${ls.legs.length}. If you had bet straight, those ${wins} correct pick${wins>1?'s':''} would have returned <strong style="color:var(--text)">+$${ls.legs.filter(l=>l.result==='win').reduce((s,l)=>+(s+(l.pl*dec(l.odds))-l.pl).toFixed(2),0).toFixed(2)}</strong> instead of losing everything.`
-            :!allW
-            ?`All ${ls.legs.length} legs missed. Both parlay and straight bets would have lost — but straight bets would have lost $${Math.abs(straightResult).toFixed(2)} vs your parlay loss of $${ls.stake.toFixed(2)}.`
-            :`Perfect card — all legs hit. The parlay paid $${Math.abs(diff).toFixed(2)} ${diff<0?'more':'less'} than straight bets would have.`
-          }
-        </div>
+      <div class="delta" style="background:${diff>0?'rgba(255,77,77,.03)':'rgba(182,245,66,.03)'}">
+        <div class="delta-lbl">Parlay format ${diff>0?'cost':'saved'} you</div>
+        <div class="delta-val" style="color:${diff>0?'var(--red)':'var(--lime)'}">${diff>0?'-':'+'} $${Math.abs(diff).toFixed(2)}</div>
+        <div class="delta-msg">${!allHit&&wins>0
+          ?`You went ${wins}/${ls.legs.length}. As straight bets those ${wins} correct picks would have returned <strong style="color:var(--text)">+$${ls.legs.filter(l=>l.result==='win').reduce((s,l)=>+(s+l.pl*dec(l.odds)-l.pl).toFixed(2),0).toFixed(2)}</strong>. The parlay format turned a winning night into a full loss.`
+          :allHit
+          ?`Perfect card — all ${ls.legs.length} legs hit. The parlay ${diff<0?`paid $${Math.abs(diff).toFixed(2)} more than straight bets would have`:`actually paid less than straight bets — unusual odds combination`}.`
+          :`All ${ls.legs.length} legs missed. Straight bets also lose, but only $${Math.abs(straightResult).toFixed(2)} vs parlay loss of $${ls.stake.toFixed(2)}.`
+        }</div>
+        ${totalPts?`<div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--lime)">+${totalPts} points earned this slip</div>`:''}
       </div>`;
     }
 
@@ -630,7 +874,145 @@ function renderLocked(){
   document.getElementById('lockedArea').innerHTML=h;
 }
 
-load();
+// ── RECORD PAGE ───────────────────────────
+async function renderRecord(){
+  document.getElementById('recordCol').innerHTML=`<div class="loading-wrap"><div class="spinner"></div><div class="loading-txt">Loading your record...</div></div>`;
+  await loadMyPicks();
+  const picks=dbPicks;
+  const resolved=picks.filter(p=>p.result!=='pending');
+  const wins=resolved.filter(p=>p.result==='win');
+  const losses=resolved.filter(p=>p.result==='loss');
+  const totalPts=wins.reduce((s,p)=>s+(p.points||0),0);
+  const acc=resolved.length?Math.round(wins.length/resolved.length*100):0;
+  // ROI on $10 per pick
+  const roi=resolved.reduce((s,p)=>{
+    if(p.result==='win')return s+(10*dec(p.odds)-10);
+    return s-10;
+  },0);
+  // By odds tier
+  const byTier={};
+  SCORE_TIERS.forEach(t=>byTier[t.label]={w:0,l:0,pts:0});
+  resolved.forEach(p=>{const t=p.odds_label||getTier(p.odds).label;if(!byTier[t])byTier[t]={w:0,l:0,pts:0};if(p.result==='win'){byTier[t].w++;byTier[t].pts+=p.points||0}else byTier[t].l++});
+
+  let h=`<div class="sec-lbl">Your record · ${username}</div>`;
+  h+=`<div class="stats-grid">
+    <div class="stat-card"><div class="sc-val" style="color:var(--lime)">${totalPts}</div><div class="sc-lbl">Total points</div></div>
+    <div class="stat-card"><div class="sc-val">${acc}%</div><div class="sc-lbl">Accuracy</div><div class="sc-sub">${wins.length}W · ${losses.length}L</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:${roi>=0?'var(--lime)':'var(--red)'}">${roi>=0?'+':'-'}$${Math.abs(roi).toFixed(0)}</div><div class="sc-lbl">ROI at $10/pick</div></div>
+    <div class="stat-card"><div class="sc-val">${resolved.length}</div><div class="sc-lbl">Picks graded</div><div class="sc-sub">${picks.filter(p=>p.result==='pending').length} pending</div></div>
+  </div>`;
+
+  // Accuracy by tier
+  h+=`<div class="breakdown-card"><div class="bk-hdr"><div class="bk-title">Accuracy by bet type</div></div>`;
+  SCORE_TIERS.slice().reverse().forEach(t=>{
+    const d=byTier[t.label]||{w:0,l:0,pts:0};
+    const total=d.w+d.l;if(!total)return;
+    const pct=Math.round(d.w/total*100);
+    const col=pct>=60?'var(--lime)':pct>=45?'var(--amber)':'var(--red)';
+    h+=`<div class="bk-row"><div class="bk-label">${t.label} (${fo(t.min)} to ${t.max===Infinity?'+∞':fo(t.max)})</div><div class="bk-track"><div class="bk-fill" style="width:${pct}%;background:${col}"></div></div><div class="bk-pct" style="color:${col}">${pct}%</div><div class="bk-pts">+${d.pts}pts</div></div>`;
+  });
+  h+=`</div>`;
+
+  // Recent picks history
+  if(picks.length){
+    h+=`<div class="history-card"><div class="hc-hdr"><div class="hc-title">Pick history</div><div class="hc-sub">${picks.length} total</div></div>
+      <div class="hist-row"><div class="col-hdr">Pick</div><div class="col-hdr">Odds</div><div class="col-hdr">Result</div><div class="col-hdr">Points</div></div>`;
+    picks.slice(0,30).forEach(p=>{
+      const rc=p.result==='win'?'var(--lime)':p.result==='loss'?'var(--red)':'var(--text3)';
+      h+=`<div class="hist-row">
+        <div><div class="hr-pick">${p.label}</div><div class="hr-type">${p.odds_label||''}${p.is_parlay?' · '+p.parlay_legs+'-leg parlay':''}</div></div>
+        <div class="hr-val">${fo(p.odds)}</div>
+        <div class="hr-result"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:${rc}">${p.result.toUpperCase()}</span></div>
+        <div class="hr-pts" style="color:${p.result==='win'?'var(--lime)':'var(--text3)'}">${p.result==='win'?'+'+p.points:'—'}</div>
+      </div>`;
+    });
+    h+=`</div>`;
+  }
+
+  if(!picks.length)h+=`<div style="padding:40px;text-align:center;color:var(--text3);font-size:12px">No picks yet. Lock your first slip on the Board tab.</div>`;
+  document.getElementById('recordCol').innerHTML=h;
+  // Animate bars
+  setTimeout(()=>document.querySelectorAll('.bk-fill').forEach(el=>{const w=el.style.width;el.style.width='0';setTimeout(()=>el.style.width=w,50)}),100);
+}
+
+// ── LEADERBOARD PAGE ──────────────────────
+async function renderLeaderboard(){
+  document.getElementById('leaderboardCol').innerHTML=`<div class="loading-wrap"><div class="spinner"></div><div class="loading-txt">Loading leaderboard...</div></div>`;
+  const rows=await loadLeaderboard();
+  let h=`<div class="sec-lbl">Global leaderboard · all time</div>`;
+
+  if(!rows.length){
+    h+=`<div style="padding:40px;text-align:center;color:var(--text3);font-size:12px">No picks graded yet. Be the first on the board.</div>`;
+    document.getElementById('leaderboardCol').innerHTML=h;return;
+  }
+
+  h+=`<div class="lb-card">`;
+  rows.slice(0,20).forEach((r,i)=>{
+    const rank=i+1;
+    const rankClass=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
+    const rankDisplay=rank===1?'#1':rank===2?'#2':rank===3?'#3':rank;
+    const initials=r.username.slice(0,2).toUpperCase();
+    const hue=((r.username.charCodeAt(0)||65)*47)%360;
+    h+=`<div class="lb-row${r.isMe?' me':''}">
+      <div class="lb-rank ${rankClass}">${rankDisplay}</div>
+      <div class="lb-av" style="background:hsl(${hue},40%,20%);color:hsl(${hue},70%,65%)">${initials}</div>
+      <div class="lb-info">
+        <div class="lb-name">${r.username}${r.isMe?' <span style="font-size:9px;color:var(--lime);font-family:\'IBM Plex Mono\',monospace">(you)</span>':''}</div>
+        <div class="lb-sub">${r.total} picks · ${r.acc}% accuracy</div>
+      </div>
+      <div>
+        <div class="lb-pts">${r.pts} pts</div>
+        <div class="lb-acc">${r.wins} correct</div>
+      </div>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  // My position if not in top 20
+  const myPos=rows.findIndex(r=>r.isMe);
+  if(myPos>=20){
+    const me=rows[myPos];
+    h+=`<div style="background:var(--lime-dim);border:1px solid var(--lime-line);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:12px;color:var(--text)">Your rank: <strong style="font-family:'Syne',sans-serif;font-weight:800">#${myPos+1}</strong></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--lime)">${me.pts} pts · ${me.acc}% acc</div>
+    </div>`;
+  }
+
+  document.getElementById('leaderboardCol').innerHTML=h;
+}
+
+// ── SCORING PAGE ──────────────────────────
+function renderScoring(){
+  let h=`<div class="sec-lbl">How points work</div>`;
+
+  h+=`<div class="sg-card"><div class="sg-hdr"><div class="sg-title">Base points by odds</div><div class="sg-sub">Harder picks = more points. Every correct pick earns base points regardless of parlay.</div></div>`;
+  SCORE_TIERS.forEach(t=>{
+    const rangeStr=t.min===-Infinity?`${fo(t.max)} or worse`:t.max===Infinity?`${fo(t.min)} or better`:`${fo(t.min)} to ${fo(t.max)}`;
+    h+=`<div class="sg-row"><div class="sg-left"><div class="sg-label">${t.label}</div><div class="sg-range">${rangeStr}</div></div><div class="sg-pts">+${t.pts} pts</div></div>`;
+  });
+  h+=`</div>`;
+
+  h+=`<div class="sg-card"><div class="sg-hdr"><div class="sg-title">Full parlay bonus</div><div class="sg-sub">When EVERY leg of a parlay hits, all legs get a multiplier applied to their base points. Miss one leg and no multiplier — but you still keep your base points for legs you got right.</div></div>`;
+  [[2,1.5],[3,2],[4,2.75],[5,3.5],[6,4.5]].forEach(([n,m])=>{
+    h+=`<div class="sg-row"><div class="sg-left"><div class="sg-label">${n}-leg parlay — all hit</div><div class="sg-range">Every leg must be correct</div></div><div class="sg-mult">${m}x multiplier</div></div>`;
+  });
+  h+=`</div>`;
+
+  h+=`<div class="sg-card"><div class="sg-hdr"><div class="sg-title">Example</div><div class="sg-sub">See exactly how points calculate in a real scenario.</div></div>
+    <div class="sg-row"><div class="sg-left"><div class="sg-label">SGA Over 32.5 pts · -115 (Favorite)</div><div class="sg-range">Single straight pick</div></div><div class="sg-pts">+12 pts</div></div>
+    <div class="sg-row"><div class="sg-left"><div class="sg-label">PHX ML · +305 (Big Dog) — in 3-leg parlay, all hit</div><div class="sg-range">45 base × 2.0x parlay mult</div></div><div class="sg-pts">+90 pts</div></div>
+    <div class="sg-row"><div class="sg-left"><div class="sg-label">PHX ML · +305 — in 3-leg parlay, 1 leg misses</div><div class="sg-range">45 base only, no multiplier</div></div><div class="sg-pts">+45 pts</div></div>
+    <div class="sg-row"><div class="sg-left"><div class="sg-label">Wrong pick, any odds</div><div class="sg-range">No points, no penalty</div></div><div class="sg-pts" style="color:var(--text3)">0 pts</div></div>
+  </div>`;
+
+  h+=`<div style="background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r2);padding:14px;font-size:11px;color:var(--text3);line-height:1.8">
+    The leaderboard ranks by total points. Accuracy is shown but not the primary rank metric — someone who correctly calls +300 underdogs at 50% accuracy will outscore someone who hammers -300 favorites at 90% accuracy. Real knowledge gets rewarded.
+  </div>`;
+
+  document.getElementById('scoringCol').innerHTML=h;
+}
+
+init();
 </script>
 </body>
 </html>
